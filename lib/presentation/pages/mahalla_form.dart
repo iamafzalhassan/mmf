@@ -153,17 +153,20 @@ class _MahallaFormViewState extends State<MahallaFormView> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                padding: const EdgeInsets.all(32),
                 child: Form(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeadOfFamilySection(),
-                      _buildFamilyMembersSection(),
-                      _buildAdditionalInformationSection(),
-                      const SizedBox(height: 32),
-                      _buildSubmitButton(),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildHeadOfFamilySection(),
+                        _buildFamilyMembersSection(),
+                        _buildAdditionalInformationSection(),
+                        const SizedBox(height: 16),
+                        _buildSubmitButton(),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -184,7 +187,6 @@ class _MahallaFormViewState extends State<MahallaFormView> {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
       ),
       child: const Column(
         children: [
@@ -216,6 +218,7 @@ class _MahallaFormViewState extends State<MahallaFormView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 32),
         const SectionHeader(
           title: 'Head of Family Details',
           icon: Icons.person,
@@ -346,11 +349,11 @@ class _MahallaFormViewState extends State<MahallaFormView> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 32),
             const SectionHeader(
               title: 'Family Members',
               icon: Icons.family_restroom,
             ),
-            const SizedBox(height: 16),
             ...List.generate(
               cubit.familyMembers.length,
               (index) => FamilyMemberCard(
@@ -387,6 +390,7 @@ class _MahallaFormViewState extends State<MahallaFormView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 32),
         const SectionHeader(
           title: 'Additional Information',
           icon: Icons.info_outline,

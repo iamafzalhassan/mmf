@@ -13,7 +13,6 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 32, bottom: 16),
       padding: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         border: Border(
