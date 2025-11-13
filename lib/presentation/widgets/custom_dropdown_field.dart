@@ -39,7 +39,7 @@ class CustomDropdownField extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.only(top: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -61,7 +61,7 @@ class CustomDropdownField extends StatelessWidget {
                     ),
               ),
             ),
-            const Divider(),
+            const Divider(height: 0),
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,

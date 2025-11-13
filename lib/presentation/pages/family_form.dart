@@ -150,13 +150,13 @@ class _FamilyFormState extends State<FamilyForm> {
                               label: 'Relationship to Head',
                               value: state.relationship,
                               items: const [
-                                'Spouse',
-                                'Son',
-                                'Daughter',
                                 'Father',
                                 'Mother',
+                                'Son',
+                                'Daughter',
                                 'Brother',
                                 'Sister',
+                                'Spouse',
                                 'Other'
                               ],
                               onChanged: cubit.updateRelationship,
@@ -238,15 +238,14 @@ class _FamilyFormState extends State<FamilyForm> {
           const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
-              'Above Grade 9',
+              'Above Grade 5',
               'O/L',
               'A/L',
               'Certificate',
               'Diploma',
               'Degree',
               "Master's Degree",
-              'Doctorate',
-              'Studied Abroad'
+              'Phd',
             ],
             selectedItems: state.students,
             onChanged: cubit.toggleStudent,
@@ -285,11 +284,10 @@ class _FamilyFormState extends State<FamilyForm> {
           const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
-              'Hifz Part Time',
-              'Hifz Full Time',
               'Kitab Part Time',
               'Kitab Full Time',
-              'Ladies 1-Year Course'
+              'Hifz Part Time',
+              'Hifz Full Time',
             ],
             selectedItems: state.madarasa,
             onChanged: cubit.toggleMadarasa,
@@ -315,7 +313,7 @@ class _FamilyFormState extends State<FamilyForm> {
               const Icon(Icons.auto_stories, color: Color(0xFF667EEA)),
               const SizedBox(width: 8),
               Text(
-                'Ulma Qualifications',
+                'Ulama Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -328,10 +326,10 @@ class _FamilyFormState extends State<FamilyForm> {
           CheckboxGrid(
             items: const [
               'Hafiz',
-              'Moulavi',
-              'Hafiz & Moulavi',
               'Hafiza',
+              'Alim',
               'Alima',
+              'Hafiz & Alim',
               'Hafiza & Alima'
             ],
             selectedItems: state.ulma,
