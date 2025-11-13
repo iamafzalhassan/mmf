@@ -1,0 +1,389 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/presentation/cubits/family_member_cubit.dart';
+import 'package:mmf/presentation/widgets/checkbox_grid.dart';
+import 'package:mmf/presentation/widgets/custom_dropdown_field.dart';
+import 'package:mmf/presentation/widgets/gradient_button.dart';
+
+class FamilyForm extends StatefulWidget {
+  const FamilyForm({super.key});
+
+  @override
+  State<FamilyForm> createState() => _FamilyFormState();
+}
+
+class _FamilyFormState extends State<FamilyForm> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameController;
+  late final TextEditingController _nicController;
+  late final TextEditingController _ageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _nicController = TextEditingController();
+    _ageController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nicController.dispose();
+    _ageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => FamilyMemberCubit(),
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: AppBar(
+          title: const Text('Add Family Member'),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          ),
+          foregroundColor: Colors.white,
+        ),
+        body: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
+          builder: (context, state) {
+            final cubit = context.read<FamilyMemberCubit>();
+
+            return Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 900),
+                margin: const EdgeInsets.all(20),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(32),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Name with Initials',
+                            ),
+                            onChanged: cubit.updateName,
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _nicController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'National ID No',
+                                  ),
+                                  onChanged: cubit.updateNic,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _ageController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Age',
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  onChanged: cubit.updateAge,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomDropdownField(
+                                  label: 'Gender',
+                                  value: state.gender,
+                                  items: const ['Male', 'Female'],
+                                  onChanged: cubit.updateGender,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: CustomDropdownField(
+                                  label: 'Civil Status',
+                                  value: state.civilStatus,
+                                  items: const [
+                                    'Married',
+                                    'Single',
+                                    'Divorced',
+                                    'Widow'
+                                  ],
+                                  onChanged: cubit.updateCivilStatus,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomDropdownField(
+                                  label: 'Status',
+                                  value: state.status,
+                                  items: const [
+                                    'Studying Only',
+                                    'Working Only',
+                                    'Studying and Working'
+                                  ],
+                                  onChanged: cubit.updateStatus,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: CustomDropdownField(
+                                  label: 'Relationship to Head',
+                                  value: state.relationship,
+                                  items: const [
+                                    'Spouse',
+                                    'Son',
+                                    'Daughter',
+                                    'Father',
+                                    'Mother',
+                                    'Brother',
+                                    'Sister',
+                                    'Other'
+                                  ],
+                                  onChanged: cubit.updateRelationship,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
+                          _buildEducationSection(cubit, state),
+                          const SizedBox(height: 24),
+                          _buildMadarasaSection(cubit, state),
+                          const SizedBox(height: 24),
+                          _buildUlmaSection(cubit, state),
+                          const SizedBox(height: 24),
+                          _buildSpecialNeedsSection(cubit, state),
+                          const SizedBox(height: 32),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                  ),
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: GradientButton(
+                                  text: 'Save Member',
+                                  onPressed: () {
+                                    final member = state.toEntity();
+                                    Navigator.pop(context, member);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEducationSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.school, color: Color(0xFF667EEA)),
+              const SizedBox(width: 8),
+              Text(
+                'Education & Qualifications',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const [
+              'Above Grade 9',
+              'O/L',
+              'A/L',
+              'Certificate',
+              'Diploma',
+              'Degree',
+              "Master's Degree",
+              'Doctorate',
+              'Studied Abroad'
+            ],
+            selectedItems: state.students,
+            onChanged: cubit.toggleStudent,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMadarasaSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.menu_book, color: Color(0xFF667EEA)),
+              const SizedBox(width: 8),
+              Text(
+                'Madarasa Education',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const [
+              'Hifz Part Time',
+              'Hifz Full Time',
+              'Kitab Part Time',
+              'Kitab Full Time',
+              'Ladies 1-Year Course'
+            ],
+            selectedItems: state.madarasa,
+            onChanged: cubit.toggleMadarasa,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUlmaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.auto_stories, color: Color(0xFF667EEA)),
+              const SizedBox(width: 8),
+              Text(
+                'Ulma Qualifications',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const [
+              'Hafiz',
+              'Moulavi',
+              'Hafiz & Moulavi',
+              'Hafiza',
+              'Alima',
+              'Hafiza & Alima'
+            ],
+            selectedItems: state.ulma,
+            onChanged: cubit.toggleUlma,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSpecialNeedsSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.favorite, color: Color(0xFF667EEA)),
+              const SizedBox(width: 8),
+              Text(
+                'Special Needs',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const ['Disabled', 'Medical Support', 'Education Support'],
+            selectedItems: state.specialNeeds,
+            onChanged: cubit.toggleSpecialNeeds,
+          ),
+        ],
+      ),
+    );
+  }
+}
