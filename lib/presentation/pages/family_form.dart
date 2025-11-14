@@ -65,48 +65,128 @@ class _FamilyFormState extends State<FamilyForm> {
         return cubit;
       },
       child: Scaffold(
-        backgroundColor: AppTheme.scaffoldBackground,
-        appBar: AppBar(
-          title: Text(isEditing ? 'Edit Family Member' : 'Add Family Member'),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-            ),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.backgroundGradient,
           ),
-          foregroundColor: AppTheme.textOnPrimary,
-        ),
-        body: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
-          builder: (context, state) {
-            final cubit = context.read<FamilyMemberCubit>();
+          child: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
+                    builder: (context, state) {
+                      final cubit = context.read<FamilyMemberCubit>();
 
-            return SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 32),
-                      _buildPersonalInfoSection(context, state, cubit),
-                      const SizedBox(height: 32),
-                      _buildEducationSection(cubit, state),
-                      const SizedBox(height: 16),
-                      _buildMadarasaSection(cubit, state),
-                      const SizedBox(height: 16),
-                      _buildUlamaSection(cubit, state),
-                      const SizedBox(height: 16),
-                      _buildSpecialNeedsSection(cubit, state),
-                      const SizedBox(height: 32),
-                      _buildActionButtons(context, state),
-                      const SizedBox(height: 32),
-                    ],
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              _buildAppBar(context),
+                              Form(
+                                key: _formKey,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.cardBackground,
+                                    borderRadius: BorderRadius.circular(24),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.08),
+                                        blurRadius: 24,
+                                        offset: const Offset(0, 8),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(28),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _buildPersonalInfoSection(
+                                            context, state, cubit),
+                                        const SizedBox(height: 32),
+                                        const Divider(height: 1),
+                                        const SizedBox(height: 32),
+                                        _buildEducationSection(cubit, state),
+                                        const SizedBox(height: 24),
+                                        _buildMadarasaSection(cubit, state),
+                                        const SizedBox(height: 24),
+                                        _buildUlamaSection(cubit, state),
+                                        const SizedBox(height: 24),
+                                        _buildSpecialNeedsSection(cubit, state),
+                                        const SizedBox(height: 32),
+                                        _buildActionButtons(context, state),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.cardBackground,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back_rounded, size: 20),
+              onPressed: () => Navigator.pop(context),
+              padding: EdgeInsets.zero,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isEditing ? 'Edit Member' : 'Add Member',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimary,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                Text(
+                  'Family member details',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -116,13 +196,29 @@ class _FamilyFormState extends State<FamilyForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const Row(
+          children: [
+            Icon(Icons.person_rounded, color: AppTheme.primaryColor, size: 24),
+            SizedBox(width: 12),
+            Text(
+              'Personal Information',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
         CustomTextField(
           label: 'Full Name',
           controller: _nameController,
           onChanged: cubit.updateName,
           isRequired: true,
+          hintText: 'Enter full name',
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Row(
           children: [
             Expanded(
@@ -130,6 +226,7 @@ class _FamilyFormState extends State<FamilyForm> {
                 label: 'National ID No',
                 controller: _nicController,
                 onChanged: cubit.updateNic,
+                hintText: 'Enter NIC',
               ),
             ),
             const SizedBox(width: 16),
@@ -141,11 +238,12 @@ class _FamilyFormState extends State<FamilyForm> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                hintText: 'Enter age',
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Row(
           children: [
             Expanded(
@@ -168,7 +266,7 @@ class _FamilyFormState extends State<FamilyForm> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         CustomDropdown(
           label: 'Relationship to Head',
           value: state.relationship,
@@ -188,14 +286,15 @@ class _FamilyFormState extends State<FamilyForm> {
           onChanged: cubit.updateRelationship,
           isRequired: true,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         CustomTextField(
           label: 'Occupation/Business',
           controller: _occupationController,
           onChanged: cubit.updateOccupation,
           isRequired: true,
+          hintText: 'Enter occupation',
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         CustomDropdown(
           label: 'Status',
           value: state.status,
@@ -214,10 +313,10 @@ class _FamilyFormState extends State<FamilyForm> {
   Widget _buildEducationSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
@@ -225,19 +324,20 @@ class _FamilyFormState extends State<FamilyForm> {
         children: [
           const Row(
             children: [
-              Icon(Icons.school, color: AppTheme.primaryColor),
-              SizedBox(width: 8),
+              Icon(Icons.school_rounded,
+                  color: AppTheme.primaryColor, size: 22),
+              SizedBox(width: 10),
               Text(
                 'Education & Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           CheckboxGrid(
             items: const [
               'Above Grade 5',
@@ -260,10 +360,10 @@ class _FamilyFormState extends State<FamilyForm> {
   Widget _buildMadarasaSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
@@ -271,19 +371,20 @@ class _FamilyFormState extends State<FamilyForm> {
         children: [
           const Row(
             children: [
-              Icon(Icons.menu_book, color: AppTheme.primaryColor),
-              SizedBox(width: 8),
+              Icon(Icons.menu_book_rounded,
+                  color: AppTheme.primaryColor, size: 22),
+              SizedBox(width: 10),
               Text(
                 'Madarasa Education',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           CheckboxGrid(
             items: const [
               'Kitab Part Time',
@@ -301,10 +402,10 @@ class _FamilyFormState extends State<FamilyForm> {
 
   Widget _buildUlamaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
@@ -312,19 +413,20 @@ class _FamilyFormState extends State<FamilyForm> {
         children: [
           const Row(
             children: [
-              Icon(Icons.auto_stories, color: AppTheme.primaryColor),
-              SizedBox(width: 8),
+              Icon(Icons.auto_stories_rounded,
+                  color: AppTheme.primaryColor, size: 22),
+              SizedBox(width: 10),
               Text(
                 'Ulama Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           CheckboxGrid(
             items: const [
               'Hafiz',
@@ -343,10 +445,10 @@ class _FamilyFormState extends State<FamilyForm> {
   Widget _buildSpecialNeedsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
@@ -354,19 +456,20 @@ class _FamilyFormState extends State<FamilyForm> {
         children: [
           const Row(
             children: [
-              Icon(Icons.favorite, color: AppTheme.primaryColor),
-              SizedBox(width: 8),
+              Icon(Icons.favorite_rounded,
+                  color: AppTheme.primaryColor, size: 22),
+              SizedBox(width: 10),
               Text(
                 'Special Needs',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           CheckboxGrid(
             items: const ['Disabled', 'Medical Support', 'Education Support'],
             selectedItems: state.specialNeeds,
@@ -382,12 +485,9 @@ class _FamilyFormState extends State<FamilyForm> {
       children: [
         Expanded(
           child: SizedBox(
-            height: 48,
+            height: 52,
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
               child: const Text('Cancel', style: TextStyle(fontSize: 16)),
             ),
           ),
@@ -395,7 +495,8 @@ class _FamilyFormState extends State<FamilyForm> {
         const SizedBox(width: 16),
         Expanded(
           child: GradientButton(
-            text: isEditing ? 'Update Member' : 'Save Member',
+            text: isEditing ? 'Update' : 'Save',
+            icon: Icons.check_rounded,
             onPressed: () {
               if (_formKey.currentState?.validate() ?? false) {
                 final member = state.toEntity();
