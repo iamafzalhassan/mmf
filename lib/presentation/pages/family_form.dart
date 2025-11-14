@@ -10,10 +10,10 @@ class FamilyForm extends StatefulWidget {
   const FamilyForm({super.key});
 
   @override
-  State<FamilyForm> createState() => _FamilyFormState();
+  State<FamilyForm> createState() => _FamilyMainFormState();
 }
 
-class _FamilyFormState extends State<FamilyForm> {
+class _FamilyMainFormState extends State<FamilyForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _nicController;
@@ -70,9 +70,10 @@ class _FamilyFormState extends State<FamilyForm> {
                       TextFormField(
                         controller: _nameController,
                         decoration: const InputDecoration(
-                          labelText: 'Name with Initials',
+                          labelText: 'Name with Initials *',
                         ),
                         onChanged: cubit.updateName,
+                        validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -91,13 +92,14 @@ class _FamilyFormState extends State<FamilyForm> {
                             child: TextFormField(
                               controller: _ageController,
                               decoration: const InputDecoration(
-                                labelText: 'Age',
+                                labelText: 'Age *',
                               ),
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly
                               ],
                               onChanged: cubit.updateAge,
+                              validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
                             ),
                           ),
                         ],
@@ -111,6 +113,7 @@ class _FamilyFormState extends State<FamilyForm> {
                               value: state.gender,
                               items: const ['Male', 'Female'],
                               onChanged: cubit.updateGender,
+                              isRequired: true,
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -169,7 +172,7 @@ class _FamilyFormState extends State<FamilyForm> {
                       const SizedBox(height: 16),
                       _buildMadarasaSection(cubit, state),
                       const SizedBox(height: 16),
-                      _buildUlmaSection(cubit, state),
+                      _buildUlamaSection(cubit, state),
                       const SizedBox(height: 16),
                       _buildSpecialNeedsSection(cubit, state),
                       const SizedBox(height: 32),
@@ -179,8 +182,8 @@ class _FamilyFormState extends State<FamilyForm> {
                             child: OutlinedButton(
                               onPressed: () => Navigator.pop(context),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                               ),
                               child: const Text('Cancel'),
                             ),
@@ -190,8 +193,11 @@ class _FamilyFormState extends State<FamilyForm> {
                             child: GradientButton(
                               text: 'Save Member',
                               onPressed: () {
-                                final member = state.toEntity();
-                                Navigator.pop(context, member);
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  final member = state.toEntity();
+                                  Navigator.pop(context, member);
+                                }
                               },
                             ),
                           ),
@@ -297,7 +303,7 @@ class _FamilyFormState extends State<FamilyForm> {
     );
   }
 
-  Widget _buildUlmaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget _buildUlamaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
