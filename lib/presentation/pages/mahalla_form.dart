@@ -121,7 +121,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Household Information',
-          icon: Icons.home_outlined,
+          icon: Icons.home_filled,
         ),
         const SizedBox(height: 16),
         CustomTextField(
@@ -183,7 +183,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Family Members',
-          icon: Icons.people_outline,
+          icon: Icons.family_restroom,
         ),
         if (state.familyMembers.isEmpty)
           Padding(
@@ -306,7 +306,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Additional Information',
-          icon: Icons.info_outlined,
+          icon: Icons.info,
         ),
         const SizedBox(height: 16),
         CustomDropdown(
