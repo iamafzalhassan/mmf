@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomDropdownField extends StatelessWidget {
+class CustomDropdown extends StatelessWidget {
   final String label;
   final String value;
   final List<String> items;
   final ValueChanged<String> onChanged;
   final bool isRequired;
 
-  const CustomDropdownField({
+  const CustomDropdown({
     super.key,
     required this.label,
     required this.value,

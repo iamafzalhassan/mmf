@@ -6,6 +6,24 @@ part 'family_member_state.dart';
 class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   FamilyMemberCubit() : super(FamilyMemberState());
 
+  // Initialize with existing member data for editing
+  void loadMember(FamilyMember member) {
+    emit(FamilyMemberState(
+      name: member.name,
+      nic: member.nic,
+      gender: member.gender,
+      civilStatus: member.civilStatus,
+      age: member.age,
+      relationship: member.relationship,
+      occupation: member.occupation,
+      status: member.status,
+      students: member.students,
+      madarasa: member.madarasa,
+      ulma: member.ulma,
+      specialNeeds: member.specialNeeds,
+    ));
+  }
+
   void updateName(String value) {
     emit(state.copyWith(name: value));
   }
@@ -28,6 +46,10 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   void updateRelationship(String value) {
     emit(state.copyWith(relationship: value));
+  }
+
+  void updateOccupation(String value) {
+    emit(state.copyWith(occupation: value));
   }
 
   void updateStatus(String value) {
