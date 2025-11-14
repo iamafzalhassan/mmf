@@ -22,7 +22,7 @@ class MahallaForm extends StatelessWidget {
       backgroundColor: AppTheme.scaffoldBackground,
       body: BlocConsumer<MainFormCubit, MainFormState>(
         listenWhen: (prev, curr) =>
-        prev.isSuccess != curr.isSuccess || prev.error != curr.error,
+            prev.isSuccess != curr.isSuccess || prev.error != curr.error,
         listener: (context, state) {
           if (state.isSuccess) {
             scrollController.animateTo(
@@ -121,7 +121,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Household Information',
-          icon: Icons.home,
+          icon: Icons.home_outlined,
         ),
         const SizedBox(height: 16),
         CustomTextField(
@@ -183,7 +183,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Family Members',
-          icon: Icons.family_restroom,
+          icon: Icons.people_outline,
         ),
         if (state.familyMembers.isEmpty)
           Padding(
@@ -197,7 +197,7 @@ class MahallaForm extends StatelessWidget {
         if (state.familyMembers.isNotEmpty) const SizedBox(height: 16),
         ...List.generate(
           state.familyMembers.length,
-              (index) {
+          (index) {
             final member = state.familyMembers[index];
             return FamilyMemberCard(
               index: index,
@@ -222,8 +222,8 @@ class MahallaForm extends StatelessWidget {
                   if (updatedMember.relationship == 'Head of Family') {
                     // Find if there's already a head (excluding current member if editing)
                     final existingHeadIndex = state.familyMembers.indexWhere(
-                            (m) =>
-                        m.relationship == 'Head of Family' &&
+                        (m) =>
+                            m.relationship == 'Head of Family' &&
                             (!isEditing ||
                                 state.familyMembers.indexOf(m) != editIndex));
 
@@ -255,7 +255,8 @@ class MahallaForm extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('Add Family Member', style: TextStyle(fontSize: 16)),
+            child:
+                const Text('Add Family Member', style: TextStyle(fontSize: 16)),
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -305,7 +306,7 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 32),
         const SectionHeader(
           title: 'Additional Information',
-          icon: Icons.info_outline,
+          icon: Icons.info_outlined,
         ),
         const SizedBox(height: 16),
         CustomDropdown(
