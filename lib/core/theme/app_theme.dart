@@ -50,7 +50,7 @@ class AppTheme {
         secondary: secondaryColor,
       ),
       useMaterial3: true,
-      fontFamily: 'Roboto',
+      fontFamily: 'SFProDisplay',
       scaffoldBackgroundColor: scaffoldBackground,
 
       // AppBar Theme
