@@ -1,48 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/domain/entities/family_member.dart';
 import 'package:mmf/presentation/cubits/family_member_cubit.dart';
 import 'package:mmf/presentation/widgets/checkbox_grid.dart';
-import 'package:mmf/presentation/widgets/custom_dropdown_field.dart';
+import 'package:mmf/presentation/widgets/custom_dropdown.dart';
+import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 
-class FamilyForm extends StatefulWidget {
-  const FamilyForm({super.key});
+class FamilyForm extends StatelessWidget {
+  final FamilyMember? existingMember;
+  final int? memberIndex;
 
-  @override
-  State<FamilyForm> createState() => _FamilyMainFormState();
-}
+  const FamilyForm({
+    super.key,
+    this.existingMember,
+    this.memberIndex,
+  });
 
-class _FamilyMainFormState extends State<FamilyForm> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
-  late final TextEditingController _nicController;
-  late final TextEditingController _ageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _nicController = TextEditingController();
-    _ageController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _nicController.dispose();
-    _ageController.dispose();
-    super.dispose();
-  }
+  bool get isEditing => existingMember != null;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => FamilyMemberCubit(),
+      create: (_) {
+        final cubit = FamilyMemberCubit();
+        if (existingMember != null) {
+          cubit.loadMember(existingMember!);
+        }
+        return cubit;
+      },
       child: Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: const Text('Add Family Member'),
+          title: Text(isEditing ? 'Edit Family Member' : 'Add Family Member'),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -57,116 +48,18 @@ class _FamilyMainFormState extends State<FamilyForm> {
         body: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
           builder: (context, state) {
             final cubit = context.read<FamilyMemberCubit>();
+            final formKey = GlobalKey<FormState>();
 
             return SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 32),
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Name with Initials *',
-                        ),
-                        onChanged: cubit.updateName,
-                        validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _nicController,
-                              decoration: const InputDecoration(
-                                labelText: 'National ID No',
-                              ),
-                              onChanged: cubit.updateNic,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _ageController,
-                              decoration: const InputDecoration(
-                                labelText: 'Age *',
-                              ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              onChanged: cubit.updateAge,
-                              validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomDropdownField(
-                              label: 'Gender',
-                              value: state.gender,
-                              items: const ['Male', 'Female'],
-                              onChanged: cubit.updateGender,
-                              isRequired: true,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: CustomDropdownField(
-                              label: 'Civil Status',
-                              value: state.civilStatus,
-                              items: const [
-                                'Married',
-                                'Single',
-                                'Divorced',
-                                'Widow'
-                              ],
-                              onChanged: cubit.updateCivilStatus,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomDropdownField(
-                              label: 'Status',
-                              value: state.status,
-                              items: const [
-                                'Studying Only',
-                                'Working Only',
-                                'Studying and Working'
-                              ],
-                              onChanged: cubit.updateStatus,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: CustomDropdownField(
-                              label: 'Relationship to Head',
-                              value: state.relationship,
-                              items: const [
-                                'Father',
-                                'Mother',
-                                'Son',
-                                'Daughter',
-                                'Brother',
-                                'Sister',
-                                'Spouse',
-                                'Other'
-                              ],
-                              onChanged: cubit.updateRelationship,
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildPersonalInfoSection(context, state, cubit),
                       const SizedBox(height: 32),
                       _buildEducationSection(cubit, state),
                       const SizedBox(height: 16),
@@ -176,33 +69,7 @@ class _FamilyMainFormState extends State<FamilyForm> {
                       const SizedBox(height: 16),
                       _buildSpecialNeedsSection(cubit, state),
                       const SizedBox(height: 32),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => Navigator.pop(context),
-                              style: OutlinedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                              ),
-                              child: const Text('Cancel'),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: GradientButton(
-                              text: 'Save Member',
-                              onPressed: () {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  final member = state.toEntity();
-                                  Navigator.pop(context, member);
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildActionButtons(context, formKey, state),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -212,6 +79,106 @@ class _FamilyMainFormState extends State<FamilyForm> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildPersonalInfoSection(
+      BuildContext context, FamilyMemberState state, FamilyMemberCubit cubit) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextField(
+          label: 'Full Name',
+          initialValue: state.name,
+          onChanged: cubit.updateName,
+          isRequired: true,
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                label: 'National ID No',
+                initialValue: state.nic,
+                onChanged: cubit.updateNic,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: CustomTextField(
+                label: 'Age',
+                initialValue: state.age,
+                onChanged: cubit.updateAge,
+                isRequired: true,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: CustomDropdown(
+                label: 'Gender',
+                value: state.gender,
+                items: const ['Male', 'Female'],
+                onChanged: cubit.updateGender,
+                isRequired: true,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: CustomDropdown(
+                label: 'Civil Status',
+                value: state.civilStatus,
+                items: const ['Married', 'Single', 'Divorced', 'Widow'],
+                onChanged: cubit.updateCivilStatus,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        CustomDropdown(
+          label: 'Relationship to Head',
+          value: state.relationship,
+          items: const [
+            'Head of Family',
+            'Spouse',
+            'Son',
+            'Daughter',
+            'Father',
+            'Mother',
+            'Brother',
+            'Sister',
+            'Grandson',
+            'Granddaughter',
+            'Other'
+          ],
+          onChanged: cubit.updateRelationship,
+          isRequired: true,
+        ),
+        const SizedBox(height: 16),
+        CustomTextField(
+          label: 'Occupation/Business',
+          initialValue: state.occupation,
+          onChanged: cubit.updateOccupation,
+          isRequired: true,
+        ),
+        const SizedBox(height: 16),
+        CustomDropdown(
+          label: 'Status',
+          value: state.status,
+          items: const [
+            'Studying Only',
+            'Working Only',
+            'Studying and Working',
+            'Not Working/Studying'
+          ],
+          onChanged: cubit.updateStatus,
+        ),
+      ],
     );
   }
 
@@ -227,16 +194,16 @@ class _FamilyMainFormState extends State<FamilyForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.school, color: Color(0xFF667EEA)),
-              const SizedBox(width: 8),
+              Icon(Icons.school, color: Color(0xFF667EEA)),
+              SizedBox(width: 8),
               Text(
                 'Education & Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Color(0xFF667EEA),
                 ),
               ),
             ],
@@ -273,16 +240,16 @@ class _FamilyMainFormState extends State<FamilyForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.menu_book, color: Color(0xFF667EEA)),
-              const SizedBox(width: 8),
+              Icon(Icons.menu_book, color: Color(0xFF667EEA)),
+              SizedBox(width: 8),
               Text(
                 'Madarasa Education',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Color(0xFF667EEA),
                 ),
               ),
             ],
@@ -314,16 +281,16 @@ class _FamilyMainFormState extends State<FamilyForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.auto_stories, color: Color(0xFF667EEA)),
-              const SizedBox(width: 8),
+              Icon(Icons.auto_stories, color: Color(0xFF667EEA)),
+              SizedBox(width: 8),
               Text(
                 'Ulama Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Color(0xFF667EEA),
                 ),
               ),
             ],
@@ -358,16 +325,16 @@ class _FamilyMainFormState extends State<FamilyForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.favorite, color: Color(0xFF667EEA)),
-              const SizedBox(width: 8),
+              Icon(Icons.favorite, color: Color(0xFF667EEA)),
+              SizedBox(width: 8),
               Text(
                 'Special Needs',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Color(0xFF667EEA),
                 ),
               ),
             ],
@@ -380,6 +347,35 @@ class _FamilyMainFormState extends State<FamilyForm> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildActionButtons(
+      BuildContext context, GlobalKey<FormState> formKey, FamilyMemberState state) {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: const Text('Cancel'),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: GradientButton(
+            text: isEditing ? 'Update Member' : 'Save Member',
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                final member = state.toEntity();
+                Navigator.pop(context, member);
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 }

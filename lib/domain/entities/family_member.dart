@@ -5,6 +5,7 @@ class FamilyMember {
   final String civilStatus;
   final String age;
   final String relationship;
+  final String occupation;
   final String status;
   final List<String> students;
   final List<String> madarasa;
@@ -18,6 +19,7 @@ class FamilyMember {
     required this.civilStatus,
     required this.age,
     required this.relationship,
+    required this.occupation,
     required this.status,
     required this.students,
     required this.madarasa,
@@ -33,6 +35,7 @@ class FamilyMember {
       'civilStatus': civilStatus,
       'age': age,
       'relationship': relationship,
+      'occupation': occupation,
       'status': status,
       'students': students.join(', '),
       'madarasa': madarasa.join(', '),

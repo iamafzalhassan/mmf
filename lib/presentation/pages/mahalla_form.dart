@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmf/core/di/injection_container.dart' as di;
-import 'package:mmf/core/utils/date_utils.dart';
-import 'package:mmf/domain/entities/form_data.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
 import 'package:mmf/presentation/pages/family_form.dart';
-import 'package:mmf/presentation/widgets/custom_dropdown_field.dart';
+import 'package:mmf/presentation/widgets/custom_dropdown.dart';
+import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 import 'package:mmf/presentation/widgets/section_header.dart';
 
@@ -16,123 +14,17 @@ class MahallaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => di.sl<MainFormCubit>(),
-      child: const MahallaFormView(),
-    );
-  }
-}
+    final formKey = GlobalKey<FormState>();
+    final scrollController = ScrollController();
 
-class MahallaFormView extends StatefulWidget {
-  const MahallaFormView({super.key});
-
-  @override
-  State<MahallaFormView> createState() => _MahallaFormViewState();
-}
-
-class _MahallaFormViewState extends State<MahallaFormView> {
-  final _formKey = GlobalKey<FormState>();
-  final _scrollController = ScrollController();
-
-  // Controllers
-  late final TextEditingController _refNoController;
-  late final TextEditingController _admissionNoController;
-  late final TextEditingController _headNameController;
-  late final TextEditingController _headInitialsController;
-  late final TextEditingController _addressController;
-  late final TextEditingController _headNICController;
-  late final TextEditingController _headAgeController;
-  late final TextEditingController _mobileController;
-  late final TextEditingController _occupationController;
-
-  // Dropdown values
-  String _headGender = '';
-  String _headCivilStatus = '';
-  String _ownership = '';
-  String _zakath = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _refNoController =
-        TextEditingController(text: DateTimeUtils.generateRefNo());
-    _admissionNoController = TextEditingController();
-    _headNameController = TextEditingController();
-    _headInitialsController = TextEditingController();
-    _addressController = TextEditingController();
-    _headNICController = TextEditingController();
-    _headAgeController = TextEditingController();
-    _mobileController = TextEditingController();
-    _occupationController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _refNoController.dispose();
-    _admissionNoController.dispose();
-    _headNameController.dispose();
-    _headInitialsController.dispose();
-    _addressController.dispose();
-    _headNICController.dispose();
-    _headAgeController.dispose();
-    _mobileController.dispose();
-    _occupationController.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _resetForm() {
-    _formKey.currentState?.reset();
-    _refNoController.text = DateTimeUtils.generateRefNo();
-    _admissionNoController.clear();
-    _headNameController.clear();
-    _headInitialsController.clear();
-    _addressController.clear();
-    _headNICController.clear();
-    _headAgeController.clear();
-    _mobileController.clear();
-    _occupationController.clear();
-    setState(() {
-      _headGender = '';
-      _headCivilStatus = '';
-      _ownership = '';
-      _zakath = '';
-    });
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final formData = FormData(
-        refNo: _refNoController.text,
-        admissionNo: _admissionNoController.text,
-        headName: _headNameController.text,
-        headInitials: _headInitialsController.text,
-        address: _addressController.text,
-        headNIC: _headNICController.text,
-        headAge: _headAgeController.text,
-        mobile: _mobileController.text,
-        occupation: _occupationController.text,
-        headGender: _headGender,
-        headCivilStatus: _headCivilStatus,
-        ownership: _ownership,
-        zakath: _zakath,
-        familyMembers: context.read<MainFormCubit>().state.familyMembers,
-      );
-
-      context.read<MainFormCubit>().submit(formData);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: BlocListener<MainFormCubit, MainFormState>(
+      body: BlocConsumer<MainFormCubit, MainFormState>(
         listenWhen: (prev, curr) =>
             prev.isSuccess != curr.isSuccess || prev.error != curr.error,
         listener: (context, state) {
           if (state.isSuccess) {
-            _scrollController.animateTo(
+            scrollController.animateTo(
               0,
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
@@ -143,7 +35,7 @@ class _MahallaFormViewState extends State<MahallaFormView> {
                 backgroundColor: Colors.green,
               ),
             );
-            _resetForm();
+            context.read<MainFormCubit>().resetForm();
           } else if (state.error != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -153,33 +45,35 @@ class _MahallaFormViewState extends State<MahallaFormView> {
             );
           }
         },
-        child: Column(
-          children: [
-            _buildHeader(),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildHeadOfFamilySection(),
-                        _buildFamilyMembersSection(),
-                        _buildAdditionalInformationSection(),
-                        const SizedBox(height: 16),
-                        _buildSubmitButton(),
-                        const SizedBox(height: 32),
-                      ],
+        builder: (context, state) {
+          return Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildHouseholdSection(context, state),
+                          _buildFamilyMembersSection(context, state),
+                          _buildAdditionalInformationSection(context, state),
+                          const SizedBox(height: 16),
+                          _buildSubmitButton(context, formKey, state),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -221,176 +115,140 @@ class _MahallaFormViewState extends State<MahallaFormView> {
     );
   }
 
-  Widget _buildHeadOfFamilySection() {
+  Widget _buildHouseholdSection(BuildContext context, MainFormState state) {
+    final cubit = context.read<MainFormCubit>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 32),
         const SectionHeader(
-          title: 'Head of Family Details',
-          icon: Icons.person,
+          title: 'Household Information',
+          icon: Icons.home,
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: _admissionNoController,
-          decoration: const InputDecoration(
-            labelText: 'Admission (Sandapaname) No',
-          ),
+        CustomTextField(
+          label: 'Reference No',
+          initialValue: state.refNo,
+          readOnly: true,
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: _headNameController,
-          decoration: const InputDecoration(labelText: 'Full Name *'),
-          validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
+        CustomTextField(
+          label: 'Admission (Sandapaname) No',
+          initialValue: state.admissionNo,
+          onChanged: cubit.updateAdmissionNo,
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: _headInitialsController,
-          decoration: const InputDecoration(labelText: 'Name with Initials *'),
-          validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
+        CustomTextField(
+          label: 'Address',
+          initialValue: state.address,
+          onChanged: cubit.updateAddress,
+          isRequired: true,
+          maxLines: 3,
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: _addressController,
-          decoration: const InputDecoration(labelText: 'Address *'),
-          validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: _headNICController,
-                decoration:
-                    const InputDecoration(labelText: 'National ID No *'),
-                validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: TextFormField(
-                controller: _headAgeController,
-                decoration: const InputDecoration(labelText: 'Age *'),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-              ),
-            ),
+        CustomTextField(
+          label: 'Mobile No',
+          initialValue: state.mobile,
+          onChanged: cubit.updateMobile,
+          isRequired: true,
+          keyboardType: TextInputType.phone,
+          hintText: '07XXXXXXXX',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10),
           ],
+          validator: (val) {
+            if (val?.isEmpty ?? true) return 'Required';
+            if (val!.length != 10 || !val.startsWith('07')) {
+              return 'Invalid mobile number';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: _mobileController,
-                decoration: const InputDecoration(
-                  labelText: 'Mobile No *',
-                  hintText: '07XXXXXXXX',
-                ),
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
-                ],
-                validator: (val) {
-                  if (val?.isEmpty ?? true) return 'Required';
-                  if (val!.length != 10 || !val.startsWith('07')) {
-                    return 'Invalid mobile number';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: TextFormField(
-                controller: _occupationController,
-                decoration:
-                    const InputDecoration(labelText: 'Occupation/Business *'),
-                validator: (val) => val?.isEmpty ?? true ? 'Required' : null,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: CustomDropdownField(
-                label: 'Gender',
-                value: _headGender,
-                items: const ['Male', 'Female'],
-                onChanged: (val) => setState(() => _headGender = val),
-                isRequired: true,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: CustomDropdownField(
-                label: 'Civil Status',
-                value: _headCivilStatus,
-                items: const ['Married', 'Single', 'Divorced', 'Widow'],
-                onChanged: (val) => setState(() => _headCivilStatus = val),
-                isRequired: true,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        CustomDropdownField(
+        CustomDropdown(
           label: 'House Ownership',
-          value: _ownership,
+          value: state.ownership,
           items: const ['Own', 'Rent'],
-          onChanged: (val) => setState(() => _ownership = val),
+          onChanged: cubit.updateOwnership,
           isRequired: true,
         ),
       ],
     );
   }
 
-  Widget _buildFamilyMembersSection() {
-    return BlocBuilder<MainFormCubit, MainFormState>(
-      buildWhen: (prev, curr) => prev.familyMembers != curr.familyMembers,
-      builder: (context, state) {
-        final cubit = context.read<MainFormCubit>();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 32),
-            const SectionHeader(
-              title: 'Family Members',
-              icon: Icons.family_restroom,
-            ),
-            ...List.generate(
-              state.familyMembers.length,
-              (index) => FamilyMemberCard(
-                index: index,
-                onRemove: () => cubit.removeFamilyMember(index),
+  Widget _buildFamilyMembersSection(BuildContext context, MainFormState state) {
+    final cubit = context.read<MainFormCubit>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 32),
+        const SectionHeader(
+          title: 'Family Members',
+          icon: Icons.family_restroom,
+        ),
+        const SizedBox(height: 8),
+        if (state.familyMembers.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              'No family members added yet. Please add at least one member as Head of Family.',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontStyle: FontStyle.italic,
               ),
             ),
-            const SizedBox(height: 16),
-            GradientButton(
-              text: 'Add Family Member',
-              onPressed: () async {
-                final member = await Navigator.push(
+          ),
+        ...List.generate(
+          state.familyMembers.length,
+          (index) {
+            final member = state.familyMembers[index];
+            return FamilyMemberCard(
+              index: index,
+              member: member,
+              onTap: () async {
+                final updatedMember = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const FamilyForm(),
+                    builder: (_) => FamilyForm(
+                      existingMember: member,
+                      memberIndex: index,
+                    ),
                   ),
                 );
-                if (member != null) {
-                  cubit.addFamilyMember(member);
+                if (updatedMember != null) {
+                  cubit.updateFamilyMember(index, updatedMember);
                 }
               },
-            ),
-          ],
-        );
-      },
+              onRemove: () => cubit.removeFamilyMember(index),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
+        GradientButton(
+          text: 'Add Family Member',
+          onPressed: () async {
+            final member = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const FamilyForm(),
+              ),
+            );
+            if (member != null) {
+              cubit.addFamilyMember(member);
+            }
+          },
+        ),
+      ],
     );
   }
 
-  Widget _buildAdditionalInformationSection() {
+  Widget _buildAdditionalInformationSection(
+      BuildContext context, MainFormState state) {
+    final cubit = context.read<MainFormCubit>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -400,68 +258,141 @@ class _MahallaFormViewState extends State<MahallaFormView> {
           icon: Icons.info_outline,
         ),
         const SizedBox(height: 16),
-        CustomDropdownField(
+        CustomDropdown(
           label: 'Eligible For Zakath',
-          value: _zakath,
+          value: state.zakath,
           items: const ['Yes', 'No'],
-          onChanged: (val) => setState(() => _zakath = val),
+          onChanged: cubit.updateZakath,
           isRequired: true,
         ),
       ],
     );
   }
 
-  Widget _buildSubmitButton() {
-    return BlocBuilder<MainFormCubit, MainFormState>(
-      buildWhen: (prev, curr) => prev.isLoading != curr.isLoading,
-      builder: (context, state) {
-        return GradientButton(
-          text: 'Submit Form',
-          onPressed: _submitForm,
-          isLoading: state.isLoading,
-        );
+  Widget _buildSubmitButton(
+      BuildContext context, GlobalKey<FormState> formKey, MainFormState state) {
+    final cubit = context.read<MainFormCubit>();
+
+    return GradientButton(
+      text: 'Submit Form',
+      onPressed: () {
+        if (formKey.currentState?.validate() ?? false) {
+          if (state.familyMembers.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please add at least one family member'),
+                backgroundColor: Colors.orange,
+              ),
+            );
+            return;
+          }
+
+          // Check if there's a Head of Family
+          final hasHead = state.familyMembers
+              .any((m) => m.relationship == 'Head of Family');
+          if (!hasHead) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please designate one member as Head of Family'),
+                backgroundColor: Colors.orange,
+              ),
+            );
+            return;
+          }
+
+          cubit.submit();
+        }
       },
+      isLoading: state.isLoading,
     );
   }
 }
 
 class FamilyMemberCard extends StatelessWidget {
   final int index;
+  final dynamic member;
+  final VoidCallback onTap;
   final VoidCallback onRemove;
 
   const FamilyMemberCard({
     super.key,
     required this.index,
+    required this.member,
+    required this.onTap,
     required this.onRemove,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      color: Colors.grey[50],
+      margin: const EdgeInsets.only(bottom: 12),
+      color: Colors.white,
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side:
-            BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
+        side: BorderSide(
+          color: member.relationship == 'Head of Family'
+              ? Theme.of(context).colorScheme.primary
+              : Colors.grey[300]!,
+          width: member.relationship == 'Head of Family' ? 2 : 1,
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Family Member ${index + 1}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: member.relationship == 'Head of Family'
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                      : Colors.grey[100],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  member.relationship == 'Head of Family'
+                      ? Icons.star
+                      : Icons.person,
+                  color: member.relationship == 'Head of Family'
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey[600],
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: onRemove,
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      member.name.isNotEmpty ? member.name : 'Unnamed Member',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      member.relationship.isNotEmpty
+                          ? member.relationship
+                          : 'No relationship set',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: onRemove,
+              ),
+            ],
+          ),
         ),
       ),
     );

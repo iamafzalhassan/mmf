@@ -7,6 +7,7 @@ class FamilyMemberState {
   final String civilStatus;
   final String age;
   final String relationship;
+  final String occupation;
   final String status;
   final List<String> students;
   final List<String> madarasa;
@@ -20,6 +21,7 @@ class FamilyMemberState {
     this.civilStatus = '',
     this.age = '',
     this.relationship = '',
+    this.occupation = '',
     this.status = '',
     this.students = const [],
     this.madarasa = const [],
@@ -34,6 +36,7 @@ class FamilyMemberState {
     String? civilStatus,
     String? age,
     String? relationship,
+    String? occupation,
     String? status,
     List<String>? students,
     List<String>? madarasa,
@@ -47,6 +50,7 @@ class FamilyMemberState {
       civilStatus: civilStatus ?? this.civilStatus,
       age: age ?? this.age,
       relationship: relationship ?? this.relationship,
+      occupation: occupation ?? this.occupation,
       status: status ?? this.status,
       students: students ?? this.students,
       madarasa: madarasa ?? this.madarasa,
@@ -63,6 +67,7 @@ class FamilyMemberState {
       civilStatus: civilStatus,
       age: age,
       relationship: relationship,
+      occupation: occupation,
       status: status,
       students: students,
       madarasa: madarasa,
