@@ -13,11 +13,9 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
 
   @override
   Future<void> submitForm(FormData formData) async {
-    print(formData.toJson());
-
     final response = await client.post(
       Uri.parse('https://script.google.com/macros/s/AKfycbxwkLGeyDuh4gvMsfNx7pSmcCYybJ3itLCYYfezpAUW6p0cUu4lwfQyAvyi-sEeNhALLg/exec'),
-      headers: {'Content-Type': 'text/plain'},
+      headers: {"Content-Type": "application/json"},
       body: jsonEncode(formData.toJson()),
     );
 
