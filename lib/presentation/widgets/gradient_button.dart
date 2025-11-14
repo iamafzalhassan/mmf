@@ -29,7 +29,7 @@ class GradientButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isLoading ? null : onPressed,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
           child: Center(
             child: isLoading
                 ? const SizedBox(
