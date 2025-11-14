@@ -68,22 +68,8 @@ class MainFormCubit extends Cubit<MainFormState> {
     final formData = FormData(
       refNo: state.refNo,
       admissionNo: state.admissionNo,
-      headName: '',
-      // Not needed anymore
-      headInitials: '',
-      // Not needed anymore
       address: state.address,
-      headNIC: '',
-      // Not needed anymore
-      headAge: '',
-      // Not needed anymore
       mobile: state.mobile,
-      occupation: '',
-      // Not needed anymore
-      headGender: '',
-      // Not needed anymore
-      headCivilStatus: '',
-      // Not needed anymore
       ownership: state.ownership,
       zakath: state.zakath,
       familyMembers: state.familyMembers,

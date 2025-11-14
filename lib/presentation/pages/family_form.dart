@@ -170,16 +170,16 @@ class _FamilyFormState extends State<FamilyForm> {
                 Text(
                   isEditing ? 'Edit Member' : 'Add Member',
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 32,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.textPrimary,
-                    letterSpacing: -0.5,
+                    height: 1.25
                   ),
                 ),
                 Text(
                   'Family member details',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: AppTheme.textSecondary,
                   ),
                 ),
@@ -187,6 +187,7 @@ class _FamilyFormState extends State<FamilyForm> {
             ),
           ),
         ],
+        crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
   }

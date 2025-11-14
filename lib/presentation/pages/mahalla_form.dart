@@ -81,7 +81,7 @@ class MahallaForm extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeader(),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
                         _buildFormCard(context, state, formKey),
                       ],
                     ),
@@ -105,6 +105,7 @@ class MahallaForm extends StatelessWidget {
             fontSize: 32,
             fontWeight: FontWeight.w700,
             color: AppTheme.textPrimary,
+            height: 1.25
           ),
         ),
         Text(
