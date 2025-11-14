@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
 import 'package:mmf/presentation/pages/family_form.dart';
@@ -18,10 +19,10 @@ class MahallaForm extends StatelessWidget {
     final scrollController = ScrollController();
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: AppTheme.scaffoldBackground,
       body: BlocConsumer<MainFormCubit, MainFormState>(
         listenWhen: (prev, curr) =>
-            prev.isSuccess != curr.isSuccess || prev.error != curr.error,
+        prev.isSuccess != curr.isSuccess || prev.error != curr.error,
         listener: (context, state) {
           if (state.isSuccess) {
             scrollController.animateTo(
@@ -32,7 +33,7 @@ class MahallaForm extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Form submitted successfully!'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppTheme.successColor,
               ),
             );
             context.read<MainFormCubit>().resetForm();
@@ -40,7 +41,7 @@ class MahallaForm extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error!),
-                backgroundColor: Colors.red,
+                backgroundColor: AppTheme.errorColor,
               ),
             );
           }
@@ -83,18 +84,14 @@ class MahallaForm extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        gradient: AppTheme.primaryGradient,
       ),
       child: const Column(
         children: [
           Text(
             'KOHILAWATTA JUMMAH MASJID & BURIAL GROUND',
             style: TextStyle(
-              color: Colors.white,
+              color: AppTheme.textOnPrimary,
               fontSize: 24,
               fontWeight: FontWeight.w500,
             ),
@@ -104,7 +101,7 @@ class MahallaForm extends StatelessWidget {
           Text(
             'Mahalla Members Details Collection Form',
             style: TextStyle(
-              color: Colors.white,
+              color: AppTheme.textOnPrimary,
               fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
@@ -194,13 +191,13 @@ class MahallaForm extends StatelessWidget {
             child: Text(
               'No family members added yet. Please add at least one member as Head of Family.',
               style: TextStyle(
-                  color: Colors.grey[600], fontStyle: FontStyle.italic),
+                  color: AppTheme.textSecondary, fontStyle: FontStyle.italic),
             ),
           ),
         if (state.familyMembers.isNotEmpty) const SizedBox(height: 16),
         ...List.generate(
           state.familyMembers.length,
-          (index) {
+              (index) {
             final member = state.familyMembers[index];
             return FamilyMemberCard(
               index: index,
@@ -225,8 +222,8 @@ class MahallaForm extends StatelessWidget {
                   if (updatedMember.relationship == 'Head of Family') {
                     // Find if there's already a head (excluding current member if editing)
                     final existingHeadIndex = state.familyMembers.indexWhere(
-                        (m) =>
-                            m.relationship == 'Head of Family' &&
+                            (m) =>
+                        m.relationship == 'Head of Family' &&
                             (!isEditing ||
                                 state.familyMembers.indexOf(m) != editIndex));
 
@@ -236,7 +233,7 @@ class MahallaForm extends StatelessWidget {
                         const SnackBar(
                           content: Text(
                               'A Head of Family already exists. Please change the existing Head\'s relationship first.'),
-                          backgroundColor: Colors.orange,
+                          backgroundColor: AppTheme.warningColor,
                           duration: Duration(seconds: 3),
                         ),
                       );
@@ -281,7 +278,7 @@ class MahallaForm extends StatelessWidget {
                       const SnackBar(
                         content: Text(
                             'A Head of Family already exists. Only one Head of Family is allowed.'),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: AppTheme.warningColor,
                         duration: Duration(seconds: 3),
                       ),
                     );
@@ -334,7 +331,7 @@ class MahallaForm extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Please add at least one family member'),
-                backgroundColor: Colors.orange,
+                backgroundColor: AppTheme.warningColor,
               ),
             );
             return;
@@ -347,7 +344,7 @@ class MahallaForm extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Please designate one member as Head of Family'),
-                backgroundColor: Colors.orange,
+                backgroundColor: AppTheme.warningColor,
               ),
             );
             return;
@@ -379,14 +376,14 @@ class FamilyMemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      color: Colors.white,
+      color: AppTheme.cardBackground,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           color: member.relationship == 'Head of Family'
               ? Theme.of(context).colorScheme.primary
-              : Colors.grey[300]!,
+              : AppTheme.borderColor,
           width: member.relationship == 'Head of Family' ? 2 : 1,
         ),
       ),
@@ -403,7 +400,7 @@ class FamilyMemberCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: member.relationship == 'Head of Family'
                       ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                      : Colors.grey[100],
+                      : AppTheme.checkboxUnselectedBackground,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(
@@ -412,7 +409,7 @@ class FamilyMemberCard extends StatelessWidget {
                       : Icons.person,
                   color: member.relationship == 'Head of Family'
                       ? Theme.of(context).colorScheme.primary
-                      : Colors.grey[600],
+                      : AppTheme.iconSecondary,
                 ),
               ),
               const SizedBox(width: 12),
@@ -434,14 +431,14 @@ class FamilyMemberCard extends StatelessWidget {
                           : 'No relationship set',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ],
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
+                icon: const Icon(Icons.delete, color: AppTheme.errorColor),
                 onPressed: onRemove,
               ),
             ],

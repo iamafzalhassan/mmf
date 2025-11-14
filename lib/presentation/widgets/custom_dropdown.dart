@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String label;
@@ -48,7 +49,7 @@ class CustomDropdown extends StatelessWidget {
               height: 4,
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: AppTheme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

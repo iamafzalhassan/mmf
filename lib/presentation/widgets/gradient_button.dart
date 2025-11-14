@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
@@ -18,15 +19,11 @@ class GradientButton extends StatelessWidget {
       width: double.infinity,
       height: 48,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        gradient: AppTheme.primaryGradient,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppTheme.transparent,
         child: InkWell(
           onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(4),
@@ -37,13 +34,14 @@ class GradientButton extends StatelessWidget {
                     height: 24,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppTheme.textOnPrimary),
                     ),
                   )
                 : Text(
                     text,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppTheme.textOnPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

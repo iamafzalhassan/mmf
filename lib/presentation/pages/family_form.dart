@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 import 'package:mmf/presentation/cubits/family_member_cubit.dart';
 import 'package:mmf/presentation/widgets/checkbox_grid.dart';
@@ -64,19 +65,15 @@ class _FamilyFormState extends State<FamilyForm> {
         return cubit;
       },
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: AppTheme.scaffoldBackground,
         appBar: AppBar(
           title: Text(isEditing ? 'Edit Family Member' : 'Add Family Member'),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
+              gradient: AppTheme.primaryGradient,
             ),
           ),
-          foregroundColor: Colors.white,
+          foregroundColor: AppTheme.textOnPrimary,
         ),
         body: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
           builder: (context, state) {
@@ -219,23 +216,23 @@ class _FamilyFormState extends State<FamilyForm> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.school, color: Color(0xFF667EEA)),
+              Icon(Icons.school, color: AppTheme.primaryColor),
               SizedBox(width: 8),
               Text(
                 'Education & Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667EEA),
+                  color: AppTheme.primaryColor,
                 ),
               ),
             ],
@@ -265,23 +262,23 @@ class _FamilyFormState extends State<FamilyForm> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.menu_book, color: Color(0xFF667EEA)),
+              Icon(Icons.menu_book, color: AppTheme.primaryColor),
               SizedBox(width: 8),
               Text(
                 'Madarasa Education',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667EEA),
+                  color: AppTheme.primaryColor,
                 ),
               ),
             ],
@@ -306,23 +303,23 @@ class _FamilyFormState extends State<FamilyForm> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.auto_stories, color: Color(0xFF667EEA)),
+              Icon(Icons.auto_stories, color: AppTheme.primaryColor),
               SizedBox(width: 8),
               Text(
                 'Ulama Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667EEA),
+                  color: AppTheme.primaryColor,
                 ),
               ),
             ],
@@ -348,23 +345,23 @@ class _FamilyFormState extends State<FamilyForm> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.favorite, color: Color(0xFF667EEA)),
+              Icon(Icons.favorite, color: AppTheme.primaryColor),
               SizedBox(width: 8),
               Text(
                 'Special Needs',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667EEA),
+                  color: AppTheme.primaryColor,
                 ),
               ),
             ],
