@@ -49,7 +49,6 @@ class MahallaForm extends StatelessWidget {
         builder: (context, state) {
           return Column(
             children: [
-              _buildHeader(),
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
@@ -60,6 +59,7 @@ class MahallaForm extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          _buildHeader(),
                           _buildHouseholdSection(context, state),
                           _buildFamilyMembersSection(context, state),
                           _buildAdditionalInformationSection(context, state),
@@ -80,35 +80,29 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(32),
-      decoration: const BoxDecoration(
-        gradient: AppTheme.primaryGradient,
-      ),
-      child: const Column(
-        children: [
-          Text(
-            'KOHILAWATTA JUMMAH MASJID & BURIAL GROUND',
-            style: TextStyle(
-              color: AppTheme.textOnPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Text(
+          'Mahalla Members Details Collection Form',
+          style: TextStyle(
+            color: AppTheme.textPrimary,
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
           ),
-          SizedBox(height: 8),
-          Text(
-            'Mahalla Members Details Collection Form',
-            style: TextStyle(
-              color: AppTheme.textOnPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-            textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          'Kohilawatta Jumma Masjid & Burial Ground',
+          style: TextStyle(
+            color: AppTheme.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
           ),
-        ],
-      ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
