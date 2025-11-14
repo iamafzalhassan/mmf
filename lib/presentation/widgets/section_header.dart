@@ -12,35 +12,24 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
+    return Row(
+      children: [
+        if (icon != null) ...[
+          Icon(
+            icon,
             color: Theme.of(context).colorScheme.primary,
-            width: 2,
+            size: 24,
           ),
-        ),
-      ),
-      child: Row(
-        children: [
-          if (icon != null) ...[
-            Icon(
-              icon,
-              color: Theme.of(context).colorScheme.primary,
-              size: 24,
-            ),
-            const SizedBox(width: 10),
-          ],
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
+          const SizedBox(width: 10),
         ],
-      ),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w500,
+              ),
+        ),
+      ],
     );
   }
 }
