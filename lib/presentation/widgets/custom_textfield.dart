@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -14,8 +15,11 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final String? hintText;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final String? prefixText;
   final bool readOnly;
   final VoidCallback? onTap;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -31,31 +35,75 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.hintText,
     this.suffixIcon,
+    this.prefixIcon,
+    this.prefixText,
     this.readOnly = false,
     this.onTap,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      initialValue: initialValue,
-      decoration: InputDecoration(
-        labelText: isRequired ? '$label *' : label,
-        hintText: hintText,
-        suffixIcon: suffixIcon,
-      ),
-      onChanged: onChanged,
-      validator: validator ??
-          (isRequired
-              ? (val) => (val == null || val.isEmpty) ? 'Required' : null
-              : null),
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      maxLines: maxLines,
-      maxLength: maxLength,
-      readOnly: readOnly,
-      onTap: onTap,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label.isNotEmpty) ...[
+          RichText(
+            text: TextSpan(
+              text: label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.textPrimary,
+              ),
+              children: [
+                if (isRequired)
+                  const TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: AppTheme.errorColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        TextFormField(
+          controller: controller,
+          initialValue: initialValue,
+          decoration: InputDecoration(
+            hintText: hintText,
+            suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon,
+            prefixText: prefixText,
+            prefixStyle: const TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+            counterText: '',
+          ),
+          onChanged: onChanged,
+          validator: validator ??
+              (isRequired
+                  ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null
+                  : null),
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+          maxLines: maxLines,
+          maxLength: maxLength,
+          readOnly: readOnly,
+          onTap: onTap,
+          obscureText: obscureText,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: AppTheme.textPrimary,
+          ),
+        ),
+      ],
     );
   }
 }

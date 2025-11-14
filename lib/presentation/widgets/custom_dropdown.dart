@@ -19,64 +19,119 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      readOnly: true,
-      controller: TextEditingController(text: value.isEmpty ? '' : value),
-      decoration: InputDecoration(
-        labelText: isRequired ? '$label *' : label,
-        suffixIcon: const Icon(Icons.arrow_drop_down),
-      ),
-      onTap: () => _showBottomSheet(context),
-      validator: isRequired
-          ? (val) => (val == null || val.isEmpty) ? 'Required' : null
-          : null,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label.isNotEmpty) ...[
+          RichText(
+            text: TextSpan(
+              text: label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.textPrimary,
+              ),
+              children: [
+                if (isRequired)
+                  const TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: AppTheme.errorColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        TextFormField(
+          readOnly: true,
+          controller: TextEditingController(text: value.isEmpty ? '' : value),
+          decoration: InputDecoration(
+            suffixIcon: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: AppTheme.iconSecondary,
+              size: 24,
+            ),
+            hintText: 'Select ${label.toLowerCase()}',
+          ),
+          onTap: () => _showBottomSheet(context),
+          validator: isRequired
+              ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null
+              : null,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: AppTheme.textPrimary,
+          ),
+        ),
+      ],
     );
   }
 
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: AppTheme.cardBackground,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 40,
               height: 4,
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
                 color: AppTheme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Row(
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textPrimary,
                     ),
+                  ),
+                ],
               ),
             ),
-            const Divider(height: 0),
+            const SizedBox(height: 8),
+            const Divider(height: 1),
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final item = items[index];
                   final isSelected = value == item;
                   return ListTile(
-                    title: Text(item),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                    title: Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        color: isSelected ? AppTheme.primaryColor : AppTheme.textPrimary,
+                      ),
+                    ),
                     trailing: isSelected
-                        ? Icon(
-                            Icons.check_circle,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
+                        ? const Icon(
+                      Icons.check_circle_rounded,
+                      color: AppTheme.primaryColor,
+                      size: 24,
+                    )
                         : null,
                     onTap: () {
                       onChanged(item);
@@ -86,6 +141,7 @@ class CustomDropdown extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

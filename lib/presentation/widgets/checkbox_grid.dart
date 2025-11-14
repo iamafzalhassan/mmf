@@ -16,46 +16,61 @@ class CheckboxGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: 10,
+      runSpacing: 10,
       children: items.map((item) {
         final isSelected = selectedItems.contains(item);
         return InkWell(
           onTap: () => onChanged(item),
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          borderRadius: BorderRadius.circular(12),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : AppTheme.checkboxUnselectedBackground,
-              borderRadius: BorderRadius.circular(8),
+                  ? AppTheme.primaryColor.withOpacity(0.15)
+                  : AppTheme.cardBackground,
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isSelected
-                    ? Theme.of(context).colorScheme.primary
+                    ? AppTheme.primaryColor
                     : AppTheme.borderColor,
-                width: 1.5,
+                width: isSelected ? 2 : 1.5,
               ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  isSelected ? Icons.check_box : Icons.check_box_outline_blank,
-                  size: 20,
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : AppTheme.iconSecondary,
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: isSelected
+                      ? const Icon(
+                    Icons.check_rounded,
+                    size: 14,
+                    color: AppTheme.textOnPrimary,
+                  )
+                      : null,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   item,
                   style: TextStyle(
                     color: isSelected
-                        ? Theme.of(context).colorScheme.primary
+                        ? AppTheme.primaryColor
                         : AppTheme.textPrimary,
                     fontWeight:
-                        isSelected ? FontWeight.w500 : FontWeight.normal,
+                    isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontSize: 14,
                   ),
                 ),
               ],
