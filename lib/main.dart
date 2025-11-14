@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(4),
           ),
           filled: true,
           fillColor: Colors.grey[50],

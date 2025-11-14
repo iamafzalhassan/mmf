@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart' hide FormState;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/core/di/injection_container.dart' as di;
 import 'package:mmf/core/utils/date_utils.dart';
 import 'package:mmf/domain/entities/form_data.dart';
-import 'package:mmf/presentation/cubits/form_cubit.dart';
-import 'package:mmf/presentation/cubits/form_state.dart';
+import 'package:mmf/presentation/cubits/main_form_cubit.dart';
+import 'package:mmf/presentation/cubits/main_form_state.dart';
+import 'package:mmf/presentation/pages/family_form.dart';
 import 'package:mmf/presentation/widgets/custom_dropdown_field.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 import 'package:mmf/presentation/widgets/section_header.dart';
-import 'family_form.dart';
 
 class MahallaForm extends StatelessWidget {
   const MahallaForm({super.key});
@@ -17,7 +17,7 @@ class MahallaForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.sl<FormCubit>(),
+      create: (_) => di.sl<MainFormCubit>(),
       child: const MahallaFormView(),
     );
   }
@@ -31,6 +31,7 @@ class MahallaFormView extends StatefulWidget {
 }
 
 class _MahallaFormViewState extends State<MahallaFormView> {
+  final _formKey = GlobalKey<FormState>();
   final _scrollController = ScrollController();
 
   // Controllers
@@ -81,6 +82,7 @@ class _MahallaFormViewState extends State<MahallaFormView> {
   }
 
   void _resetForm() {
+    _formKey.currentState?.reset();
     _refNoController.text = DateTimeUtils.generateRefNo();
     _admissionNoController.clear();
     _headNameController.clear();
@@ -99,33 +101,37 @@ class _MahallaFormViewState extends State<MahallaFormView> {
   }
 
   void _submitForm() {
-    final formData = FormData(
-      refNo: _refNoController.text,
-      admissionNo: _admissionNoController.text,
-      headName: _headNameController.text,
-      headInitials: _headInitialsController.text,
-      address: _addressController.text,
-      headNIC: _headNICController.text,
-      headAge: _headAgeController.text,
-      mobile: _mobileController.text,
-      occupation: _occupationController.text,
-      headGender: _headGender,
-      headCivilStatus: _headCivilStatus,
-      ownership: _ownership,
-      zakath: _zakath,
-      familyMembers: context.read<FormCubit>().familyMembers,
-    );
+    if (_formKey.currentState?.validate() ?? false) {
+      final formData = FormData(
+        refNo: _refNoController.text,
+        admissionNo: _admissionNoController.text,
+        headName: _headNameController.text,
+        headInitials: _headInitialsController.text,
+        address: _addressController.text,
+        headNIC: _headNICController.text,
+        headAge: _headAgeController.text,
+        mobile: _mobileController.text,
+        occupation: _occupationController.text,
+        headGender: _headGender,
+        headCivilStatus: _headCivilStatus,
+        ownership: _ownership,
+        zakath: _zakath,
+        familyMembers: context.read<MainFormCubit>().state.familyMembers,
+      );
 
-    context.read<FormCubit>().submit(formData);
+      context.read<MainFormCubit>().submit(formData);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: BlocListener<FormCubit, FormState>(
+      body: BlocListener<MainFormCubit, MainFormState>(
+        listenWhen: (prev, curr) =>
+            prev.isSuccess != curr.isSuccess || prev.error != curr.error,
         listener: (context, state) {
-          if (state is FormSuccess) {
+          if (state.isSuccess) {
             _scrollController.animateTo(
               0,
               duration: const Duration(milliseconds: 500),
@@ -138,10 +144,10 @@ class _MahallaFormViewState extends State<MahallaFormView> {
               ),
             );
             _resetForm();
-          } else if (state is FormError) {
+          } else if (state.error != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                content: Text(state.error!),
                 backgroundColor: Colors.red,
               ),
             );
@@ -153,9 +159,10 @@ class _MahallaFormViewState extends State<MahallaFormView> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                child: Form(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -343,9 +350,10 @@ class _MahallaFormViewState extends State<MahallaFormView> {
   }
 
   Widget _buildFamilyMembersSection() {
-    return BlocBuilder<FormCubit, FormState>(
+    return BlocBuilder<MainFormCubit, MainFormState>(
+      buildWhen: (prev, curr) => prev.familyMembers != curr.familyMembers,
       builder: (context, state) {
-        final cubit = context.read<FormCubit>();
+        final cubit = context.read<MainFormCubit>();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -355,13 +363,10 @@ class _MahallaFormViewState extends State<MahallaFormView> {
               icon: Icons.family_restroom,
             ),
             ...List.generate(
-              cubit.familyMembers.length,
+              state.familyMembers.length,
               (index) => FamilyMemberCard(
                 index: index,
-                onRemove: () {
-                  cubit.removeFamilyMember(index);
-                  setState(() {});
-                },
+                onRemove: () => cubit.removeFamilyMember(index),
               ),
             ),
             const SizedBox(height: 16),
@@ -376,7 +381,6 @@ class _MahallaFormViewState extends State<MahallaFormView> {
                 );
                 if (member != null) {
                   cubit.addFamilyMember(member);
-                  setState(() {});
                 }
               },
             ),
@@ -408,12 +412,13 @@ class _MahallaFormViewState extends State<MahallaFormView> {
   }
 
   Widget _buildSubmitButton() {
-    return BlocBuilder<FormCubit, FormState>(
+    return BlocBuilder<MainFormCubit, MainFormState>(
+      buildWhen: (prev, curr) => prev.isLoading != curr.isLoading,
       builder: (context, state) {
         return GradientButton(
           text: 'Submit Form',
           onPressed: _submitForm,
-          isLoading: state is FormLoading,
+          isLoading: state.isLoading,
         );
       },
     );
