@@ -144,7 +144,6 @@ class MahallaForm extends StatelessWidget {
           initialValue: state.address,
           onChanged: cubit.updateAddress,
           isRequired: true,
-          maxLines: 3,
         ),
         const SizedBox(height: 16),
         CustomTextField(
@@ -189,18 +188,16 @@ class MahallaForm extends StatelessWidget {
           title: 'Family Members',
           icon: Icons.family_restroom,
         ),
-        const SizedBox(height: 8),
         if (state.familyMembers.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
               'No family members added yet. Please add at least one member as Head of Family.',
               style: TextStyle(
-                color: Colors.grey[600],
-                fontStyle: FontStyle.italic,
-              ),
+                  color: Colors.grey[600], fontStyle: FontStyle.italic),
             ),
           ),
+        if (state.familyMembers.isNotEmpty) const SizedBox(height: 16),
         ...List.generate(
           state.familyMembers.length,
           (index) {
@@ -209,7 +206,7 @@ class MahallaForm extends StatelessWidget {
               index: index,
               member: member,
               onTap: () async {
-                final updatedMember = await Navigator.push(
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => FamilyForm(
@@ -218,7 +215,35 @@ class MahallaForm extends StatelessWidget {
                     ),
                   ),
                 );
-                if (updatedMember != null) {
+
+                if (result != null && result is Map<String, dynamic>) {
+                  final updatedMember = result['member'];
+                  final isEditing = result['isEditing'] as bool;
+                  final editIndex = result['memberIndex'] as int?;
+
+                  // Check if trying to set as Head of Family
+                  if (updatedMember.relationship == 'Head of Family') {
+                    // Find if there's already a head (excluding current member if editing)
+                    final existingHeadIndex = state.familyMembers.indexWhere(
+                        (m) =>
+                            m.relationship == 'Head of Family' &&
+                            (!isEditing ||
+                                state.familyMembers.indexOf(m) != editIndex));
+
+                    if (existingHeadIndex != -1) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'A Head of Family already exists. Please change the existing Head\'s relationship first.'),
+                          backgroundColor: Colors.orange,
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                      return;
+                    }
+                  }
+
                   cubit.updateFamilyMember(index, updatedMember);
                 }
               },
@@ -226,20 +251,48 @@ class MahallaForm extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 16),
-        GradientButton(
-          text: 'Add Family Member',
-          onPressed: () async {
-            final member = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const FamilyForm(),
-              ),
-            );
-            if (member != null) {
-              cubit.addFamilyMember(member);
-            }
-          },
+        SizedBox(
+          height: 48,
+          width: double.infinity,
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: const Text('Add Family Member', style: TextStyle(fontSize: 16)),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const FamilyForm(),
+                ),
+              );
+
+              if (result != null && result is Map<String, dynamic>) {
+                final member = result['member'];
+
+                // Check if trying to add as Head of Family
+                if (member.relationship == 'Head of Family') {
+                  final hasExistingHead = state.familyMembers
+                      .any((m) => m.relationship == 'Head of Family');
+
+                  if (hasExistingHead) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'A Head of Family already exists. Only one Head of Family is allowed.'),
+                        backgroundColor: Colors.orange,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                    return;
+                  }
+                }
+
+                cubit.addFamilyMember(member);
+              }
+            },
+          ),
         ),
       ],
     );
@@ -325,7 +378,7 @@ class FamilyMemberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(

@@ -8,7 +8,7 @@ import 'package:mmf/presentation/widgets/custom_dropdown.dart';
 import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 
-class FamilyForm extends StatelessWidget {
+class FamilyForm extends StatefulWidget {
   final FamilyMember? existingMember;
   final int? memberIndex;
 
@@ -18,15 +18,48 @@ class FamilyForm extends StatelessWidget {
     this.memberIndex,
   });
 
-  bool get isEditing => existingMember != null;
+  @override
+  State<FamilyForm> createState() => _FamilyFormState();
+}
+
+class _FamilyFormState extends State<FamilyForm> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameController;
+  late final TextEditingController _nicController;
+  late final TextEditingController _ageController;
+  late final TextEditingController _occupationController;
+
+  bool get isEditing => widget.existingMember != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController =
+        TextEditingController(text: widget.existingMember?.name ?? '');
+    _nicController =
+        TextEditingController(text: widget.existingMember?.nic ?? '');
+    _ageController =
+        TextEditingController(text: widget.existingMember?.age ?? '');
+    _occupationController =
+        TextEditingController(text: widget.existingMember?.occupation ?? '');
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nicController.dispose();
+    _ageController.dispose();
+    _occupationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
         final cubit = FamilyMemberCubit();
-        if (existingMember != null) {
-          cubit.loadMember(existingMember!);
+        if (widget.existingMember != null) {
+          cubit.loadMember(widget.existingMember!);
         }
         return cubit;
       },
@@ -48,11 +81,10 @@ class FamilyForm extends StatelessWidget {
         body: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
           builder: (context, state) {
             final cubit = context.read<FamilyMemberCubit>();
-            final formKey = GlobalKey<FormState>();
 
             return SingleChildScrollView(
               child: Form(
-                key: formKey,
+                key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
@@ -69,7 +101,7 @@ class FamilyForm extends StatelessWidget {
                       const SizedBox(height: 16),
                       _buildSpecialNeedsSection(cubit, state),
                       const SizedBox(height: 32),
-                      _buildActionButtons(context, formKey, state),
+                      _buildActionButtons(context, state),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -89,7 +121,7 @@ class FamilyForm extends StatelessWidget {
       children: [
         CustomTextField(
           label: 'Full Name',
-          initialValue: state.name,
+          controller: _nameController,
           onChanged: cubit.updateName,
           isRequired: true,
         ),
@@ -99,7 +131,7 @@ class FamilyForm extends StatelessWidget {
             Expanded(
               child: CustomTextField(
                 label: 'National ID No',
-                initialValue: state.nic,
+                controller: _nicController,
                 onChanged: cubit.updateNic,
               ),
             ),
@@ -107,7 +139,7 @@ class FamilyForm extends StatelessWidget {
             Expanded(
               child: CustomTextField(
                 label: 'Age',
-                initialValue: state.age,
+                controller: _ageController,
                 onChanged: cubit.updateAge,
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -162,7 +194,7 @@ class FamilyForm extends StatelessWidget {
         const SizedBox(height: 16),
         CustomTextField(
           label: 'Occupation/Business',
-          initialValue: state.occupation,
+          controller: _occupationController,
           onChanged: cubit.updateOccupation,
           isRequired: true,
         ),
@@ -302,11 +334,9 @@ class FamilyForm extends StatelessWidget {
               'Hafiza',
               'Alim',
               'Alima',
-              'Hafiz & Alim',
-              'Hafiza & Alima'
             ],
-            selectedItems: state.ulma,
-            onChanged: cubit.toggleUlma,
+            selectedItems: state.ulama,
+            onChanged: cubit.toggleUlama,
           ),
         ],
       ),
@@ -350,17 +380,19 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(
-      BuildContext context, GlobalKey<FormState> formKey, FamilyMemberState state) {
+  Widget _buildActionButtons(BuildContext context, FamilyMemberState state) {
     return Row(
       children: [
         Expanded(
-          child: OutlinedButton(
-            onPressed: () => Navigator.pop(context),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+          child: SizedBox(
+            height: 48,
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('Cancel', style: TextStyle(fontSize: 16)),
             ),
-            child: const Text('Cancel'),
           ),
         ),
         const SizedBox(width: 16),
@@ -368,9 +400,13 @@ class FamilyForm extends StatelessWidget {
           child: GradientButton(
             text: isEditing ? 'Update Member' : 'Save Member',
             onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
+              if (_formKey.currentState?.validate() ?? false) {
                 final member = state.toEntity();
-                Navigator.pop(context, member);
+                Navigator.pop(context, {
+                  'member': member,
+                  'isEditing': isEditing,
+                  'memberIndex': widget.memberIndex,
+                });
               }
             },
           ),

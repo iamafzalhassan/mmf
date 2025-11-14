@@ -11,7 +11,7 @@ class FamilyMemberState {
   final String status;
   final List<String> students;
   final List<String> madarasa;
-  final List<String> ulma;
+  final List<String> ulama;
   final List<String> specialNeeds;
 
   FamilyMemberState({
@@ -25,7 +25,7 @@ class FamilyMemberState {
     this.status = '',
     this.students = const [],
     this.madarasa = const [],
-    this.ulma = const [],
+    this.ulama = const [],
     this.specialNeeds = const [],
   });
 
@@ -40,7 +40,7 @@ class FamilyMemberState {
     String? status,
     List<String>? students,
     List<String>? madarasa,
-    List<String>? ulma,
+    List<String>? ulama,
     List<String>? specialNeeds,
   }) {
     return FamilyMemberState(
@@ -54,7 +54,7 @@ class FamilyMemberState {
       status: status ?? this.status,
       students: students ?? this.students,
       madarasa: madarasa ?? this.madarasa,
-      ulma: ulma ?? this.ulma,
+      ulama: ulama ?? this.ulama,
       specialNeeds: specialNeeds ?? this.specialNeeds,
     );
   }
@@ -71,7 +71,7 @@ class FamilyMemberState {
       status: status,
       students: students,
       madarasa: madarasa,
-      ulma: ulma,
+      ulama: ulama,
       specialNeeds: specialNeeds,
     );
   }

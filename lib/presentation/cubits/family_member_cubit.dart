@@ -19,7 +19,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       status: member.status,
       students: member.students,
       madarasa: member.madarasa,
-      ulma: member.ulma,
+      ulama: member.ulama,
       specialNeeds: member.specialNeeds,
     ));
   }
@@ -76,14 +76,14 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(madarasa: list));
   }
 
-  void toggleUlma(String value) {
-    final list = List<String>.from(state.ulma);
+  void toggleUlama(String value) {
+    final list = List<String>.from(state.ulama);
     if (list.contains(value)) {
       list.remove(value);
     } else {
       list.add(value);
     }
-    emit(state.copyWith(ulma: list));
+    emit(state.copyWith(ulama: list));
   }
 
   void toggleSpecialNeeds(String value) {

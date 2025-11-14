@@ -9,7 +9,7 @@ class FamilyMember {
   final String status;
   final List<String> students;
   final List<String> madarasa;
-  final List<String> ulma;
+  final List<String> ulama;
   final List<String> specialNeeds;
 
   FamilyMember({
@@ -23,7 +23,7 @@ class FamilyMember {
     required this.status,
     required this.students,
     required this.madarasa,
-    required this.ulma,
+    required this.ulama,
     required this.specialNeeds,
   });
 
@@ -39,7 +39,7 @@ class FamilyMember {
       'status': status,
       'students': students.join(', '),
       'madarasa': madarasa.join(', '),
-      'ulma': ulma.join(', '),
+      'ulama': ulama.join(', '),
       'specialNeeds': specialNeeds.join(', '),
     };
   }
