@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 
 class CheckboxGrid extends StatelessWidget {
   final List<String> items;
@@ -27,12 +28,12 @@ class CheckboxGrid extends StatelessWidget {
             decoration: BoxDecoration(
               color: isSelected
                   ? Theme.of(context).colorScheme.primaryContainer
-                  : Colors.grey[100],
+                  : AppTheme.checkboxUnselectedBackground,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isSelected
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.grey[300]!,
+                    : AppTheme.borderColor,
                 width: 1.5,
               ),
             ),
@@ -44,7 +45,7 @@ class CheckboxGrid extends StatelessWidget {
                   size: 20,
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary
-                      : Colors.grey[600],
+                      : AppTheme.iconSecondary,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -52,7 +53,7 @@ class CheckboxGrid extends StatelessWidget {
                   style: TextStyle(
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary
-                        : Colors.black87,
+                        : AppTheme.textPrimary,
                     fontWeight:
                         isSelected ? FontWeight.w500 : FontWeight.normal,
                   ),
