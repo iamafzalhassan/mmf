@@ -102,11 +102,10 @@ class MahallaForm extends StatelessWidget {
         const Text(
           'Mahalla Members Details Collection Form',
           style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
-            color: AppTheme.textPrimary,
-            height: 1.25
-          ),
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+              height: 1.25),
         ),
         Text(
           'Kohilawatta Jumma Masjid & Burial Ground',
@@ -230,39 +229,41 @@ class MahallaForm extends StatelessWidget {
           title: 'Family Members',
           icon: Icons.people_rounded,
         ),
-        const SizedBox(height: 16),
         if (state.familyMembers.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.scaffoldBackground.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppTheme.borderColor),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.info_outline,
-                    color: AppTheme.textSecondary, size: 20),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'No family members added yet. Add at least one member as Head of Family.',
-                    style: TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 14,
+          Padding(
+            padding: const EdgeInsets.only(top: 32, bottom: 16),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.scaffoldBackground.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppTheme.borderColor),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline,
+                      color: AppTheme.textSecondary, size: 20),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'No family members added yet. Add at least one member as Head of Family.',
+                      style: TextStyle(
+                        color: AppTheme.textSecondary,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        if (state.familyMembers.isNotEmpty) const SizedBox(height: 16),
+        if (state.familyMembers.isNotEmpty) const SizedBox(height: 32),
         ...List.generate(
           state.familyMembers.length,
           (index) {
             final member = state.familyMembers[index];
             return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 16),
               child: FamilyMemberCard(
                 index: index,
                 member: member,
@@ -314,7 +315,6 @@ class MahallaForm extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 12),
         SizedBox(
           height: 52,
           width: double.infinity,
