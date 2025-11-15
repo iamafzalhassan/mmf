@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmf/core/utils/date_utils.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 import 'package:mmf/domain/entities/form_data.dart';
 import 'package:mmf/domain/usecases/submit_form.dart';
@@ -87,10 +86,11 @@ class MainFormCubit extends Cubit<MainFormState> {
           isLoading: false,
           isSuccess: true,
         ));
-        // Reset success flag after a brief moment
+        // Reset the form completely after success
         Future.delayed(const Duration(milliseconds: 100), () {
           if (!isClosed) {
-            emit(state.copyWith(isSuccess: false));
+            // Generate a brand new initial state with new ref number
+            emit(MainFormState.initial());
           }
         });
       },
@@ -98,6 +98,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   }
 
   void resetForm() {
+    // Generate a completely new initial state with fresh ref number
     emit(MainFormState.initial());
   }
 
