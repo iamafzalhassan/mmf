@@ -33,6 +33,7 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
+            fontFamily: 'SFProDisplay',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,

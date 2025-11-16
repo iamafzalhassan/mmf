@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 import 'package:mmf/domain/entities/form_data.dart';
 import 'package:mmf/domain/usecases/submit_form.dart';
@@ -6,6 +8,8 @@ import 'package:mmf/presentation/cubits/main_form_state.dart';
 
 class MainFormCubit extends Cubit<MainFormState> {
   final SubmitForm submitForm;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final ScrollController scrollController = ScrollController();
 
   MainFormCubit({required this.submitForm}) : super(MainFormState.initial());
 
@@ -61,6 +65,28 @@ class MainFormCubit extends Cubit<MainFormState> {
     emit(state.copyWith(familyMembers: []));
   }
 
+  bool hasExistingHead({int? excludeIndex}) {
+    return state.familyMembers.asMap().entries.any((entry) {
+      if (excludeIndex != null && entry.key == excludeIndex) {
+        return false;
+      }
+      return entry.value.relationship == 'Head of Family';
+    });
+  }
+
+  bool validateForm() {
+    if (!(formKey.currentState?.validate() ?? false)) {
+      return false;
+    }
+
+    if (state.familyMembers.isEmpty) {
+      return false;
+    }
+
+    final hasHead = state.familyMembers.any((m) => m.relationship == 'Head of Family');
+    return hasHead;
+  }
+
   Future<void> submit() async {
     emit(state.copyWith(isLoading: true, error: null));
 
@@ -77,11 +103,11 @@ class MainFormCubit extends Cubit<MainFormState> {
     final result = await submitForm(formData);
 
     result.fold(
-      (failure) => emit(state.copyWith(
+          (failure) => emit(state.copyWith(
         isLoading: false,
         error: failure.message,
       )),
-      (_) {
+          (_) {
         emit(state.copyWith(
           isLoading: false,
           isSuccess: true,
@@ -89,7 +115,7 @@ class MainFormCubit extends Cubit<MainFormState> {
         // Reset the form completely after success
         Future.delayed(const Duration(milliseconds: 100), () {
           if (!isClosed) {
-            // Generate a brand new initial state with new ref number
+            scrollToTop();
             emit(MainFormState.initial());
           }
         });
@@ -97,12 +123,76 @@ class MainFormCubit extends Cubit<MainFormState> {
     );
   }
 
+  void scrollToTop() {
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void showSuccessSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.white),
+            SizedBox(width: 12),
+            Text('Form submitted successfully!'),
+          ],
+        ),
+        backgroundColor: AppTheme.successColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  void showErrorSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.error, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: AppTheme.errorColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  void showWarningSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppTheme.warningColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
   void resetForm() {
-    // Generate a completely new initial state with fresh ref number
     emit(MainFormState.initial());
   }
 
   void clearError() {
     emit(state.copyWith(error: null));
+  }
+
+  @override
+  Future<void> close() {
+    scrollController.dispose();
+    return super.close();
   }
 }

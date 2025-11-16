@@ -32,9 +32,8 @@ class CheckboxGrid extends StatelessWidget {
                   : AppTheme.cardBackground,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isSelected
-                    ? AppTheme.primaryColor
-                    : AppTheme.borderColor,
+                color:
+                    isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
                 width: isSelected ? 2 : 1.5,
               ),
             ),
@@ -46,30 +45,33 @@ class CheckboxGrid extends StatelessWidget {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+                    color:
+                        isSelected ? AppTheme.primaryColor : Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
+                      color: isSelected
+                          ? AppTheme.primaryColor
+                          : AppTheme.borderColor,
                       width: 2,
                     ),
                   ),
                   child: isSelected
                       ? const Icon(
-                    Icons.check_rounded,
-                    size: 14,
-                    color: AppTheme.textOnPrimary,
-                  )
+                          Icons.check_rounded,
+                          size: 14,
+                          color: AppTheme.textOnPrimary,
+                        )
                       : null,
                 ),
                 const SizedBox(width: 10),
                 Text(
                   item,
                   style: TextStyle(
+                    fontFamily: 'SFProDisplay',
                     color: isSelected
                         ? AppTheme.primaryColor
                         : AppTheme.textPrimary,
-                    fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     fontSize: 14,
                   ),
                 ),
