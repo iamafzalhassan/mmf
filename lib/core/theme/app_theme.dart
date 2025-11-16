@@ -43,6 +43,8 @@ class AppTheme {
 
   // Light Theme
   static ThemeData get lightTheme {
+    const fontFamily = 'SFProDisplay';
+
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
@@ -50,7 +52,7 @@ class AppTheme {
         secondary: secondaryColor,
       ),
       useMaterial3: true,
-      fontFamily: 'SFProDisplay',
+      fontFamily: fontFamily,
       scaffoldBackgroundColor: scaffoldBackground,
 
       // AppBar Theme
@@ -59,6 +61,12 @@ class AppTheme {
         elevation: 0,
         backgroundColor: transparent,
         foregroundColor: textPrimary,
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: textPrimary,
+        ),
       ),
 
       // Input Decoration Theme
@@ -90,16 +98,19 @@ class AppTheme {
           vertical: 18,
         ),
         labelStyle: TextStyle(
+          fontFamily: fontFamily,
           color: textSecondary,
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
         floatingLabelStyle: const TextStyle(
+          fontFamily: fontFamily,
           color: primaryColor,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
         hintStyle: TextStyle(
+          fontFamily: fontFamily,
           color: textPlaceholder,
           fontSize: 15,
         ),
@@ -127,6 +138,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(
+            fontFamily: fontFamily,
             fontSize: 16,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -142,33 +154,49 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(
+            fontFamily: fontFamily,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
 
-      // Text Theme
+      // Text Theme - THIS IS CRUCIAL
       textTheme: const TextTheme(
+        displayLarge: TextStyle(fontFamily: fontFamily),
+        displayMedium: TextStyle(fontFamily: fontFamily),
+        displaySmall: TextStyle(fontFamily: fontFamily),
+        headlineLarge: TextStyle(fontFamily: fontFamily),
+        headlineMedium: TextStyle(fontFamily: fontFamily),
+        headlineSmall: TextStyle(fontFamily: fontFamily),
         titleLarge: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 28,
           fontWeight: FontWeight.w600,
           color: textPrimary,
           letterSpacing: -0.5,
         ),
         titleMedium: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
+        titleSmall: TextStyle(fontFamily: fontFamily),
         bodyLarge: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 16,
           color: textPrimary,
         ),
         bodyMedium: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 14,
           color: textPrimary,
         ),
+        bodySmall: TextStyle(fontFamily: fontFamily),
+        labelLarge: TextStyle(fontFamily: fontFamily),
+        labelMedium: TextStyle(fontFamily: fontFamily),
+        labelSmall: TextStyle(fontFamily: fontFamily),
       ),
 
       // Checkbox Theme

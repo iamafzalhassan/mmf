@@ -1,13 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 
 part 'family_member_state.dart';
 
 class FamilyMemberCubit extends Cubit<FamilyMemberState> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController nicController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController occupationController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   FamilyMemberCubit() : super(FamilyMemberState());
 
   // Initialize with existing member data for editing
   void loadMember(FamilyMember member) {
+    nameController.text = member.name;
+    nicController.text = member.nic;
+    ageController.text = member.age;
+    occupationController.text = member.occupation;
+
     emit(FamilyMemberState(
       name: member.name,
       nic: member.nic,
@@ -33,7 +45,18 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void updateGender(String value) {
-    emit(state.copyWith(gender: value));
+    // Clear ulama selections that don't match the new gender
+    List<String> updatedUlama = List<String>.from(state.ulama);
+
+    if (value == 'Male') {
+      // Remove female-specific qualifications
+      updatedUlama.removeWhere((item) => item == 'Hafiza' || item == 'Alima');
+    } else if (value == 'Female') {
+      // Remove male-specific qualifications
+      updatedUlama.removeWhere((item) => item == 'Hafiz' || item == 'Alim');
+    }
+
+    emit(state.copyWith(gender: value, ulama: updatedUlama));
   }
 
   void updateCivilStatus(String value) {
@@ -96,7 +119,24 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(specialNeeds: list));
   }
 
+  bool validateAndSave() {
+    return formKey.currentState?.validate() ?? false;
+  }
+
   void reset() {
+    nameController.clear();
+    nicController.clear();
+    ageController.clear();
+    occupationController.clear();
     emit(FamilyMemberState());
+  }
+
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    nicController.dispose();
+    ageController.dispose();
+    occupationController.dispose();
+    return super.close();
   }
 }

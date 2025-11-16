@@ -15,9 +15,6 @@ class MahallaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final scrollController = ScrollController();
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -27,62 +24,30 @@ class MahallaForm extends StatelessWidget {
           listenWhen: (prev, curr) =>
               prev.isSuccess != curr.isSuccess || prev.error != curr.error,
           listener: (context, state) {
+            final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
-              scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Row(
-                    children: [
-                      Icon(Icons.check_circle, color: Colors.white),
-                      SizedBox(width: 12),
-                      Text('Form submitted successfully!'),
-                    ],
-                  ),
-                  backgroundColor: AppTheme.successColor,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
-              context.read<MainFormCubit>().resetForm();
+              cubit.showSuccessSnackbar(context);
+              cubit.resetForm();
             } else if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(Icons.error, color: Colors.white),
-                      const SizedBox(width: 12),
-                      Expanded(child: Text(state.error!)),
-                    ],
-                  ),
-                  backgroundColor: AppTheme.errorColor,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+              cubit.showErrorSnackbar(context, state.error!);
             }
           },
           builder: (context, state) {
+            final cubit = context.read<MainFormCubit>();
+
             return SafeArea(
               child: SingleChildScrollView(
-                controller: scrollController,
+                controller: cubit.scrollController,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Form(
-                    key: formKey,
+                    key: cubit.formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeader(),
                         const SizedBox(height: 16),
-                        _buildFormCard(context, state, formKey),
+                        _buildFormCard(context, state, cubit),
                       ],
                     ),
                   ),
@@ -102,10 +67,11 @@ class MahallaForm extends StatelessWidget {
         const Text(
           'Mahalla Members Details Collection Form',
           style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.textPrimary,
-              height: 1.25),
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textPrimary,
+            height: 1.25,
+          ),
         ),
         Text(
           'Kohilawatta Jumma Masjid & Burial Ground',
@@ -120,7 +86,7 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildFormCard(
-      BuildContext context, MainFormState state, GlobalKey<FormState> formKey) {
+      BuildContext context, MainFormState state, MainFormCubit cubit) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.cardBackground,
@@ -138,26 +104,24 @@ class MahallaForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHouseholdSection(context, state),
+            _buildHouseholdSection(state, cubit),
             const SizedBox(height: 32),
             const Divider(height: 1),
             const SizedBox(height: 32),
-            _buildFamilyMembersSection(context, state),
+            _buildFamilyMembersSection(context, state, cubit),
             const SizedBox(height: 32),
             const Divider(height: 1),
             const SizedBox(height: 32),
-            _buildAdditionalInformationSection(context, state),
+            _buildAdditionalInformationSection(state, cubit),
             const SizedBox(height: 32),
-            _buildSubmitButton(context, formKey, state),
+            _buildSubmitButton(context, state, cubit),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHouseholdSection(BuildContext context, MainFormState state) {
-    final cubit = context.read<MainFormCubit>();
-
+  Widget _buildHouseholdSection(MainFormState state, MainFormCubit cubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -219,9 +183,8 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFamilyMembersSection(BuildContext context, MainFormState state) {
-    final cubit = context.read<MainFormCubit>();
-
+  Widget _buildFamilyMembersSection(
+      BuildContext context, MainFormState state, MainFormCubit cubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -267,49 +230,8 @@ class MahallaForm extends StatelessWidget {
               child: FamilyMemberCard(
                 index: index,
                 member: member,
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => FamilyForm(
-                        existingMember: member,
-                        memberIndex: index,
-                      ),
-                    ),
-                  );
-
-                  if (result != null && result is Map<String, dynamic>) {
-                    final updatedMember = result['member'];
-                    final isEditing = result['isEditing'] as bool;
-                    final editIndex = result['memberIndex'] as int?;
-
-                    if (updatedMember.relationship == 'Head of Family') {
-                      final existingHeadIndex = state.familyMembers.indexWhere(
-                          (m) =>
-                              m.relationship == 'Head of Family' &&
-                              (!isEditing ||
-                                  state.familyMembers.indexOf(m) != editIndex));
-
-                      if (existingHeadIndex != -1) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text(
-                                'A Head of Family already exists. Please change the existing Head\'s relationship first.'),
-                            backgroundColor: AppTheme.warningColor,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-                        return;
-                      }
-                    }
-
-                    cubit.updateFamilyMember(index, updatedMember);
-                  }
-                },
+                onTap: () =>
+                    _handleEditMember(context, cubit, state, index, member),
                 onRemove: () => cubit.removeFamilyMember(index),
               ),
             );
@@ -321,51 +243,72 @@ class MahallaForm extends StatelessWidget {
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_rounded, size: 20),
             label: const Text('Add Family Member'),
-            onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const FamilyForm(),
-                ),
-              );
-
-              if (result != null && result is Map<String, dynamic>) {
-                final member = result['member'];
-
-                if (member.relationship == 'Head of Family') {
-                  final hasExistingHead = state.familyMembers
-                      .any((m) => m.relationship == 'Head of Family');
-
-                  if (hasExistingHead) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                            'A Head of Family already exists. Only one Head of Family is allowed.'),
-                        backgroundColor: AppTheme.warningColor,
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    );
-                    return;
-                  }
-                }
-
-                cubit.addFamilyMember(member);
-              }
-            },
+            onPressed: () => _handleAddMember(context, cubit, state),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildAdditionalInformationSection(
-      BuildContext context, MainFormState state) {
-    final cubit = context.read<MainFormCubit>();
+  Future<void> _handleAddMember(
+      BuildContext context, MainFormCubit cubit, MainFormState state) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const FamilyForm()),
+    );
 
+    if (result != null && result is Map<String, dynamic>) {
+      final member = result['member'];
+
+      if (member.relationship == 'Head of Family') {
+        if (cubit.hasExistingHead()) {
+          if (!context.mounted) return;
+          cubit.showWarningSnackbar(
+            context,
+            'A Head of Family already exists. Only one Head of Family is allowed.',
+          );
+          return;
+        }
+      }
+
+      cubit.addFamilyMember(member);
+    }
+  }
+
+  Future<void> _handleEditMember(BuildContext context, MainFormCubit cubit,
+      MainFormState state, int index, dynamic member) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FamilyForm(
+          existingMember: member,
+          memberIndex: index,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      final updatedMember = result['member'];
+      final isEditing = result['isEditing'] as bool;
+      final editIndex = result['memberIndex'] as int?;
+
+      if (updatedMember.relationship == 'Head of Family') {
+        if (cubit.hasExistingHead(excludeIndex: editIndex)) {
+          if (!context.mounted) return;
+          cubit.showWarningSnackbar(
+            context,
+            'A Head of Family already exists. Please change the existing Head\'s relationship first.',
+          );
+          return;
+        }
+      }
+
+      cubit.updateFamilyMember(index, updatedMember);
+    }
+  }
+
+  Widget _buildAdditionalInformationSection(
+      MainFormState state, MainFormCubit cubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -386,50 +329,38 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildSubmitButton(
-      BuildContext context, GlobalKey<FormState> formKey, MainFormState state) {
-    final cubit = context.read<MainFormCubit>();
-
+      BuildContext context, MainFormState state, MainFormCubit cubit) {
     return GradientButton(
       text: 'Submit Form',
       icon: Icons.arrow_forward_rounded,
-      onPressed: () {
-        if (formKey.currentState?.validate() ?? false) {
-          if (state.familyMembers.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Please add at least one family member'),
-                backgroundColor: AppTheme.warningColor,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            );
-            return;
-          }
-
-          final hasHead = state.familyMembers
-              .any((m) => m.relationship == 'Head of Family');
-          if (!hasHead) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    const Text('Please designate one member as Head of Family'),
-                backgroundColor: AppTheme.warningColor,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            );
-            return;
-          }
-
-          cubit.submit();
-        }
-      },
+      onPressed: () => _handleSubmit(context, cubit),
       isLoading: state.isLoading,
     );
+  }
+
+  void _handleSubmit(BuildContext context, MainFormCubit cubit) {
+    final state = cubit.state;
+    if (!cubit.validateForm()) {
+      if (state.familyMembers.isEmpty) {
+        cubit.showWarningSnackbar(
+          context,
+          'Please add at least one family member',
+        );
+        return;
+      }
+
+      final hasHead =
+          state.familyMembers.any((m) => m.relationship == 'Head of Family');
+      if (!hasHead) {
+        cubit.showWarningSnackbar(
+          context,
+          'Please designate one member as Head of Family',
+        );
+        return;
+      }
+    }
+
+    cubit.submit();
   }
 }
 

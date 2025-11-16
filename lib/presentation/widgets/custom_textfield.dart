@@ -51,19 +51,30 @@ class CustomTextField extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.textPrimary,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.textPrimary,
+                      ) ??
+                  const TextStyle(
+                    fontFamily: 'SFProDisplay',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.textPrimary,
+                  ),
               children: [
                 if (isRequired)
-                  const TextSpan(
+                  TextSpan(
                     text: ' *',
-                    style: TextStyle(
-                      color: AppTheme.errorColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.errorColor,
+                              fontWeight: FontWeight.w600,
+                            ) ??
+                        const TextStyle(
+                          fontFamily: 'SFProDisplay',
+                          color: AppTheme.errorColor,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
               ],
             ),
@@ -78,7 +89,8 @@ class CustomTextField extends StatelessWidget {
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             prefixText: prefixText,
-            prefixStyle: const TextStyle(
+            prefixStyle: TextStyle(
+              fontFamily: 'SFProDisplay',
               color: AppTheme.textPrimary,
               fontSize: 15,
               fontWeight: FontWeight.w500,
@@ -88,7 +100,9 @@ class CustomTextField extends StatelessWidget {
           onChanged: onChanged,
           validator: validator ??
               (isRequired
-                  ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null
+                  ? (val) => (val == null || val.isEmpty)
+                      ? 'This field is required'
+                      : null
                   : null),
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
@@ -98,6 +112,7 @@ class CustomTextField extends StatelessWidget {
           onTap: onTap,
           obscureText: obscureText,
           style: const TextStyle(
+            fontFamily: 'SFProDisplay',
             fontSize: 15,
             fontWeight: FontWeight.w400,
             color: AppTheme.textPrimary,

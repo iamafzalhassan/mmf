@@ -9,7 +9,7 @@ import 'package:mmf/presentation/widgets/custom_dropdown.dart';
 import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 
-class FamilyForm extends StatefulWidget {
+class FamilyForm extends StatelessWidget {
   final FamilyMember? existingMember;
   final int? memberIndex;
 
@@ -19,48 +19,15 @@ class FamilyForm extends StatefulWidget {
     this.memberIndex,
   });
 
-  @override
-  State<FamilyForm> createState() => _FamilyFormState();
-}
-
-class _FamilyFormState extends State<FamilyForm> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
-  late final TextEditingController _nicController;
-  late final TextEditingController _ageController;
-  late final TextEditingController _occupationController;
-
-  bool get isEditing => widget.existingMember != null;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController =
-        TextEditingController(text: widget.existingMember?.name ?? '');
-    _nicController =
-        TextEditingController(text: widget.existingMember?.nic ?? '');
-    _ageController =
-        TextEditingController(text: widget.existingMember?.age ?? '');
-    _occupationController =
-        TextEditingController(text: widget.existingMember?.occupation ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _nicController.dispose();
-    _ageController.dispose();
-    _occupationController.dispose();
-    super.dispose();
-  }
+  bool get isEditing => existingMember != null;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
         final cubit = FamilyMemberCubit();
-        if (widget.existingMember != null) {
-          cubit.loadMember(widget.existingMember!);
+        if (existingMember != null) {
+          cubit.loadMember(existingMember!);
         }
         return cubit;
       },
@@ -70,66 +37,58 @@ class _FamilyFormState extends State<FamilyForm> {
             gradient: AppTheme.backgroundGradient,
           ),
           child: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
-                    builder: (context, state) {
-                      final cubit = context.read<FamilyMemberCubit>();
+            child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
+              builder: (context, state) {
+                final cubit = context.read<FamilyMemberCubit>();
 
-                      return SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              _buildAppBar(context),
-                              Form(
-                                key: _formKey,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.cardBackground,
-                                    borderRadius: BorderRadius.circular(24),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.08),
-                                        blurRadius: 24,
-                                        offset: const Offset(0, 8),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(28),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        _buildPersonalInfoSection(
-                                            context, state, cubit),
-                                        const SizedBox(height: 32),
-                                        const Divider(height: 1),
-                                        const SizedBox(height: 32),
-                                        _buildEducationSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        _buildMadarasaSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        _buildUlamaSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        _buildSpecialNeedsSection(cubit, state),
-                                        const SizedBox(height: 32),
-                                        _buildActionButtons(context, state),
-                                      ],
-                                    ),
-                                  ),
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        _buildAppBar(context),
+                        Form(
+                          key: cubit.formKey,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.cardBackground,
+                              borderRadius: BorderRadius.circular(24),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.08),
+                                  blurRadius: 24,
+                                  offset: const Offset(0, 8),
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(28),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildPersonalInfoSection(cubit, state),
+                                  const SizedBox(height: 32),
+                                  const Divider(height: 1),
+                                  const SizedBox(height: 32),
+                                  _buildEducationSection(cubit, state),
+                                  const SizedBox(height: 24),
+                                  _buildMadarasaSection(cubit, state),
+                                  const SizedBox(height: 24),
+                                  _buildUlamaSection(cubit, state),
+                                  const SizedBox(height: 24),
+                                  _buildSpecialNeedsSection(cubit, state),
+                                  const SizedBox(height: 32),
+                                  _buildActionButtons(context, cubit, state),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),
@@ -141,6 +100,7 @@ class _FamilyFormState extends State<FamilyForm> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 40,
@@ -156,10 +116,19 @@ class _FamilyFormState extends State<FamilyForm> {
                 ),
               ],
             ),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded, size: 20),
-              onPressed: () => Navigator.pop(context),
-              padding: EdgeInsets.zero,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                borderRadius: BorderRadius.circular(12),
+                child: const Center(
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 20,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -173,7 +142,7 @@ class _FamilyFormState extends State<FamilyForm> {
                     fontSize: 32,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.textPrimary,
-                    height: 1.25
+                    height: 1.25,
                   ),
                 ),
                 Text(
@@ -187,13 +156,12 @@ class _FamilyFormState extends State<FamilyForm> {
             ),
           ),
         ],
-        crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
   }
 
   Widget _buildPersonalInfoSection(
-      BuildContext context, FamilyMemberState state, FamilyMemberCubit cubit) {
+      FamilyMemberCubit cubit, FamilyMemberState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -214,7 +182,7 @@ class _FamilyFormState extends State<FamilyForm> {
         const SizedBox(height: 24),
         CustomTextField(
           label: 'Full Name',
-          controller: _nameController,
+          controller: cubit.nameController,
           onChanged: cubit.updateName,
           isRequired: true,
           hintText: 'Enter full name',
@@ -225,7 +193,7 @@ class _FamilyFormState extends State<FamilyForm> {
             Expanded(
               child: CustomTextField(
                 label: 'National ID No',
-                controller: _nicController,
+                controller: cubit.nicController,
                 onChanged: cubit.updateNic,
                 hintText: 'Enter NIC',
               ),
@@ -234,7 +202,7 @@ class _FamilyFormState extends State<FamilyForm> {
             Expanded(
               child: CustomTextField(
                 label: 'Age',
-                controller: _ageController,
+                controller: cubit.ageController,
                 onChanged: cubit.updateAge,
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -290,7 +258,7 @@ class _FamilyFormState extends State<FamilyForm> {
         const SizedBox(height: 20),
         CustomTextField(
           label: 'Occupation/Business',
-          controller: _occupationController,
+          controller: cubit.occupationController,
           onChanged: cubit.updateOccupation,
           isRequired: true,
           hintText: 'Enter occupation',
@@ -402,6 +370,17 @@ class _FamilyFormState extends State<FamilyForm> {
   }
 
   Widget _buildUlamaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+    // Determine Ulama items based on gender
+    final List<String> ulamaItems;
+    if (state.gender == 'Female') {
+      ulamaItems = const ['Hafiza', 'Alima'];
+    } else if (state.gender == 'Male') {
+      ulamaItems = const ['Hafiz', 'Alim'];
+    } else {
+      // If gender not selected, show all options
+      ulamaItems = const ['Hafiz', 'Hafiza', 'Alim', 'Alima'];
+    }
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -414,8 +393,7 @@ class _FamilyFormState extends State<FamilyForm> {
         children: [
           const Row(
             children: [
-              Icon(Icons.auto_stories_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(Icons.auto_stories_rounded, color: AppTheme.primaryColor, size: 22),
               SizedBox(width: 10),
               Text(
                 'Ulama Qualifications',
@@ -429,12 +407,7 @@ class _FamilyFormState extends State<FamilyForm> {
           ),
           const SizedBox(height: 20),
           CheckboxGrid(
-            items: const [
-              'Hafiz',
-              'Hafiza',
-              'Alim',
-              'Alima',
-            ],
+            items: ulamaItems,
             selectedItems: state.ulama,
             onChanged: cubit.toggleUlama,
           ),
@@ -481,7 +454,8 @@ class _FamilyFormState extends State<FamilyForm> {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, FamilyMemberState state) {
+  Widget _buildActionButtons(
+      BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
     return Row(
       children: [
         Expanded(
@@ -499,12 +473,12 @@ class _FamilyFormState extends State<FamilyForm> {
             text: isEditing ? 'Update' : 'Save',
             icon: Icons.check_rounded,
             onPressed: () {
-              if (_formKey.currentState?.validate() ?? false) {
+              if (cubit.validateAndSave()) {
                 final member = state.toEntity();
                 Navigator.pop(context, {
                   'member': member,
                   'isEditing': isEditing,
-                  'memberIndex': widget.memberIndex,
+                  'memberIndex': memberIndex,
                 });
               }
             },

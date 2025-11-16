@@ -26,19 +26,30 @@ class CustomDropdown extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.textPrimary,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.textPrimary,
+                      ) ??
+                  const TextStyle(
+                    fontFamily: 'SFProDisplay',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.textPrimary,
+                  ),
               children: [
                 if (isRequired)
-                  const TextSpan(
+                  TextSpan(
                     text: ' *',
-                    style: TextStyle(
-                      color: AppTheme.errorColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.errorColor,
+                              fontWeight: FontWeight.w600,
+                            ) ??
+                        const TextStyle(
+                          fontFamily: 'SFProDisplay',
+                          color: AppTheme.errorColor,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
               ],
             ),
@@ -62,6 +73,7 @@ class CustomDropdown extends StatelessWidget {
                   (val == null || val.isEmpty) ? 'This field is required' : null
               : null,
           style: const TextStyle(
+            fontFamily: 'SFProDisplay',
             fontSize: 15,
             fontWeight: FontWeight.w400,
             color: AppTheme.textPrimary,
@@ -99,6 +111,7 @@ class CustomDropdown extends StatelessWidget {
                   Text(
                     label,
                     style: const TextStyle(
+                      fontFamily: 'SFProDisplay',
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textPrimary,
@@ -122,6 +135,7 @@ class CustomDropdown extends StatelessWidget {
                     title: Text(
                       item,
                       style: TextStyle(
+                        fontFamily: 'SFProDisplay',
                         fontSize: 15,
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.w400,
