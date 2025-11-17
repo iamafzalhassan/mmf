@@ -284,33 +284,8 @@ class MahallaForm extends StatelessWidget {
     return GradientButton(
       text: 'Submit Form',
       icon: Icons.arrow_circle_right_rounded,
-      onPressed: () => _handleSubmit(context, cubit),
+      onPressed: () => cubit.submit(context),
       isLoading: state.isLoading,
     );
-  }
-
-  void _handleSubmit(BuildContext context, MainFormCubit cubit) {
-    final state = cubit.state;
-    if (!cubit.validateForm()) {
-      if (state.familyMembers.isEmpty) {
-        cubit.showWarningSnackbar(
-          context,
-          'Please add at least one family member',
-        );
-        return;
-      }
-
-      final status =
-          state.familyMembers.any((m) => m.relationship == 'Head of Family');
-      if (!status) {
-        cubit.showWarningSnackbar(
-          context,
-          'Please designate one member as Head of Family',
-        );
-        return;
-      }
-    }
-
-    cubit.submit();
   }
 }
