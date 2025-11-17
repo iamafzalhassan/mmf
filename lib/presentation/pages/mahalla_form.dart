@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
@@ -110,10 +109,6 @@ class MahallaForm extends StatelessWidget {
             const SizedBox(height: 32),
             _buildFamilyMembersSection(context, state, cubit),
             const SizedBox(height: 32),
-            const Divider(height: 1),
-            const SizedBox(height: 32),
-            _buildAdditionalInformationSection(state, cubit),
-            const SizedBox(height: 32),
             _buildSubmitButton(context, state, cubit),
           ],
         ),
@@ -150,26 +145,6 @@ class MahallaForm extends StatelessWidget {
           onChanged: cubit.updateAddress,
           isRequired: true,
           hintText: 'Enter full address',
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          label: 'Mobile No',
-          initialValue: state.mobile,
-          onChanged: cubit.updateMobile,
-          isRequired: true,
-          keyboardType: TextInputType.phone,
-          hintText: 'Enter phone number',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(10),
-          ],
-          validator: (val) {
-            if (val?.isEmpty ?? true) return 'This field is required';
-            if (val!.length != 10 || !val.startsWith('07')) {
-              return 'Invalid mobile number';
-            }
-            return null;
-          },
         ),
         const SizedBox(height: 20),
         CustomDropdown(
@@ -307,27 +282,6 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Widget _buildAdditionalInformationSection(
-      MainFormState state, MainFormCubit cubit) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader(
-          title: 'Additional Information',
-          icon: Icons.info_rounded,
-        ),
-        const SizedBox(height: 24),
-        CustomDropdown(
-          label: 'Eligible For Zakath',
-          value: state.zakath,
-          items: const ['Yes', 'No'],
-          onChanged: cubit.updateZakath,
-          isRequired: true,
-        ),
-      ],
-    );
-  }
-
   Widget _buildSubmitButton(
       BuildContext context, MainFormState state, MainFormCubit cubit) {
     return GradientButton(
@@ -441,6 +395,16 @@ class FamilyMemberCard extends StatelessWidget {
                           color: AppTheme.textSecondary,
                         ),
                       ),
+                      if (member.mobile.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          member.mobile,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppTheme.textSecondary,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

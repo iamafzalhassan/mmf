@@ -9,6 +9,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   final TextEditingController nicController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   FamilyMemberCubit() : super(FamilyMemberState());
@@ -19,6 +20,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     nicController.text = member.nic;
     ageController.text = member.age;
     occupationController.text = member.occupation;
+    mobileController.text = member.mobile;
 
     emit(FamilyMemberState(
       name: member.name,
@@ -29,6 +31,8 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       relationship: member.relationship,
       occupation: member.occupation,
       status: member.status,
+      mobile: member.mobile,
+      zakath: member.zakath,
       schoolEducation: member.schoolEducation,
       professionalQualifications: member.professionalQualifications,
       madarasa: member.madarasa,
@@ -78,6 +82,14 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   void updateStatus(String value) {
     emit(state.copyWith(status: value));
+  }
+
+  void updateMobile(String value) {
+    emit(state.copyWith(mobile: value));
+  }
+
+  void updateZakath(String value) {
+    emit(state.copyWith(zakath: value));
   }
 
   void toggleSchoolEducation(String value) {
@@ -139,6 +151,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     nicController.clear();
     ageController.clear();
     occupationController.clear();
+    mobileController.clear();
     emit(FamilyMemberState());
   }
 
@@ -148,6 +161,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     nicController.dispose();
     ageController.dispose();
     occupationController.dispose();
+    mobileController.dispose();
     return super.close();
   }
 }

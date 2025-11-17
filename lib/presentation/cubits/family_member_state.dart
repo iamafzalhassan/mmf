@@ -9,6 +9,8 @@ class FamilyMemberState {
   final String relationship;
   final String occupation;
   final String status;
+  final String mobile;
+  final String zakath;
   final List<String> schoolEducation;
   final List<String> professionalQualifications;
   final List<String> madarasa;
@@ -24,6 +26,8 @@ class FamilyMemberState {
     this.relationship = '',
     this.occupation = '',
     this.status = '',
+    this.mobile = '',
+    this.zakath = '',
     this.schoolEducation = const [],
     this.professionalQualifications = const [],
     this.madarasa = const [],
@@ -40,6 +44,8 @@ class FamilyMemberState {
     String? relationship,
     String? occupation,
     String? status,
+    String? mobile,
+    String? zakath,
     List<String>? schoolEducation,
     List<String>? professionalQualifications,
     List<String>? madarasa,
@@ -55,6 +61,8 @@ class FamilyMemberState {
       relationship: relationship ?? this.relationship,
       occupation: occupation ?? this.occupation,
       status: status ?? this.status,
+      mobile: mobile ?? this.mobile,
+      zakath: zakath ?? this.zakath,
       schoolEducation: schoolEducation ?? this.schoolEducation,
       professionalQualifications: professionalQualifications ?? this.professionalQualifications,
       madarasa: madarasa ?? this.madarasa,
@@ -73,6 +81,8 @@ class FamilyMemberState {
       relationship: relationship,
       occupation: occupation,
       status: status,
+      mobile: mobile,
+      zakath: zakath,
       schoolEducation: schoolEducation,
       professionalQualifications: professionalQualifications,
       madarasa: madarasa,
