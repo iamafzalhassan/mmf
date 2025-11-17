@@ -70,11 +70,15 @@ class FamilyForm extends StatelessWidget {
                                   const SizedBox(height: 32),
                                   const Divider(height: 1),
                                   const SizedBox(height: 32),
-                                  _buildEducationSection(cubit, state),
+                                  _buildSchoolEducationSection(cubit, state),
                                   const SizedBox(height: 24),
-                                  _buildMadarasaSection(cubit, state),
+                                  _buildProfessionalQualificationsSection(
+                                      cubit, state),
                                   const SizedBox(height: 24),
-                                  _buildUlamaSection(cubit, state),
+                                  _buildMadarasaEducationSection(cubit, state),
+                                  const SizedBox(height: 24),
+                                  _buildUlamaQualificationsSection(
+                                      cubit, state),
                                   const SizedBox(height: 24),
                                   _buildSpecialNeedsSection(cubit, state),
                                   const SizedBox(height: 32),
@@ -279,7 +283,49 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildEducationSection(
+  Widget _buildSchoolEducationSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.local_library_rounded,
+                  color: AppTheme.primaryColor, size: 22),
+              SizedBox(width: 10),
+              Text(
+                'School Education',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          CheckboxGrid(
+            items: const [
+              'Above Grade 5',
+              'O/L',
+              'A/L',
+            ],
+            selectedItems: state.schoolEducation,
+            onChanged: cubit.toggleSchoolEducation,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfessionalQualificationsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -297,7 +343,7 @@ class FamilyForm extends StatelessWidget {
                   color: AppTheme.primaryColor, size: 22),
               SizedBox(width: 10),
               Text(
-                'Education & Qualifications',
+                'Professional Qualifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -309,24 +355,21 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 20),
           CheckboxGrid(
             items: const [
-              'Above Grade 5',
-              'O/L',
-              'A/L',
               'Certificate',
               'Diploma',
               'Degree',
               "Master's Degree",
               'Phd',
             ],
-            selectedItems: state.students,
-            onChanged: cubit.toggleStudent,
+            selectedItems: state.professionalQualifications,
+            onChanged: cubit.toggleProfessionalQualification,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMadarasaSection(
+  Widget _buildMadarasaEducationSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -340,7 +383,7 @@ class FamilyForm extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.menu_book_rounded,
+              Icon(Icons.local_library_rounded,
                   color: AppTheme.primaryColor, size: 22),
               SizedBox(width: 10),
               Text(
@@ -369,7 +412,8 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildUlamaSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget _buildUlamaQualificationsSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
     // Determine Ulama items based on gender
     final List<String> ulamaItems;
     if (state.gender == 'Female') {
@@ -393,7 +437,8 @@ class FamilyForm extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.auto_stories_rounded, color: AppTheme.primaryColor, size: 22),
+              Icon(Icons.school_rounded,
+                  color: AppTheme.primaryColor, size: 22),
               SizedBox(width: 10),
               Text(
                 'Ulama Qualifications',
@@ -471,7 +516,7 @@ class FamilyForm extends StatelessWidget {
         Expanded(
           child: GradientButton(
             text: isEditing ? 'Update' : 'Save',
-            icon: Icons.check_rounded,
+            icon: Icons.check_circle_rounded,
             onPressed: () {
               if (cubit.validateAndSave()) {
                 final member = state.toEntity();

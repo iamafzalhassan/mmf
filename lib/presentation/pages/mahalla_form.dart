@@ -134,7 +134,7 @@ class MahallaForm extends StatelessWidget {
           label: 'Reference No',
           initialValue: state.refNo,
           readOnly: true,
-          suffixIcon: const Icon(Icons.lock_outline, size: 20),
+          suffixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
         ),
         const SizedBox(height: 20),
         CustomTextField(
@@ -204,8 +204,8 @@ class MahallaForm extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline,
-                      color: AppTheme.textSecondary, size: 20),
+                  Icon(Icons.info_outline_rounded,
+                      color: AppTheme.secondaryColor, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -241,7 +241,7 @@ class MahallaForm extends StatelessWidget {
           height: 52,
           width: double.infinity,
           child: OutlinedButton.icon(
-            icon: const Icon(Icons.add_rounded, size: 20),
+            icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
             label: const Text('Add Family Member'),
             onPressed: () => _handleAddMember(context, cubit, state),
           ),
@@ -332,7 +332,7 @@ class MahallaForm extends StatelessWidget {
       BuildContext context, MainFormState state, MainFormCubit cubit) {
     return GradientButton(
       text: 'Submit Form',
-      icon: Icons.arrow_forward_rounded,
+      icon: Icons.arrow_circle_right_rounded,
       onPressed: () => _handleSubmit(context, cubit),
       isLoading: state.isLoading,
     );
@@ -445,7 +445,7 @@ class FamilyMemberCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline_rounded),
+                  icon: const Icon(Icons.delete_rounded),
                   color: AppTheme.errorColor,
                   onPressed: onRemove,
                   tooltip: 'Remove member',
