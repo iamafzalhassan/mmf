@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/core/theme/app_theme.dart';
+import 'package:mmf/core/utils/date_utils.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 import 'package:mmf/domain/entities/form_data.dart';
 import 'package:mmf/domain/usecases/submit_form.dart';
@@ -11,9 +12,12 @@ class MainFormCubit extends Cubit<MainFormState> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
 
-  MainFormCubit({required this.submitForm}) : super(MainFormState.initial());
+  final TextEditingController admissionNoController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
-  // Main form fields
+  MainFormCubit({required this.submitForm})
+      : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
+
   void updateRefNo(String value) {
     emit(state.copyWith(refNo: value));
   }
@@ -30,7 +34,6 @@ class MainFormCubit extends Cubit<MainFormState> {
     emit(state.copyWith(ownership: value));
   }
 
-  // Family members management
   void addFamilyMember(FamilyMember member) {
     final updatedMembers = List<FamilyMember>.from(state.familyMembers)
       ..add(member);
@@ -75,7 +78,8 @@ class MainFormCubit extends Cubit<MainFormState> {
       return false;
     }
 
-    final hasHead = state.familyMembers.any((m) => m.relationship == 'Head of Family');
+    final hasHead =
+        state.familyMembers.any((m) => m.relationship == 'Head of Family');
     return hasHead;
   }
 
@@ -93,20 +97,19 @@ class MainFormCubit extends Cubit<MainFormState> {
     final result = await submitForm(formData);
 
     result.fold(
-          (failure) => emit(state.copyWith(
+      (failure) => emit(state.copyWith(
         isLoading: false,
         error: failure.message,
       )),
-          (_) {
+      (_) {
         emit(state.copyWith(
           isLoading: false,
           isSuccess: true,
         ));
-        // Reset the form completely after success
         Future.delayed(const Duration(milliseconds: 100), () {
           if (!isClosed) {
             scrollToTop();
-            emit(MainFormState.initial());
+            resetForm();
           }
         });
       },
@@ -173,7 +176,10 @@ class MainFormCubit extends Cubit<MainFormState> {
   }
 
   void resetForm() {
-    emit(MainFormState.initial());
+    admissionNoController.clear();
+    addressController.clear();
+    formKey.currentState?.reset();
+    emit(state.copyWith(refNo: DateTimeUtils.generateRefNo()));
   }
 
   void clearError() {
@@ -182,6 +188,8 @@ class MainFormCubit extends Cubit<MainFormState> {
 
   @override
   Future<void> close() {
+    admissionNoController.dispose();
+    addressController.dispose();
     scrollController.dispose();
     return super.close();
   }

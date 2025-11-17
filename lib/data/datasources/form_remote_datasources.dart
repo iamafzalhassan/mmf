@@ -14,7 +14,7 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
   @override
   Future<void> submitForm(FormData formData) async {
     const scriptUrl =
-        'https://script.google.com/macros/s/AKfycbxOjHiZ1nVfo8u2lhgWrpltKGMBlheLeM09B2E8III_IwmLCSELEPzmtUU3SpaCDjcc/exec';
+        'https://script.google.com/macros/s/AKfycbww1GomAdBZiKjuSwD96tMEuq7wiPslDiMmXngEC-hh78MGLeCOQsqyaLHR07hWLnVG/exec';
 
     try {
       // Encode form data as base64
