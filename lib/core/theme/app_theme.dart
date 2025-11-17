@@ -10,11 +10,11 @@ class AppTheme {
   static const Color gradientEnd = Color(0xFFF5F3E8); // Light cream
   static const Color scaffoldBackground = Color(0xFFE8F5E8);
   static const Color cardBackground = Colors.white;
-  static final Color inputFillColor = const Color(0xFFF8F9FA);
+  static const Color inputFillColor = Color(0xFFF8F9FA);
   static final Color checkboxUnselectedBackground = Colors.grey[100]!;
 
   // Border Colors
-  static final Color borderColor = const Color(0xFFE0E0E0);
+  static const Color borderColor = Color(0xFFE0E0E0);
   static final Color dividerColor = Colors.grey[300]!;
 
   // Text Colors
@@ -73,11 +73,11 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: borderColor),
+          borderSide: const BorderSide(color: borderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: borderColor),
+          borderSide: const BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -149,7 +149,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
-          side: BorderSide(color: borderColor, width: 1.5),
+          side: const BorderSide(color: borderColor, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -208,7 +208,7 @@ class AppTheme {
           return Colors.transparent;
         }),
         checkColor: WidgetStateProperty.all(textOnPrimary),
-        side: BorderSide(color: borderColor, width: 2),
+        side: const BorderSide(color: borderColor, width: 2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
