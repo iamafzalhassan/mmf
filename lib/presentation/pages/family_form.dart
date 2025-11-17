@@ -36,75 +36,72 @@ class FamilyForm extends StatelessWidget {
           decoration: const BoxDecoration(
             gradient: AppTheme.backgroundGradient,
           ),
-          child: SafeArea(
-            child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
-              builder: (context, state) {
-                final cubit = context.read<FamilyMemberCubit>();
+          child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(
+            builder: (context, state) {
+              final cubit = context.read<FamilyMemberCubit>();
 
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        _buildAppBar(context),
-                        Form(
-                          key: cubit.formKey,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppTheme.cardBackground,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.08),
-                                  blurRadius: 24,
-                                  offset: const Offset(0, 8),
-                                ),
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _buildHeader(context),
+                      Form(
+                        key: cubit.formKey,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppTheme.cardBackground,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 24,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildPersonalInfoSection(cubit, state),
+                                const SizedBox(height: 32),
+                                const Divider(height: 1),
+                                const SizedBox(height: 32),
+                                _buildSchoolEducationSection(cubit, state),
+                                const SizedBox(height: 24),
+                                _buildProfessionalQualificationsSection(
+                                    cubit, state),
+                                const SizedBox(height: 24),
+                                _buildMadarasaEducationSection(cubit, state),
+                                const SizedBox(height: 24),
+                                _buildUlamaQualificationsSection(cubit, state),
+                                const SizedBox(height: 24),
+                                _buildSpecialNeedsSection(cubit, state),
+                                const SizedBox(height: 32),
+                                const Divider(height: 1),
+                                const SizedBox(height: 32),
+                                _buildAdditionalInfoSection(cubit, state),
+                                const SizedBox(height: 32),
+                                _buildActionButtons(context, cubit, state),
                               ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildPersonalInfoSection(cubit, state),
-                                  const SizedBox(height: 32),
-                                  const Divider(height: 1),
-                                  const SizedBox(height: 32),
-                                  _buildSchoolEducationSection(cubit, state),
-                                  const SizedBox(height: 24),
-                                  _buildProfessionalQualificationsSection(
-                                      cubit, state),
-                                  const SizedBox(height: 24),
-                                  _buildMadarasaEducationSection(cubit, state),
-                                  const SizedBox(height: 24),
-                                  _buildUlamaQualificationsSection(
-                                      cubit, state),
-                                  const SizedBox(height: 24),
-                                  _buildSpecialNeedsSection(cubit, state),
-                                  const SizedBox(height: 32),
-                                  const Divider(height: 1),
-                                  const SizedBox(height: 32),
-                                  _buildAdditionalInfoSection(cubit, state),
-                                  const SizedBox(height: 32),
-                                  _buildActionButtons(context, cubit, state),
-                                ],
-                              ),
-                            ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -237,8 +234,9 @@ class FamilyForm extends StatelessWidget {
           ],
           validator: (val) {
             if (isHeadOfFamily) {
-              if (val?.isEmpty ?? true)
+              if (val?.isEmpty ?? true) {
                 return 'Mobile number is required for Head of Family';
+              }
               if (val!.length != 10 || !val.startsWith('07')) {
                 return 'Invalid mobile number';
               }

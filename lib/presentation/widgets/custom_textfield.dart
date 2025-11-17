@@ -90,7 +90,7 @@ class CustomTextField extends StatelessWidget {
             suffixIconColor: AppTheme.iconSecondary,
             prefixIcon: prefixIcon,
             prefixText: prefixText,
-            prefixStyle: TextStyle(
+            prefixStyle: const TextStyle(
               fontFamily: 'SFProDisplay',
               color: AppTheme.textPrimary,
               fontSize: 15,
