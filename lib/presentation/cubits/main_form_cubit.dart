@@ -86,7 +86,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   Future<void> submit(BuildContext context) async {
     if (!validateForm()) {
       if (state.familyMembers.isEmpty) {
-        showWarningSnackbar(
+        showErrorSnackbar(
           context,
           'Please add at least one family member',
         );
@@ -96,12 +96,14 @@ class MainFormCubit extends Cubit<MainFormState> {
       final status =
           state.familyMembers.any((m) => m.relationship == 'Head of Family');
       if (!status) {
-        showWarningSnackbar(
+        showErrorSnackbar(
           context,
           'Please designate one member as Head of Family',
         );
         return;
       }
+
+      return;
     }
 
     emit(state.copyWith(isLoading: true, error: null));
@@ -126,12 +128,8 @@ class MainFormCubit extends Cubit<MainFormState> {
           isLoading: false,
           isSuccess: true,
         ));
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (!isClosed) {
-            scrollToTop();
-            resetForm();
-          }
-        });
+        scrollToTop();
+        resetForm();
       },
     );
   }
@@ -146,52 +144,31 @@ class MainFormCubit extends Cubit<MainFormState> {
 
   void showSuccessSnackbar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
-          children: [
-            Icon(Icons.check_circle_rounded, color: Colors.white),
-            SizedBox(width: 12),
-            Text('Form submitted successfully!'),
-          ],
-        ),
-        backgroundColor: AppTheme.successColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+      const SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle_rounded, color: Colors.white),
+              SizedBox(width: 12),
+              Text('Form submitted successfully!'),
+            ],
+          ),
+          backgroundColor: AppTheme.successColor,
+          behavior: SnackBarBehavior.fixed),
     );
   }
 
   void showErrorSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_rounded, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: AppTheme.errorColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-
-  void showWarningSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.warningColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+          content: Row(
+            children: [
+              const Icon(Icons.info_rounded, color: Colors.white),
+              const SizedBox(width: 12),
+              Text(message),
+            ],
+          ),
+          backgroundColor: AppTheme.errorColor,
+          behavior: SnackBarBehavior.fixed),
     );
   }
 
@@ -199,13 +176,14 @@ class MainFormCubit extends Cubit<MainFormState> {
     admissionNoController.clear();
     addressController.clear();
 
-    formKey.currentState?.reset();
+    Future.delayed(
+        const Duration(seconds: 1), () => formKey.currentState?.reset());
 
     emit(state.copyWith(
       refNo: DateTimeUtils.generateRefNo(),
       admissionNo: '',
       address: '',
-      ownership: null,
+      ownership: '',
       familyMembers: [],
       isSuccess: false,
       error: null,
