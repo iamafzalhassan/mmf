@@ -26,16 +26,8 @@ class MainFormCubit extends Cubit<MainFormState> {
     emit(state.copyWith(address: value));
   }
 
-  void updateMobile(String value) {
-    emit(state.copyWith(mobile: value));
-  }
-
   void updateOwnership(String value) {
     emit(state.copyWith(ownership: value));
-  }
-
-  void updateZakath(String value) {
-    emit(state.copyWith(zakath: value));
   }
 
   // Family members management
@@ -94,9 +86,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       refNo: state.refNo,
       admissionNo: state.admissionNo,
       address: state.address,
-      mobile: state.mobile,
       ownership: state.ownership,
-      zakath: state.zakath,
       familyMembers: state.familyMembers,
     );
 

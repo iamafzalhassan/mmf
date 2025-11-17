@@ -43,7 +43,7 @@ class FamilyForm extends StatelessWidget {
 
                 return SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
                         _buildAppBar(context),
@@ -52,7 +52,7 @@ class FamilyForm extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               color: AppTheme.cardBackground,
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.08),
@@ -62,7 +62,7 @@ class FamilyForm extends StatelessWidget {
                               ],
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(28),
+                              padding: const EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -81,6 +81,10 @@ class FamilyForm extends StatelessWidget {
                                       cubit, state),
                                   const SizedBox(height: 24),
                                   _buildSpecialNeedsSection(cubit, state),
+                                  const SizedBox(height: 32),
+                                  const Divider(height: 1),
+                                  const SizedBox(height: 32),
+                                  _buildAdditionalInfoSection(cubit, state),
                                   const SizedBox(height: 32),
                                   _buildActionButtons(context, cubit, state),
                                 ],
@@ -102,7 +106,7 @@ class FamilyForm extends StatelessWidget {
 
   Widget _buildAppBar(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -166,6 +170,8 @@ class FamilyForm extends StatelessWidget {
 
   Widget _buildPersonalInfoSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
+    final isHeadOfFamily = state.relationship == 'Head of Family';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -195,11 +201,12 @@ class FamilyForm extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: CustomTextField(
-                label: 'National ID No',
-                controller: cubit.nicController,
-                onChanged: cubit.updateNic,
-                hintText: 'Enter NIC',
+              child: CustomDropdown(
+                label: 'Gender',
+                value: state.gender,
+                items: const ['Male', 'Female'],
+                onChanged: cubit.updateGender,
+                isRequired: true,
               ),
             ),
             const SizedBox(width: 16),
@@ -217,27 +224,65 @@ class FamilyForm extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              child: CustomDropdown(
-                label: 'Gender',
-                value: state.gender,
-                items: const ['Male', 'Female'],
-                onChanged: cubit.updateGender,
-                isRequired: true,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: CustomDropdown(
-                label: 'Civil Status',
-                value: state.civilStatus,
-                items: const ['Married', 'Single', 'Divorced', 'Widow'],
-                onChanged: cubit.updateCivilStatus,
-              ),
-            ),
+        CustomTextField(
+          label: 'Mobile No',
+          controller: cubit.mobileController,
+          onChanged: cubit.updateMobile,
+          isRequired: isHeadOfFamily,
+          keyboardType: TextInputType.phone,
+          hintText: 'Enter phone number',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10),
           ],
+          validator: (val) {
+            if (isHeadOfFamily) {
+              if (val?.isEmpty ?? true)
+                return 'Mobile number is required for Head of Family';
+              if (val!.length != 10 || !val.startsWith('07')) {
+                return 'Invalid mobile number';
+              }
+            } else if (val != null && val.isNotEmpty) {
+              if (val.length != 10 || !val.startsWith('07')) {
+                return 'Invalid mobile number';
+              }
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          label: 'National ID No',
+          controller: cubit.nicController,
+          onChanged: cubit.updateNic,
+          hintText: 'Enter NIC',
+        ),
+        const SizedBox(height: 20),
+        CustomDropdown(
+          label: 'Status',
+          value: state.status,
+          items: const [
+            'Studying Only',
+            'Working Only',
+            'Studying and Working',
+            'Not Working/Studying'
+          ],
+          onChanged: cubit.updateStatus,
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          label: 'Occupation/Business',
+          controller: cubit.occupationController,
+          onChanged: cubit.updateOccupation,
+          isRequired: true,
+          hintText: 'Enter occupation',
+        ),
+        const SizedBox(height: 20),
+        CustomDropdown(
+          label: 'Civil Status',
+          value: state.civilStatus,
+          items: const ['Married', 'Single', 'Divorced', 'Widow'],
+          onChanged: cubit.updateCivilStatus,
         ),
         const SizedBox(height: 20),
         CustomDropdown(
@@ -258,26 +303,6 @@ class FamilyForm extends StatelessWidget {
           ],
           onChanged: cubit.updateRelationship,
           isRequired: true,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          label: 'Occupation/Business',
-          controller: cubit.occupationController,
-          onChanged: cubit.updateOccupation,
-          isRequired: true,
-          hintText: 'Enter occupation',
-        ),
-        const SizedBox(height: 20),
-        CustomDropdown(
-          label: 'Status',
-          value: state.status,
-          items: const [
-            'Studying Only',
-            'Working Only',
-            'Studying and Working',
-            'Not Working/Studying'
-          ],
-          onChanged: cubit.updateStatus,
         ),
       ],
     );
@@ -496,6 +521,37 @@ class FamilyForm extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAdditionalInfoSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          children: [
+            Icon(Icons.info_rounded, color: AppTheme.primaryColor, size: 24),
+            SizedBox(width: 12),
+            Text(
+              'Additional Information',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        CustomDropdown(
+          label: 'Eligible For Zakath',
+          value: state.zakath,
+          items: const ['Yes', 'No'],
+          onChanged: cubit.updateZakath,
+          isRequired: true,
+        ),
+      ],
     );
   }
 
