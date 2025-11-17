@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:mmf/core/utils/date_utils.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 
 class MainFormState extends Equatable {
@@ -23,23 +22,17 @@ class MainFormState extends Equatable {
     this.error,
   });
 
-  factory MainFormState.initial() {
-    return MainFormState(
-      refNo: DateTimeUtils.generateRefNo(),
-    );
-  }
-
   @override
   List<Object?> get props => [
-    refNo,
-    admissionNo,
-    address,
-    ownership,
-    familyMembers,
-    isLoading,
-    isSuccess,
-    error,
-  ];
+        refNo,
+        admissionNo,
+        address,
+        ownership,
+        familyMembers,
+        isLoading,
+        isSuccess,
+        error,
+      ];
 
   MainFormState copyWith({
     String? refNo,

@@ -14,7 +14,6 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   FamilyMemberCubit() : super(FamilyMemberState());
 
-  // Initialize with existing member data for editing
   void loadMember(FamilyMember member) {
     nameController.text = member.name;
     nicController.text = member.nic;
@@ -50,14 +49,11 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void updateGender(String value) {
-    // Clear ulama selections that don't match the new gender
     List<String> updatedUlama = List<String>.from(state.ulama);
 
     if (value == 'Male') {
-      // Remove female-specific qualifications
       updatedUlama.removeWhere((item) => item == 'Hafiza' || item == 'Alima');
     } else if (value == 'Female') {
-      // Remove male-specific qualifications
       updatedUlama.removeWhere((item) => item == 'Hafiz' || item == 'Alim');
     }
 

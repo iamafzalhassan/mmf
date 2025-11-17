@@ -168,6 +168,8 @@ class FamilyForm extends StatelessWidget {
   Widget _buildPersonalInfoSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     final isHeadOfFamily = state.relationship == 'Head of Family';
+    final shouldShowOccupation = state.status == 'Working Only' ||
+        state.status == 'Studying and Working';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,14 +270,15 @@ class FamilyForm extends StatelessWidget {
           onChanged: cubit.updateStatus,
         ),
         const SizedBox(height: 20),
-        CustomTextField(
-          label: 'Occupation/Business',
-          controller: cubit.occupationController,
-          onChanged: cubit.updateOccupation,
-          isRequired: true,
-          hintText: 'Enter occupation',
-        ),
-        const SizedBox(height: 20),
+        if (shouldShowOccupation)
+          CustomTextField(
+            label: 'Occupation/Business',
+            controller: cubit.occupationController,
+            onChanged: cubit.updateOccupation,
+            isRequired: true,
+            hintText: 'Enter occupation',
+          ),
+        if (shouldShowOccupation) const SizedBox(height: 20),
         CustomDropdown(
           label: 'Civil Status',
           value: state.civilStatus,
@@ -437,14 +440,12 @@ class FamilyForm extends StatelessWidget {
 
   Widget _buildUlamaQualificationsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
-    // Determine Ulama items based on gender
     final List<String> ulamaItems;
     if (state.gender == 'Female') {
       ulamaItems = const ['Hafiza', 'Alima'];
     } else if (state.gender == 'Male') {
       ulamaItems = const ['Hafiz', 'Alim'];
     } else {
-      // If gender not selected, show all options
       ulamaItems = const ['Hafiz', 'Hafiza', 'Alim', 'Alima'];
     }
 

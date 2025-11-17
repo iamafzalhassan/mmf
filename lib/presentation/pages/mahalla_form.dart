@@ -27,7 +27,6 @@ class MahallaForm extends StatelessWidget {
             final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
               cubit.showSuccessSnackbar(context);
-              cubit.resetForm();
             } else if (state.error != null) {
               cubit.showErrorSnackbar(context, state.error!);
             }
@@ -133,14 +132,14 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 20),
         CustomTextField(
           label: 'Admission (Sandapaname) No',
-          initialValue: state.admissionNo,
+          controller: cubit.admissionNoController,
           onChanged: cubit.updateAdmissionNo,
           hintText: 'Enter admission number',
         ),
         const SizedBox(height: 20),
         CustomTextField(
           label: 'Address',
-          initialValue: state.address,
+          controller: cubit.addressController,
           onChanged: cubit.updateAddress,
           isRequired: true,
           hintText: 'Enter full address',
@@ -301,9 +300,9 @@ class MahallaForm extends StatelessWidget {
         return;
       }
 
-      final hasHead =
+      final status =
           state.familyMembers.any((m) => m.relationship == 'Head of Family');
-      if (!hasHead) {
+      if (!status) {
         cubit.showWarningSnackbar(
           context,
           'Please designate one member as Head of Family',
