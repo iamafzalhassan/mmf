@@ -7,7 +7,8 @@ class FamilyMember {
   final String relationship;
   final String occupation;
   final String status;
-  final List<String> students;
+  final List<String> schoolEducation;
+  final List<String> professionalQualifications;
   final List<String> madarasa;
   final List<String> ulama;
   final List<String> specialNeeds;
@@ -21,7 +22,8 @@ class FamilyMember {
     required this.relationship,
     required this.occupation,
     required this.status,
-    required this.students,
+    required this.schoolEducation,
+    required this.professionalQualifications,
     required this.madarasa,
     required this.ulama,
     required this.specialNeeds,
@@ -37,7 +39,8 @@ class FamilyMember {
       'relationship': relationship,
       'occupation': occupation,
       'status': status,
-      'students': students.join(', '),
+      'schoolEducation': schoolEducation.join(', '),
+      'professionalQualifications': professionalQualifications.join(', '),
       'madarasa': madarasa.join(', '),
       'ulama': ulama.join(', '),
       'specialNeeds': specialNeeds.join(', '),

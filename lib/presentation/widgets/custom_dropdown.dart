@@ -61,9 +61,9 @@ class CustomDropdown extends StatelessWidget {
           controller: TextEditingController(text: value.isEmpty ? '' : value),
           decoration: InputDecoration(
             suffixIcon: Icon(
-              Icons.keyboard_arrow_down_rounded,
+              Icons.arrow_drop_down_circle_outlined,
               color: AppTheme.iconSecondary,
-              size: 24,
+              size: 20,
             ),
             hintText: 'Select ${label.toLowerCase()}',
           ),

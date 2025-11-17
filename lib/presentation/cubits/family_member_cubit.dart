@@ -29,7 +29,8 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       relationship: member.relationship,
       occupation: member.occupation,
       status: member.status,
-      students: member.students,
+      schoolEducation: member.schoolEducation,
+      professionalQualifications: member.professionalQualifications,
       madarasa: member.madarasa,
       ulama: member.ulama,
       specialNeeds: member.specialNeeds,
@@ -79,14 +80,24 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(status: value));
   }
 
-  void toggleStudent(String value) {
-    final list = List<String>.from(state.students);
+  void toggleSchoolEducation(String value) {
+    final list = List<String>.from(state.schoolEducation);
     if (list.contains(value)) {
       list.remove(value);
     } else {
       list.add(value);
     }
-    emit(state.copyWith(students: list));
+    emit(state.copyWith(schoolEducation: list));
+  }
+
+  void toggleProfessionalQualification(String value) {
+    final list = List<String>.from(state.professionalQualifications);
+    if (list.contains(value)) {
+      list.remove(value);
+    } else {
+      list.add(value);
+    }
+    emit(state.copyWith(professionalQualifications: list));
   }
 
   void toggleMadarasa(String value) {

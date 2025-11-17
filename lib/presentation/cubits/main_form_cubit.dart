@@ -136,7 +136,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       SnackBar(
         content: const Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.white),
+            Icon(Icons.check_circle_rounded, color: Colors.white),
             SizedBox(width: 12),
             Text('Form submitted successfully!'),
           ],
@@ -155,7 +155,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.error, color: Colors.white),
+            const Icon(Icons.error_rounded, color: Colors.white),
             const SizedBox(width: 12),
             Expanded(child: Text(message)),
           ],
