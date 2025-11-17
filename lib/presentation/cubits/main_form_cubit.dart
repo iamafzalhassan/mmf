@@ -78,12 +78,32 @@ class MainFormCubit extends Cubit<MainFormState> {
       return false;
     }
 
-    final hasHead =
+    final status =
         state.familyMembers.any((m) => m.relationship == 'Head of Family');
-    return hasHead;
+    return status;
   }
 
-  Future<void> submit() async {
+  Future<void> submit(BuildContext context) async {
+    if (!validateForm()) {
+      if (state.familyMembers.isEmpty) {
+        showWarningSnackbar(
+          context,
+          'Please add at least one family member',
+        );
+        return;
+      }
+
+      final status =
+          state.familyMembers.any((m) => m.relationship == 'Head of Family');
+      if (!status) {
+        showWarningSnackbar(
+          context,
+          'Please designate one member as Head of Family',
+        );
+        return;
+      }
+    }
+
     emit(state.copyWith(isLoading: true, error: null));
 
     final formData = FormData(
@@ -178,8 +198,18 @@ class MainFormCubit extends Cubit<MainFormState> {
   void resetForm() {
     admissionNoController.clear();
     addressController.clear();
+
     formKey.currentState?.reset();
-    emit(state.copyWith(refNo: DateTimeUtils.generateRefNo()));
+
+    emit(state.copyWith(
+      refNo: DateTimeUtils.generateRefNo(),
+      admissionNo: '',
+      address: '',
+      ownership: null,
+      familyMembers: [],
+      isSuccess: false,
+      error: null,
+    ));
   }
 
   void clearError() {
