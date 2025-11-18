@@ -33,7 +33,7 @@ class CheckboxGrid extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color:
-                    isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
+                isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
                 width: isSelected ? 2 : 1.5,
               ),
             ),
@@ -46,7 +46,7 @@ class CheckboxGrid extends StatelessWidget {
                   height: 20,
                   decoration: BoxDecoration(
                     color:
-                        isSelected ? AppTheme.primaryColor : Colors.transparent,
+                    isSelected ? AppTheme.primaryColor : Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isSelected
@@ -57,10 +57,10 @@ class CheckboxGrid extends StatelessWidget {
                   ),
                   child: isSelected
                       ? const Icon(
-                          Icons.check_rounded,
-                          size: 14,
-                          color: AppTheme.textOnPrimary,
-                        )
+                    Icons.check_rounded,
+                    size: 14,
+                    color: AppTheme.textOnPrimary,
+                  )
                       : null,
                 ),
                 const SizedBox(width: 10),
