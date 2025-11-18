@@ -136,7 +136,7 @@ class CustomDropdown extends StatelessWidget {
                       item,
                       style: TextStyle(
                         fontFamily: 'SFProDisplay',
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.w400,
                         color: isSelected
