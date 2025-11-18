@@ -81,7 +81,7 @@ class AppTheme {
         fillColor: cardBackground,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 18,
+          vertical: 16,
         ),
         labelStyle: TextStyle(
           fontFamily: fontFamily,
@@ -160,7 +160,6 @@ class AppTheme {
           fontSize: 28,
           fontWeight: FontWeight.w600,
           color: textPrimary,
-          letterSpacing: -0.5,
         ),
         titleMedium: TextStyle(
           fontFamily: fontFamily,
