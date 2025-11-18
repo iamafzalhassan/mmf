@@ -178,30 +178,22 @@ class MahallaForm extends StatelessWidget {
         if (state.familyMembers.isEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 32, bottom: 16),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.scaffoldBackground.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.borderColor),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.info_outline_rounded,
-                      color: AppTheme.secondaryColor, size: 20),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Required to add at least one member as Head of Family.',
-                      style: TextStyle(
-                        color: AppTheme.textSecondary,
-                        fontSize: 16,
-                      ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.info_outline_rounded,
+                    color: AppTheme.secondaryColor, size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Required to add at least one member as Head of Family.',
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 16,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         if (state.familyMembers.isNotEmpty) const SizedBox(height: 32),
