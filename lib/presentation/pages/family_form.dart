@@ -211,30 +211,22 @@ class FamilyForm extends StatelessWidget {
           hintText: 'Enter full name',
         ),
         const SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              child: CustomDropdown(
-                label: 'Gender',
-                value: state.gender,
-                items: const ['Male', 'Female'],
-                onChanged: cubit.updateGender,
-                isRequired: true,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: CustomTextField(
-                label: 'Age',
-                controller: cubit.ageController,
-                onChanged: cubit.updateAge,
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                hintText: 'Enter age',
-              ),
-            ),
-          ],
+        CustomDropdown(
+          label: 'Gender',
+          value: state.gender,
+          items: const ['Male', 'Female'],
+          onChanged: cubit.updateGender,
+          isRequired: true,
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          label: 'Age',
+          controller: cubit.ageController,
+          onChanged: cubit.updateAge,
+          isRequired: true,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          hintText: 'Enter age',
         ),
         const SizedBox(height: 20),
         CustomTextField(
