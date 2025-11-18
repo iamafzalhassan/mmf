@@ -26,9 +26,9 @@ class MahallaForm extends StatelessWidget {
           listener: (context, state) {
             final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
-              cubit.showSuccessSnackbar(context);
+              cubit.showSuccessSnackBar(context);
             } else if (state.error != null) {
-              cubit.showErrorSnackbar(context, state.error!);
+              cubit.showErrorSnackBar(context, state.error!);
             }
           },
           builder: (context, state) {
@@ -236,7 +236,7 @@ class MahallaForm extends StatelessWidget {
       if (member.relationship == 'Head of Family') {
         if (cubit.hasExistingHead()) {
           if (!context.mounted) return;
-          cubit.showErrorSnackbar(
+          cubit.showErrorSnackBar(
             context,
             'A Head of Family already exists. Only one Head of Family is allowed.',
           );
@@ -267,7 +267,7 @@ class MahallaForm extends StatelessWidget {
       if (updatedMember.relationship == 'Head of Family') {
         if (cubit.hasExistingHead(excludeIndex: editIndex)) {
           if (!context.mounted) return;
-          cubit.showErrorSnackbar(
+          cubit.showErrorSnackBar(
             context,
             'A Head of Family already exists. Please change the existing Head\'s relationship first.',
           );
