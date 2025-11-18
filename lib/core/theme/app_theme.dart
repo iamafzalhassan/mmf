@@ -55,20 +55,6 @@ class AppTheme {
       fontFamily: fontFamily,
       scaffoldBackgroundColor: scaffoldBackground,
 
-      // AppBar Theme
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: transparent,
-        foregroundColor: textPrimary,
-        titleTextStyle: TextStyle(
-          fontFamily: fontFamily,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: textPrimary,
-        ),
-      ),
-
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
@@ -100,19 +86,19 @@ class AppTheme {
         labelStyle: TextStyle(
           fontFamily: fontFamily,
           color: textSecondary,
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
         floatingLabelStyle: const TextStyle(
           fontFamily: fontFamily,
           color: primaryColor,
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
         hintStyle: TextStyle(
           fontFamily: fontFamily,
           color: textPlaceholder,
-          fontSize: 15,
+          fontSize: 16,
         ),
       ),
 

@@ -141,17 +141,31 @@ class FamilyForm extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  isEditing ? 'Edit Member' : 'Add Member',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.textPrimary,
-                    height: 1.25,
-                  ),
+                Stack(
+                  children: [
+                    Text(
+                      isEditing ? 'Edit Family Member' : 'Add Family Member',
+                      style: TextStyle(
+                        fontSize: 32,
+                        height: 1,
+                        foreground: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 1.25
+                          ..color = AppTheme.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      isEditing ? 'Edit Family Member' : 'Add Family Member',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        color: AppTheme.textPrimary,
+                        height: 1,
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
-                  'Family member details',
+                  'Enter member details',
                   style: TextStyle(
                     fontSize: 16,
                     color: AppTheme.textSecondary,

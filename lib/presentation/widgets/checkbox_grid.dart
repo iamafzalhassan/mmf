@@ -72,7 +72,7 @@ class CheckboxGrid extends StatelessWidget {
                         ? AppTheme.primaryColor
                         : AppTheme.textPrimary,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                 ),
               ],
