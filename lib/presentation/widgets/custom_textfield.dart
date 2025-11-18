@@ -52,13 +52,13 @@ class CustomTextField extends StatelessWidget {
             text: TextSpan(
               text: label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: AppTheme.textPrimary,
                       ) ??
                   const TextStyle(
                     fontFamily: 'SFProDisplay',
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppTheme.textPrimary,
                   ),
@@ -67,9 +67,9 @@ class CustomTextField extends StatelessWidget {
                   TextSpan(
                     text: ' *',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.errorColor,
-                              fontWeight: FontWeight.w600,
-                            ) ??
+                            color: AppTheme.errorColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16) ??
                         const TextStyle(
                           fontFamily: 'SFProDisplay',
                           color: AppTheme.errorColor,
@@ -93,7 +93,7 @@ class CustomTextField extends StatelessWidget {
             prefixStyle: const TextStyle(
               fontFamily: 'SFProDisplay',
               color: AppTheme.textPrimary,
-              fontSize: 15,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
             counterText: '',
@@ -114,7 +114,7 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           style: const TextStyle(
             fontFamily: 'SFProDisplay',
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.w400,
             color: AppTheme.textPrimary,
           ),

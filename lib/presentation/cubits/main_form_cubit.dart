@@ -88,7 +88,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       if (state.familyMembers.isEmpty) {
         showErrorSnackBar(
           context,
-          'Please add at least one family member',
+          'Please add at least one family member.',
         );
         return;
       }
@@ -98,7 +98,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       if (!status) {
         showErrorSnackBar(
           context,
-          'Please designate one member as Head of Family',
+          'Please designate one member as Head of Family.',
         );
         return;
       }
@@ -149,7 +149,8 @@ class MainFormCubit extends Cubit<MainFormState> {
             children: [
               Icon(Icons.check_circle_rounded, color: Colors.white),
               SizedBox(width: 12),
-              Text('Form submitted successfully!'),
+              Text('Form submitted successfully.',
+                  style: TextStyle(fontSize: 16)),
             ],
           ),
           backgroundColor: AppTheme.successColor,
@@ -164,7 +165,7 @@ class MainFormCubit extends Cubit<MainFormState> {
             children: [
               const Icon(Icons.info_rounded, color: Colors.white),
               const SizedBox(width: 12),
-              Text(message),
+              Text(message, style: const TextStyle(fontSize: 16)),
             ],
           ),
           backgroundColor: AppTheme.errorColor,

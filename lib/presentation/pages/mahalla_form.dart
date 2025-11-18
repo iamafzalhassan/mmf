@@ -61,20 +61,30 @@ class MahallaForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Mahalla Members Details Collection Form',
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
-            color: AppTheme.textPrimary,
-            height: 1.25,
-          ),
+        Stack(
+          children: [
+            Text(
+              'Mahalla Members Details Collection Form',
+              style: TextStyle(
+                fontSize: 32,
+                height: 1,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 1.25
+                  ..color = AppTheme.textPrimary,
+              ),
+            ),
+            const Text(
+              'Mahalla Members Details Collection Form',
+              style: TextStyle(
+                  fontSize: 32, color: AppTheme.textPrimary, height: 1),
+            ),
+          ],
         ),
         Text(
           'Kohilawatta Jumma Masjid & Burial Ground',
           style: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w400,
             color: AppTheme.textSecondary,
           ),
         ),
@@ -176,16 +186,17 @@ class MahallaForm extends StatelessWidget {
                 border: Border.all(color: AppTheme.borderColor),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.info_outline_rounded,
                       color: AppTheme.secondaryColor, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'No family members added yet. Add at least one member as Head of Family.',
+                      'Required to add at least one member as Head of Family.',
                       style: TextStyle(
                         color: AppTheme.textSecondary,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                   ),
