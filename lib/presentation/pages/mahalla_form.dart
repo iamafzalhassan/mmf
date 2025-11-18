@@ -183,13 +183,14 @@ class MahallaForm extends StatelessWidget {
               children: [
                 const Icon(Icons.info_outline_rounded,
                     color: AppTheme.secondaryColor, size: 20),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Required to add at least one member as Head of Family.',
                     style: TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 16,
+                      height: 1.25
                     ),
                   ),
                 ),
