@@ -574,9 +574,8 @@ class FamilyForm extends StatelessWidget {
             icon: Icons.check_circle_rounded,
             onPressed: () {
               if (cubit.validateAndSave()) {
-                final member = state.toEntity();
                 Navigator.pop(context, {
-                  'member': member,
+                  'member': state.toEntity(),
                   'isEditing': isEditing,
                   'memberIndex': memberIndex,
                 });
