@@ -9,9 +9,9 @@ import 'package:mmf/presentation/cubits/main_form_state.dart';
 
 class MainFormCubit extends Cubit<MainFormState> {
   final SubmitForm submitForm;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
-
   final TextEditingController admissionNoController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
@@ -86,7 +86,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   Future<void> submit(BuildContext context) async {
     if (!validateForm()) {
       if (state.familyMembers.isEmpty) {
-        showErrorSnackbar(
+        showErrorSnackBar(
           context,
           'Please add at least one family member',
         );
@@ -96,7 +96,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       final status =
           state.familyMembers.any((m) => m.relationship == 'Head of Family');
       if (!status) {
-        showErrorSnackbar(
+        showErrorSnackBar(
           context,
           'Please designate one member as Head of Family',
         );
@@ -142,7 +142,7 @@ class MainFormCubit extends Cubit<MainFormState> {
     );
   }
 
-  void showSuccessSnackbar(BuildContext context) {
+  void showSuccessSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Row(
@@ -157,7 +157,7 @@ class MainFormCubit extends Cubit<MainFormState> {
     );
   }
 
-  void showErrorSnackbar(BuildContext context, String message) {
+  void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           content: Row(
