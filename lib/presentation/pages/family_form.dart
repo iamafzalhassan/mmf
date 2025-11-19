@@ -72,6 +72,11 @@ class FamilyForm extends StatelessWidget {
                                 const SizedBox(height: 32),
                                 const Divider(height: 1),
                                 const SizedBox(height: 32),
+                                _buildSpecialNeedsSection(
+                                  cubit,
+                                  state,
+                                ),
+                                const SizedBox(height: 24),
                                 _buildSchoolEducationSection(
                                   cubit,
                                   state,
@@ -88,11 +93,6 @@ class FamilyForm extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 _buildUlamaQualificationsSection(
-                                  cubit,
-                                  state,
-                                ),
-                                const SizedBox(height: 24),
-                                _buildSpecialNeedsSection(
                                   cubit,
                                   state,
                                 ),
@@ -355,6 +355,52 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
+  Widget _buildSpecialNeedsSection(
+      FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.favorite_rounded,
+                size: 22,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Special Needs',
+                style: TextStyle(
+                  color: AppTheme.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const [
+              'Disabled',
+              'Medical Support',
+              'Education Support',
+              'Converted'
+            ],
+            onChanged: cubit.toggleSpecialNeeds,
+            selectedItems: state.specialNeeds,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSchoolEducationSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
@@ -566,52 +612,6 @@ class FamilyForm extends StatelessWidget {
             items: ulamaItems,
             onChanged: cubit.toggleUlama,
             selectedItems: state.ulama,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSpecialNeedsSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
-        borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(
-                color: AppTheme.primaryColor,
-                Icons.favorite_rounded,
-                size: 22,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Special Needs',
-                style: TextStyle(
-                  color: AppTheme.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          CheckboxGrid(
-            items: const [
-              'Disabled',
-              'Medical Support',
-              'Education Support',
-              'Converted'
-            ],
-            onChanged: cubit.toggleSpecialNeeds,
-            selectedItems: state.specialNeeds,
           ),
         ],
       ),
