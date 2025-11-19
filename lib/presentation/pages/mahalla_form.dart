@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmf/core/constants/asset_constants.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
@@ -58,37 +59,52 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            Text(
-              'Mahalla Members Details Collection Form',
-              style: TextStyle(
-                fontSize: 32,
-                height: 1,
-                foreground: Paint()
-                  ..style = PaintingStyle.stroke
-                  ..strokeWidth = 1.25
-                  ..color = AppTheme.textPrimary,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(child: Image.asset(AssetConstants.logo, height: 65)),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  Text(
+                    'Mahalla Members Details Collection Form',
+                    style: TextStyle(
+                      foreground: Paint()
+                        ..color = AppTheme.textPrimary
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 1.25,
+                      fontSize: 32,
+                      height: 1,
+                    ),
+                  ),
+                  const Text(
+                    'Mahalla Members Details Collection Form',
+                    style: TextStyle(
+                      color: AppTheme.textPrimary,
+                      fontSize: 32,
+                      height: 1,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const Text(
-              'Mahalla Members Details Collection Form',
-              style: TextStyle(
-                  fontSize: 32, color: AppTheme.textPrimary, height: 1),
-            ),
-          ],
-        ),
-        Text(
-          'Kohilawatta Jumma Masjid & Burial Ground',
-          style: TextStyle(
-            fontSize: 16,
-            color: AppTheme.textSecondary,
-          ),
-        ),
-      ],
+              const SizedBox(height: 2),
+              Text(
+                'Kohilawatta Jumma Masjid & Burial Ground',
+                style: TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 20,
+                  height: 1
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -96,15 +112,15 @@ class MahallaForm extends StatelessWidget {
       BuildContext context, MainFormState state, MainFormCubit cubit) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
             blurRadius: 24,
+            color: Colors.black.withOpacity(0.08),
             offset: const Offset(0, 8),
           ),
         ],
+        color: AppTheme.cardBackground,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -129,38 +145,38 @@ class MahallaForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(
-          title: 'Household Information',
           icon: Icons.home_rounded,
+          title: 'Household Information',
         ),
         const SizedBox(height: 24),
         CustomTextField(
-          label: 'Reference No',
           initialValue: state.refNo,
+          label: 'Reference No',
           readOnly: true,
           suffixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          label: 'Admission (Sandapaname) No',
           controller: cubit.admissionNoController,
-          onChanged: cubit.updateAdmissionNo,
           hintText: 'Enter admission number',
+          label: 'Admission (Sandapaname) No',
+          onChanged: cubit.updateAdmissionNo,
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          label: 'Address',
           controller: cubit.addressController,
-          onChanged: cubit.updateAddress,
-          isRequired: true,
           hintText: 'Enter full address',
+          isRequired: true,
+          label: 'Address',
+          onChanged: cubit.updateAddress,
         ),
         const SizedBox(height: 20),
         CustomDropdown(
-          label: 'House Ownership',
-          value: state.ownership,
-          items: const ['Own', 'Rent'],
-          onChanged: cubit.updateOwnership,
           isRequired: true,
+          items: const ['Own', 'Rent'],
+          label: 'House Ownership',
+          onChanged: cubit.updateOwnership,
+          value: state.ownership,
         ),
       ],
     );
@@ -172,17 +188,20 @@ class MahallaForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(
-          title: 'Family Members',
           icon: Icons.people_rounded,
+          title: 'Family Members',
         ),
         if (state.familyMembers.isEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 32, bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16, top: 32),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.info_outline_rounded,
-                    color: AppTheme.secondaryColor, size: 20),
+                const Icon(
+                  Icons.info_outline_rounded,
+                  color: AppTheme.secondaryColor,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -190,7 +209,7 @@ class MahallaForm extends StatelessWidget {
                     style: TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 16,
-                      height: 1.25
+                      height: 1.25,
                     ),
                   ),
                 ),
@@ -207,9 +226,9 @@ class MahallaForm extends StatelessWidget {
               child: FamilyMemberCard(
                 index: index,
                 member: member,
+                onRemove: () => cubit.removeFamilyMember(index),
                 onTap: () =>
                     _handleEditMember(context, cubit, state, index, member),
-                onRemove: () => cubit.removeFamilyMember(index),
               ),
             );
           },
@@ -219,7 +238,7 @@ class MahallaForm extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-            label: const Text('Add Family Member'),
+            label: const Text('Add Family Member', style: TextStyle(fontSize: 18)),
             onPressed: () => _handleAddMember(context, cubit, state),
           ),
         ),
@@ -240,6 +259,7 @@ class MahallaForm extends StatelessWidget {
       if (member.relationship == 'Head of Family') {
         if (cubit.hasExistingHead()) {
           if (!context.mounted) return;
+
           cubit.showErrorSnackBar(
             context,
             'A Head of Family already exists. Only one Head of Family is allowed.',
@@ -252,8 +272,13 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Future<void> _handleEditMember(BuildContext context, MainFormCubit cubit,
-      MainFormState state, int index, dynamic member) async {
+  Future<void> _handleEditMember(
+    BuildContext context,
+    MainFormCubit cubit,
+    MainFormState state,
+    int index,
+    dynamic member,
+  ) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -265,12 +290,13 @@ class MahallaForm extends StatelessWidget {
     );
 
     if (result != null && result is Map<String, dynamic>) {
-      final updatedMember = result['member'];
       final editIndex = result['memberIndex'] as int?;
+      final updatedMember = result['member'];
 
       if (updatedMember.relationship == 'Head of Family') {
         if (cubit.hasExistingHead(excludeIndex: editIndex)) {
           if (!context.mounted) return;
+
           cubit.showErrorSnackBar(
             context,
             'A Head of Family already exists. Please change the existing Head\'s relationship first.',
@@ -286,10 +312,10 @@ class MahallaForm extends StatelessWidget {
   Widget _buildSubmitButton(
       BuildContext context, MainFormState state, MainFormCubit cubit) {
     return GradientButton(
-      text: 'Submit Form',
       icon: Icons.arrow_circle_right_rounded,
-      onPressed: () => cubit.submit(context),
       isLoading: state.isLoading,
+      onPressed: () => cubit.submit(context),
+      text: 'Submit Form',
     );
   }
 }

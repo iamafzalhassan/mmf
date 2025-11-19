@@ -8,12 +8,12 @@ class FamilyMember {
   final String occupation;
   final String civilStatus;
   final String relationship;
+  final String zakath;
   final List<String> schoolEducation;
   final List<String> professionalQualifications;
   final List<String> madarasa;
   final List<String> ulama;
   final List<String> specialNeeds;
-  final String zakath;
 
   FamilyMember({
     required this.name,
@@ -25,12 +25,12 @@ class FamilyMember {
     required this.occupation,
     required this.civilStatus,
     required this.relationship,
+    required this.zakath,
     required this.schoolEducation,
     required this.professionalQualifications,
     required this.madarasa,
     required this.ulama,
     required this.specialNeeds,
-    required this.zakath,
   });
 
   Map<String, dynamic> toJson() {
@@ -44,12 +44,12 @@ class FamilyMember {
       'occupation': occupation,
       'civilStatus': civilStatus,
       'relationship': relationship,
+      'zakath': zakath,
       'schoolEducation': schoolEducation.join(', '),
       'professionalQualifications': professionalQualifications.join(', '),
       'madarasa': madarasa.join(', '),
       'ulama': ulama.join(', '),
       'specialNeeds': specialNeeds.join(', '),
-      'zakath': zakath,
     };
   }
 }

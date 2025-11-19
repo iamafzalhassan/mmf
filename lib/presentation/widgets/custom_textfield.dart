@@ -3,43 +3,43 @@ import 'package:flutter/services.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
+  final bool isRequired;
+  final bool obscureText;
+  final bool readOnly;
   final String label;
-  final TextEditingController? controller;
+  final String? hintText;
   final String? initialValue;
+  final String? prefixText;
+  final int? maxLength;
+  final int? maxLines;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final FormFieldValidator<String>? validator;
-  final bool isRequired;
-  final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-  final int? maxLines;
-  final int? maxLength;
-  final String? hintText;
-  final Widget? suffixIcon;
-  final Widget? prefixIcon;
-  final String? prefixText;
-  final bool readOnly;
   final VoidCallback? onTap;
-  final bool obscureText;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
 
   const CustomTextField({
     super.key,
+    this.isRequired = false,
+    this.obscureText = false,
+    this.readOnly = false,
     required this.label,
-    this.controller,
+    this.hintText,
     this.initialValue,
+    this.prefixText,
+    this.maxLength,
+    this.maxLines = 1,
+    this.controller,
+    this.keyboardType,
     this.onChanged,
     this.validator,
-    this.isRequired = false,
-    this.keyboardType,
     this.inputFormatters,
-    this.maxLines = 1,
-    this.maxLength,
-    this.hintText,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.prefixText,
-    this.readOnly = false,
     this.onTap,
-    this.obscureText = false,
+    this.prefixIcon,
+    this.suffixIcon,
   });
 
   @override
@@ -50,31 +50,34 @@ class CustomTextField extends StatelessWidget {
         if (label.isNotEmpty) ...[
           RichText(
             text: TextSpan(
-              text: label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              children: [
+                TextSpan(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppTheme.textPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ) ??
+                      const TextStyle(
+                        color: AppTheme.textPrimary,
+                        fontFamily: 'SFProDisplay',
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: AppTheme.textPrimary,
-                      ) ??
-                  const TextStyle(
-                    fontFamily: 'SFProDisplay',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppTheme.textPrimary,
-                  ),
-              children: [
+                      ),
+                  text: label,
+                ),
                 if (isRequired)
                   TextSpan(
-                    text: ' *',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.errorColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16) ??
+                              color: AppTheme.errorColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ) ??
                         const TextStyle(
-                          fontFamily: 'SFProDisplay',
                           color: AppTheme.errorColor,
+                          fontFamily: 'SFProDisplay',
                           fontWeight: FontWeight.w600,
                         ),
+                    text: ' *',
                   ),
               ],
             ),
@@ -83,41 +86,36 @@ class CustomTextField extends StatelessWidget {
         ],
         TextFormField(
           controller: controller,
-          initialValue: initialValue,
           decoration: InputDecoration(
+            counterText: '',
             hintText: hintText,
-            suffixIcon: suffixIcon,
-            suffixIconColor: AppTheme.iconSecondary,
             prefixIcon: prefixIcon,
-            prefixText: prefixText,
             prefixStyle: const TextStyle(
-              fontFamily: 'SFProDisplay',
               color: AppTheme.textPrimary,
+              fontFamily: 'SFProDisplay',
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
-            counterText: '',
+            prefixText: prefixText,
+            suffixIcon: suffixIcon,
+            suffixIconColor: AppTheme.iconSecondary,
           ),
-          onChanged: onChanged,
-          validator: validator ??
-              (isRequired
-                  ? (val) => (val == null || val.isEmpty)
-                      ? 'This field is required'
-                      : null
-                  : null),
-          keyboardType: keyboardType,
+          initialValue: initialValue,
           inputFormatters: inputFormatters,
-          maxLines: maxLines,
+          keyboardType: keyboardType,
           maxLength: maxLength,
-          readOnly: readOnly,
-          onTap: onTap,
+          maxLines: maxLines,
           obscureText: obscureText,
+          onChanged: onChanged,
+          onTap: onTap,
+          readOnly: readOnly,
           style: const TextStyle(
+            color: AppTheme.textPrimary,
             fontFamily: 'SFProDisplay',
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: AppTheme.textPrimary,
           ),
+          validator: validator ?? (isRequired ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null : null),
         ),
       ],
     );

@@ -17,11 +17,11 @@ class SectionHeader extends StatelessWidget {
       children: [
         if (icon != null) ...[
           Container(
-            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.15),
               borderRadius: BorderRadius.circular(10),
+              color: AppTheme.primaryColor.withOpacity(0.15),
             ),
+            padding: const EdgeInsets.all(8),
             child: Icon(
               icon,
               color: AppTheme.primaryColor,
@@ -33,10 +33,10 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
+            color: AppTheme.textPrimary,
             fontFamily: 'SFProDisplay',
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
             letterSpacing: -0.2,
           ),
         ),
