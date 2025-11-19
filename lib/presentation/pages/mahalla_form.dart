@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmf/core/constants/asset_constants.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
@@ -118,9 +117,9 @@ class MahallaForm extends StatelessWidget {
             const SizedBox(height: 32),
             const Divider(height: 1),
             const SizedBox(height: 32),
-            _buildFamilyMembersSection(context, state, cubit),
+            _buildFamilyMembersSection(context, cubit, state),
             const SizedBox(height: 32),
-            _buildSubmitButton(context, state, cubit),
+            _buildSubmitButton(context, cubit, state),
           ],
         ),
       ),
@@ -170,7 +169,7 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildFamilyMembersSection(
-      BuildContext context, MainFormState state, MainFormCubit cubit) {
+      BuildContext context, MainFormCubit cubit, MainFormState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -298,7 +297,7 @@ class MahallaForm extends StatelessWidget {
   }
 
   Widget _buildSubmitButton(
-      BuildContext context, MainFormState state, MainFormCubit cubit) {
+      BuildContext context, MainFormCubit cubit, MainFormState state) {
     return GradientButton(
       icon: Icons.arrow_circle_right_rounded,
       isLoading: state.isLoading,
