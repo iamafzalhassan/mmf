@@ -10,13 +10,13 @@ import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 
 class FamilyForm extends StatelessWidget {
-  final FamilyMember? existingMember;
   final int? memberIndex;
+  final FamilyMember? existingMember;
 
   const FamilyForm({
     super.key,
-    this.existingMember,
     this.memberIndex,
+    this.existingMember,
   });
 
   bool get isEditing => existingMember != null;
@@ -50,41 +50,60 @@ class FamilyForm extends StatelessWidget {
                         key: cubit.formKey,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: AppTheme.cardBackground,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
                                 blurRadius: 24,
+                                color: Colors.black.withOpacity(0.08),
                                 offset: const Offset(0, 8),
                               ),
                             ],
+                            color: AppTheme.cardBackground,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildPersonalInfoSection(cubit, state),
+                                _buildPersonalInfoSection(
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 32),
                                 const Divider(height: 1),
                                 const SizedBox(height: 32),
-                                _buildSchoolEducationSection(cubit, state),
+                                _buildSchoolEducationSection(
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 24),
                                 _buildProfessionalQualificationsSection(
-                                    cubit, state),
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 24),
-                                _buildMadarasaEducationSection(cubit, state),
+                                _buildMadarasaEducationSection(
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 24),
-                                _buildUlamaQualificationsSection(cubit, state),
+                                _buildUlamaQualificationsSection(
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 24),
-                                _buildSpecialNeedsSection(cubit, state),
+                                _buildSpecialNeedsSection(
+                                  cubit,
+                                  state,
+                                ),
                                 const SizedBox(height: 32),
                                 const Divider(height: 1),
                                 const SizedBox(height: 32),
-                                _buildAdditionalInfoSection(cubit, state),
-                                const SizedBox(height: 32),
-                                _buildActionButtons(context, cubit, state),
+                                _buildActionButtons(
+                                  context,
+                                  cubit,
+                                  state,
+                                ),
                               ],
                             ),
                           ),
@@ -103,34 +122,34 @@ class FamilyForm extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(top: 16, bottom: 32),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 40,
-            height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.cardBackground,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 8,
+                  color: Colors.black.withOpacity(0.05),
                   offset: const Offset(0, 2),
                 ),
               ],
+              color: AppTheme.cardBackground,
             ),
+            height: 40,
+            width: 40,
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () => Navigator.pop(context),
                 borderRadius: BorderRadius.circular(12),
+                onTap: () => Navigator.pop(context),
                 child: const Center(
                   child: Icon(
+                    color: AppTheme.textPrimary,
                     Icons.arrow_back_rounded,
                     size: 20,
-                    color: AppTheme.textPrimary,
                   ),
                 ),
               ),
@@ -147,29 +166,22 @@ class FamilyForm extends StatelessWidget {
                       isEditing ? 'Edit Family Member' : 'Add Family Member',
                       style: TextStyle(
                         fontSize: 32,
-                        height: 1,
                         foreground: Paint()
-                          ..style = PaintingStyle.stroke
+                          ..color = AppTheme.textPrimary
                           ..strokeWidth = 1.25
-                          ..color = AppTheme.textPrimary,
+                          ..style = PaintingStyle.stroke,
+                        height: 1,
                       ),
                     ),
                     Text(
                       isEditing ? 'Edit Family Member' : 'Add Family Member',
                       style: const TextStyle(
-                        fontSize: 32,
                         color: AppTheme.textPrimary,
+                        fontSize: 32,
                         height: 1,
                       ),
                     ),
                   ],
-                ),
-                Text(
-                  'Enter member details',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppTheme.textSecondary,
-                  ),
                 ),
               ],
             ),
@@ -182,64 +194,66 @@ class FamilyForm extends StatelessWidget {
   Widget _buildPersonalInfoSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     final isHeadOfFamily = state.relationship == 'Head of Family';
-    final shouldShowOccupation = state.status == 'Working Only' ||
-        state.status == 'Studying and Working';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Row(
           children: [
-            Icon(Icons.person_rounded, color: AppTheme.primaryColor, size: 24),
+            Icon(
+              color: AppTheme.primaryColor,
+              Icons.person_rounded,
+              size: 24,
+            ),
             SizedBox(width: 12),
             Text(
               'Personal Information',
               style: TextStyle(
+                color: AppTheme.textPrimary,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
               ),
             ),
           ],
         ),
         const SizedBox(height: 24),
         CustomTextField(
-          label: 'Full Name',
           controller: cubit.nameController,
-          onChanged: cubit.updateName,
-          isRequired: true,
           hintText: 'Enter full name',
+          isRequired: true,
+          label: 'Full Name',
+          onChanged: cubit.updateName,
         ),
         const SizedBox(height: 20),
         CustomDropdown(
-          label: 'Gender',
-          value: state.gender,
-          items: const ['Male', 'Female'],
-          onChanged: cubit.updateGender,
           isRequired: true,
+          items: const ['Male', 'Female'],
+          label: 'Gender',
+          onChanged: cubit.updateGender,
+          value: state.gender,
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          label: 'Age',
           controller: cubit.ageController,
-          onChanged: cubit.updateAge,
+          hintText: 'Enter age',
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           isRequired: true,
           keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          hintText: 'Enter age',
+          label: 'Age',
+          onChanged: cubit.updateAge,
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          label: 'Mobile No',
           controller: cubit.mobileController,
-          onChanged: cubit.updateMobile,
-          isRequired: isHeadOfFamily,
-          keyboardType: TextInputType.phone,
           hintText: 'Enter phone number',
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(10),
           ],
+          isRequired: isHeadOfFamily,
+          keyboardType: TextInputType.phone,
+          label: 'Mobile No',
+          onChanged: cubit.updateMobile,
           validator: (val) {
             if (isHeadOfFamily) {
               if (val?.isEmpty ?? true) {
@@ -249,52 +263,51 @@ class FamilyForm extends StatelessWidget {
                 return 'Invalid mobile number';
               }
             } else if (val != null && val.isNotEmpty) {
-              if (val.length != 10 || !val.startsWith('07')) {
+              if (val.length != 10 || !val.startsWith('07'))
                 return 'Invalid mobile number';
-              }
             }
             return null;
           },
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          label: 'National ID No',
           controller: cubit.nicController,
-          onChanged: cubit.updateNic,
           hintText: 'Enter NIC',
+          label: 'National ID No',
+          onChanged: cubit.updateNic,
         ),
         const SizedBox(height: 20),
         CustomDropdown(
-          label: 'Status',
-          value: state.status,
+          isRequired: true,
           items: const [
             'Studying Only',
             'Working Only',
             'Studying and Working',
             'Not Working/Studying'
           ],
+          label: 'Status',
           onChanged: cubit.updateStatus,
+          value: state.status,
         ),
         const SizedBox(height: 20),
-        if (shouldShowOccupation)
-          CustomTextField(
-            label: 'Occupation/Business',
-            controller: cubit.occupationController,
-            onChanged: cubit.updateOccupation,
-            isRequired: true,
-            hintText: 'Enter occupation',
-          ),
-        if (shouldShowOccupation) const SizedBox(height: 20),
+        CustomTextField(
+          controller: cubit.occupationController,
+          hintText: 'Enter Course, Occupation or Business',
+          isRequired: true,
+          label: 'Course/Occupation/Business',
+          onChanged: cubit.updateOccupation,
+        ),
+        const SizedBox(height: 20),
         CustomDropdown(
-          label: 'Civil Status',
-          value: state.civilStatus,
+          isRequired: true,
           items: const ['Married', 'Single', 'Divorced', 'Widow'],
+          label: 'Civil Status',
           onChanged: cubit.updateCivilStatus,
+          value: state.civilStatus,
         ),
         const SizedBox(height: 20),
         CustomDropdown(
-          label: 'Relationship to Head',
-          value: state.relationship,
+          isRequired: true,
           items: const [
             'Head of Family',
             'Spouse',
@@ -308,8 +321,9 @@ class FamilyForm extends StatelessWidget {
             'Granddaughter',
             'Other'
           ],
+          label: 'Relationship to Head',
           onChanged: cubit.updateRelationship,
-          isRequired: true,
+          value: state.relationship,
         ),
       ],
     );
@@ -318,26 +332,29 @@ class FamilyForm extends StatelessWidget {
   Widget _buildSchoolEducationSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.local_library_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.local_library_rounded,
+                size: 22,
+              ),
               SizedBox(width: 10),
               Text(
                 'School Education',
                 style: TextStyle(
+                  color: AppTheme.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -349,8 +366,8 @@ class FamilyForm extends StatelessWidget {
               'O/L',
               'A/L',
             ],
-            selectedItems: state.schoolEducation,
             onChanged: cubit.toggleSchoolEducation,
+            selectedItems: state.schoolEducation,
           ),
         ],
       ),
@@ -360,26 +377,29 @@ class FamilyForm extends StatelessWidget {
   Widget _buildProfessionalQualificationsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.school_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.school_rounded,
+                size: 22,
+              ),
               SizedBox(width: 10),
               Text(
                 'Professional Qualifications',
                 style: TextStyle(
+                  color: AppTheme.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -393,8 +413,8 @@ class FamilyForm extends StatelessWidget {
               "Master's Degree",
               'Phd',
             ],
-            selectedItems: state.professionalQualifications,
             onChanged: cubit.toggleProfessionalQualification,
+            selectedItems: state.professionalQualifications,
           ),
         ],
       ),
@@ -404,26 +424,29 @@ class FamilyForm extends StatelessWidget {
   Widget _buildMadarasaEducationSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.local_library_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.local_library_rounded,
+                size: 22,
+              ),
               SizedBox(width: 10),
               Text(
                 'Madarasa Education',
                 style: TextStyle(
+                  color: AppTheme.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -436,8 +459,8 @@ class FamilyForm extends StatelessWidget {
               'Hifz Part Time',
               'Hifz Full Time',
             ],
-            selectedItems: state.madarasa,
             onChanged: cubit.toggleMadarasa,
+            selectedItems: state.madarasa,
           ),
         ],
       ),
@@ -456,26 +479,29 @@ class FamilyForm extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.school_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.school_rounded,
+                size: 22,
+              ),
               SizedBox(width: 10),
               Text(
                 'Ulama Qualifications',
                 style: TextStyle(
+                  color: AppTheme.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -483,8 +509,8 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 20),
           CheckboxGrid(
             items: ulamaItems,
-            selectedItems: state.ulama,
             onChanged: cubit.toggleUlama,
+            selectedItems: state.ulama,
           ),
         ],
       ),
@@ -494,26 +520,29 @@ class FamilyForm extends StatelessWidget {
   Widget _buildSpecialNeedsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.borderColor),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.favorite_rounded,
-                  color: AppTheme.primaryColor, size: 22),
+              Icon(
+                color: AppTheme.primaryColor,
+                Icons.favorite_rounded,
+                size: 22,
+              ),
               SizedBox(width: 10),
               Text(
                 'Special Needs',
                 style: TextStyle(
+                  color: AppTheme.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -521,44 +550,44 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 20),
           CheckboxGrid(
             items: const ['Disabled', 'Medical Support', 'Education Support'],
-            selectedItems: state.specialNeeds,
             onChanged: cubit.toggleSpecialNeeds,
+            selectedItems: state.specialNeeds,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAdditionalInfoSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Row(
-          children: [
-            Icon(Icons.info_rounded, color: AppTheme.primaryColor, size: 24),
-            SizedBox(width: 12),
-            Text(
-              'Additional Information',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        CustomDropdown(
-          label: 'Eligible For Zakath',
-          value: state.zakath,
-          items: const ['Yes', 'No'],
-          onChanged: cubit.updateZakath,
-          isRequired: true,
-        ),
-      ],
-    );
-  }
+  /* Additional Information */
+  // Widget buildAdditionalInfoSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Row(
+  //         children: [
+  //           Icon(Icons.info_rounded, color: AppTheme.primaryColor, size: 24),
+  //           SizedBox(width: 12),
+  //           Text(
+  //             'Additional Information',
+  //             style: TextStyle(
+  //               color: AppTheme.textPrimary,
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //       const SizedBox(height: 24),
+  //       CustomDropdown(
+  //         isRequired: true,
+  //         items: const ['Yes', 'No'],
+  //         label: 'Eligible For Zakath',
+  //         onChanged: cubit.updateZakath,
+  //         value: state.zakath,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildActionButtons(
       BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
@@ -569,14 +598,16 @@ class FamilyForm extends StatelessWidget {
             height: 52,
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(fontSize: 16)),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: GradientButton(
-            text: isEditing ? 'Update' : 'Save',
             icon: Icons.check_circle_rounded,
             onPressed: () {
               if (cubit.validateAndSave()) {
@@ -587,6 +618,7 @@ class FamilyForm extends StatelessWidget {
                 });
               }
             },
+            text: isEditing ? 'Update' : 'Save',
           ),
         ),
       ],

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mmf/core/theme/app_theme.dart';
+import 'package:mmf/domain/entities/family_member.dart';
 
 class FamilyMemberCard extends StatelessWidget {
   final int index;
-  final dynamic member;
+  final FamilyMember member;
   final VoidCallback onTap;
   final VoidCallback onRemove;
 
@@ -21,37 +22,32 @@ class FamilyMemberCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isHead
-            ? AppTheme.primaryColor.withOpacity(0.05)
-            : AppTheme.scaffoldBackground.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isHead ? AppTheme.primaryColor : AppTheme.borderColor,
           width: isHead ? 2 : 1,
         ),
+        borderRadius: BorderRadius.circular(12),
+        color: isHead ? AppTheme.primaryColor.withOpacity(0.05) : AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
           borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
                   decoration: BoxDecoration(
-                    color: isHead
-                        ? AppTheme.primaryColor.withOpacity(0.15)
-                        : AppTheme.checkboxUnselectedBackground,
                     borderRadius: BorderRadius.circular(24),
+                    color: isHead ? AppTheme.primaryColor.withOpacity(0.15) : AppTheme.checkboxUnselectedBackground,
                   ),
+                  height: 48,
+                  width: 48,
                   child: Icon(
                     isHead ? Icons.star_rounded : Icons.person_rounded,
-                    color:
-                        isHead ? AppTheme.primaryColor : AppTheme.iconSecondary,
+                    color: isHead ? AppTheme.primaryColor : AppTheme.iconSecondary,
                     size: 24,
                   ),
                 ),
@@ -63,19 +59,17 @@ class FamilyMemberCard extends StatelessWidget {
                       Text(
                         member.name.isNotEmpty ? member.name : 'Unnamed Member',
                         style: const TextStyle(
+                          color: AppTheme.textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        member.relationship.isNotEmpty
-                            ? member.relationship
-                            : 'No relationship set',
+                        member.relationship.isNotEmpty ? member.relationship : 'No relationship set',
                         style: TextStyle(
-                          fontSize: 14,
                           color: AppTheme.textSecondary,
+                          fontSize: 14,
                         ),
                       ),
                       if (member.mobile.isNotEmpty) ...[
@@ -83,8 +77,8 @@ class FamilyMemberCard extends StatelessWidget {
                         Text(
                           member.mobile,
                           style: TextStyle(
-                            fontSize: 13,
                             color: AppTheme.textSecondary,
+                            fontSize: 13,
                           ),
                         ),
                       ],
@@ -92,8 +86,8 @@ class FamilyMemberCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_rounded),
                   color: AppTheme.errorColor,
+                  icon: const Icon(Icons.delete_rounded),
                   onPressed: onRemove,
                   tooltip: 'Remove member',
                 ),

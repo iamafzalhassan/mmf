@@ -2,49 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 
 class GradientButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
   final bool isLoading;
+  final String text;
   final IconData? icon;
+  final VoidCallback onPressed;
 
   const GradientButton({
     super.key,
-    required this.text,
-    required this.onPressed,
     this.isLoading = false,
+    required this.text,
     this.icon,
+    required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       height: 52,
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withOpacity(0.3),
             blurRadius: 12,
+            color: AppTheme.primaryColor.withOpacity(0.3),
             offset: const Offset(0, 4),
           ),
         ],
+        color: AppTheme.primaryColor,
       ),
       child: Material(
         color: AppTheme.transparent,
         child: InkWell(
-          onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(12),
+          onTap: isLoading ? null : onPressed,
           child: Center(
             child: isLoading
                 ? const SizedBox(
-                    width: 24,
                     height: 24,
+                    width: 24,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppTheme.textOnPrimary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppTheme.textOnPrimary,
+                      ),
                     ),
                   )
                 : Row(
@@ -53,8 +54,8 @@ class GradientButton extends StatelessWidget {
                       Text(
                         text,
                         style: const TextStyle(
-                          fontFamily: 'SFProDisplay',
                           color: AppTheme.textOnPrimary,
+                          fontFamily: 'SFProDisplay',
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
