@@ -10,6 +10,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
+  final TextEditingController alYearController = TextEditingController(); // New controller
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   FamilyMemberCubit() : super(FamilyMemberState());
@@ -20,6 +21,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     ageController.text = member.age;
     occupationController.text = member.occupation;
     mobileController.text = member.mobile;
+    alYearController.text = member.alYear; // Load A/L year
 
     emit(FamilyMemberState(
       name: member.name,
@@ -32,6 +34,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       status: member.status,
       mobile: member.mobile,
       zakath: member.zakath,
+      alYear: member.alYear, // Load A/L year
       schoolEducation: member.schoolEducation,
       professionalQualifications: member.professionalQualifications,
       madarasa: member.madarasa,
@@ -57,7 +60,23 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       updatedUlama.removeWhere((item) => item == 'Hafiz' || item == 'Alim');
     }
 
-    emit(state.copyWith(gender: value, ulama: updatedUlama));
+    // Reset relationship if it's a gender-specific one
+    String updatedRelationship = state.relationship;
+    if (value == 'Male') {
+      if (['Mother', 'Daughter', 'Sister', 'Granddaughter'].contains(state.relationship)) {
+        updatedRelationship = '';
+      }
+    } else if (value == 'Female') {
+      if (['Father', 'Son', 'Brother', 'Grandson'].contains(state.relationship)) {
+        updatedRelationship = '';
+      }
+    }
+
+    emit(state.copyWith(
+      gender: value,
+      ulama: updatedUlama,
+      relationship: updatedRelationship,
+    ));
   }
 
   void updateCivilStatus(String value) {
@@ -88,10 +107,20 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(zakath: value));
   }
 
+  void updateAlYear(String value) {
+    emit(state.copyWith(alYear: value));
+  }
+
   void toggleSchoolEducation(String value) {
     final list = List<String>.from(state.schoolEducation);
     if (list.contains(value)) {
       list.remove(value);
+      // Clear A/L year if A/L is deselected
+      if (value == 'A/L') {
+        alYearController.clear();
+        emit(state.copyWith(schoolEducation: list, alYear: ''));
+        return;
+      }
     } else {
       list.add(value);
     }
@@ -148,6 +177,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     ageController.clear();
     occupationController.clear();
     mobileController.clear();
+    alYearController.clear();
     emit(FamilyMemberState());
   }
 
@@ -158,6 +188,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     ageController.dispose();
     occupationController.dispose();
     mobileController.dispose();
+    alYearController.dispose();
     return super.close();
   }
 }

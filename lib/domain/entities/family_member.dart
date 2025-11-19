@@ -8,6 +8,7 @@ class FamilyMember {
   final String occupation;
   final String civilStatus;
   final String relationship;
+  final String alYear;
   final String zakath;
   final List<String> schoolEducation;
   final List<String> professionalQualifications;
@@ -25,6 +26,7 @@ class FamilyMember {
     required this.occupation,
     required this.civilStatus,
     required this.relationship,
+    required this.alYear,
     required this.zakath,
     required this.schoolEducation,
     required this.professionalQualifications,
@@ -44,6 +46,7 @@ class FamilyMember {
       'occupation': occupation,
       'civilStatus': civilStatus,
       'relationship': relationship,
+      'alYear': alYear,
       'zakath': zakath,
       'schoolEducation': schoolEducation.join(', '),
       'professionalQualifications': professionalQualifications.join(', '),

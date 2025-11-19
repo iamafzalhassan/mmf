@@ -145,31 +145,33 @@ class MainFormCubit extends Cubit<MainFormState> {
   void showSuccessSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle_rounded, color: Colors.white),
-              SizedBox(width: 12),
-              Text('Form submitted successfully.',
-                  style: TextStyle(fontSize: 16)),
-            ],
-          ),
-          backgroundColor: AppTheme.successColor,
-          behavior: SnackBarBehavior.fixed),
+        backgroundColor: AppTheme.successColor,
+        behavior: SnackBarBehavior.fixed,
+        content: Row(
+          children: [
+            Icon(Icons.check_circle_rounded, color: Colors.white),
+            SizedBox(width: 12),
+            Text('Form submitted successfully.',
+                style: TextStyle(fontSize: 16)),
+          ],
+        ),
+      ),
     );
   }
 
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.info_rounded, color: Colors.white),
-              const SizedBox(width: 12),
-              Text(message, style: const TextStyle(fontSize: 16)),
-            ],
-          ),
-          backgroundColor: AppTheme.errorColor,
-          behavior: SnackBarBehavior.fixed),
+        backgroundColor: AppTheme.errorColor,
+        behavior: SnackBarBehavior.fixed,
+        content: Row(
+          children: [
+            const Icon(Icons.info_rounded, color: Colors.white),
+            const SizedBox(width: 12),
+            Text(message, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+      ),
     );
   }
 
