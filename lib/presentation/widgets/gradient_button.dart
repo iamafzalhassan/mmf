@@ -56,7 +56,7 @@ class GradientButton extends StatelessWidget {
                         style: const TextStyle(
                           color: AppTheme.textOnPrimary,
                           fontFamily: 'SFProDisplay',
-                          fontSize: 16,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
                         ),

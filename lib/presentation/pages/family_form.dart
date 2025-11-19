@@ -193,6 +193,45 @@ class FamilyForm extends StatelessWidget {
       FamilyMemberCubit cubit, FamilyMemberState state) {
     final isHeadOfFamily = state.relationship == 'Head of Family';
 
+    // Get gender-specific relationship options
+    List<String> relationshipItems;
+    if (state.gender == 'Male') {
+      relationshipItems = const [
+        'Head of Family',
+        'Spouse',
+        'Son',
+        'Father',
+        'Brother',
+        'Grandson',
+        'Other'
+      ];
+    } else if (state.gender == 'Female') {
+      relationshipItems = const [
+        'Head of Family',
+        'Spouse',
+        'Daughter',
+        'Mother',
+        'Sister',
+        'Granddaughter',
+        'Other'
+      ];
+    } else {
+      // Show all options if gender not selected yet
+      relationshipItems = const [
+        'Head of Family',
+        'Spouse',
+        'Son',
+        'Daughter',
+        'Father',
+        'Mother',
+        'Brother',
+        'Sister',
+        'Grandson',
+        'Granddaughter',
+        'Other'
+      ];
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,7 +330,7 @@ class FamilyForm extends StatelessWidget {
         const SizedBox(height: 20),
         CustomTextField(
           controller: cubit.occupationController,
-          hintText: 'Enter current Course, Occupation or Business',
+          hintText: 'CIMA, Accountant',
           isRequired: true,
           label: 'Course/Occupation/Business',
           onChanged: cubit.updateOccupation,
@@ -307,19 +346,7 @@ class FamilyForm extends StatelessWidget {
         const SizedBox(height: 20),
         CustomDropdown(
           isRequired: true,
-          items: const [
-            'Head of Family',
-            'Spouse',
-            'Son',
-            'Daughter',
-            'Father',
-            'Mother',
-            'Brother',
-            'Sister',
-            'Grandson',
-            'Granddaughter',
-            'Other'
-          ],
+          items: relationshipItems,
           label: 'Relationship to Head',
           onChanged: cubit.updateRelationship,
           value: state.relationship,
@@ -336,7 +363,7 @@ class FamilyForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -358,7 +385,7 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
               'Primary',
@@ -369,6 +396,34 @@ class FamilyForm extends StatelessWidget {
             onChanged: cubit.toggleSchoolEducation,
             selectedItems: state.schoolEducation,
           ),
+          // Show A/L Year field if A/L is selected
+          if (state.schoolEducation.contains('A/L')) ...[
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: cubit.alYearController,
+              hintText: 'Enter A/L year (e.g. 2020)',
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(4),
+              ],
+              isRequired: true,
+              keyboardType: TextInputType.number,
+              label: 'A/L Year',
+              onChanged: cubit.updateAlYear,
+              validator: (val) {
+                if (val?.isEmpty ?? true) {
+                  return 'A/L year is required';
+                }
+                final year = int.tryParse(val!);
+                if (year == null ||
+                    year < 1950 ||
+                    year > DateTime.now().year + 1) {
+                  return 'Enter a valid year';
+                }
+                return null;
+              },
+            ),
+          ],
         ],
       ),
     );
@@ -382,7 +437,7 @@ class FamilyForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -404,7 +459,7 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
               'Certificate',
@@ -429,7 +484,7 @@ class FamilyForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -451,7 +506,7 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
               'Kitab Part Time',
@@ -484,7 +539,7 @@ class FamilyForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -506,7 +561,7 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           CheckboxGrid(
             items: ulamaItems,
             onChanged: cubit.toggleUlama,
@@ -525,7 +580,7 @@ class FamilyForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppTheme.scaffoldBackground.withOpacity(0.3),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -547,9 +602,14 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           CheckboxGrid(
-            items: const ['Disabled', 'Medical Support', 'Education Support', 'Converted'],
+            items: const [
+              'Disabled',
+              'Medical Support',
+              'Education Support',
+              'Converted'
+            ],
             onChanged: cubit.toggleSpecialNeeds,
             selectedItems: state.specialNeeds,
           ),
@@ -557,37 +617,6 @@ class FamilyForm extends StatelessWidget {
       ),
     );
   }
-
-  /* Additional Information */
-  // Widget buildAdditionalInfoSection(FamilyMemberCubit cubit, FamilyMemberState state) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Row(
-  //         children: [
-  //           Icon(Icons.info_rounded, color: AppTheme.primaryColor, size: 24),
-  //           SizedBox(width: 12),
-  //           Text(
-  //             'Additional Information',
-  //             style: TextStyle(
-  //               color: AppTheme.textPrimary,
-  //               fontSize: 18,
-  //               fontWeight: FontWeight.w600,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 24),
-  //       CustomDropdown(
-  //         isRequired: true,
-  //         items: const ['Yes', 'No'],
-  //         label: 'Eligible For Zakath',
-  //         onChanged: cubit.updateZakath,
-  //         value: state.zakath,
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildActionButtons(
       BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
@@ -600,7 +629,7 @@ class FamilyForm extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: const Text(
                 'Cancel',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ),
@@ -616,6 +645,21 @@ class FamilyForm extends StatelessWidget {
                   'isEditing': isEditing,
                   'memberIndex': memberIndex,
                 });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: AppTheme.errorColor,
+                    behavior: SnackBarBehavior.fixed,
+                    content: Row(
+                      children: [
+                        Icon(Icons.info_rounded, color: Colors.white),
+                        SizedBox(width: 12),
+                        Text('Please fill all required fields correctly.',
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                );
               }
             },
             text: isEditing ? 'Update' : 'Save',
