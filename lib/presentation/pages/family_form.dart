@@ -97,8 +97,6 @@ class FamilyForm extends StatelessWidget {
                                   state,
                                 ),
                                 const SizedBox(height: 32),
-                                const Divider(height: 1),
-                                const SizedBox(height: 32),
                                 _buildActionButtons(
                                   context,
                                   cubit,
@@ -263,8 +261,9 @@ class FamilyForm extends StatelessWidget {
                 return 'Invalid mobile number';
               }
             } else if (val != null && val.isNotEmpty) {
-              if (val.length != 10 || !val.startsWith('07'))
+              if (val.length != 10 || !val.startsWith('07')) {
                 return 'Invalid mobile number';
+              }
             }
             return null;
           },
@@ -292,7 +291,7 @@ class FamilyForm extends StatelessWidget {
         const SizedBox(height: 20),
         CustomTextField(
           controller: cubit.occupationController,
-          hintText: 'Enter Course, Occupation or Business',
+          hintText: 'Enter current Course, Occupation or Business',
           isRequired: true,
           label: 'Course/Occupation/Business',
           onChanged: cubit.updateOccupation,
@@ -362,7 +361,8 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 20),
           CheckboxGrid(
             items: const [
-              'Above Grade 5',
+              'Primary',
+              'Above Grade 8',
               'O/L',
               'A/L',
             ],
@@ -549,7 +549,7 @@ class FamilyForm extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           CheckboxGrid(
-            items: const ['Disabled', 'Medical Support', 'Education Support'],
+            items: const ['Disabled', 'Medical Support', 'Education Support', 'Converted'],
             onChanged: cubit.toggleSpecialNeeds,
             selectedItems: state.specialNeeds,
           ),

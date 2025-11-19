@@ -61,48 +61,38 @@ class MahallaForm extends StatelessWidget {
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(child: Image.asset(AssetConstants.logo, height: 65)),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Stack(
             children: [
-              Stack(
-                children: [
-                  Text(
-                    'Mahalla Members Details Collection Form',
-                    style: TextStyle(
-                      foreground: Paint()
-                        ..color = AppTheme.textPrimary
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 1.25,
-                      fontSize: 32,
-                      height: 1,
-                    ),
-                  ),
-                  const Text(
-                    'Mahalla Members Details Collection Form',
-                    style: TextStyle(
-                      color: AppTheme.textPrimary,
-                      fontSize: 32,
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 2),
               Text(
-                'Kohilawatta Jumma Masjid & Burial Ground',
+                'Mahalla Members Details Collection Form',
                 style: TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 20,
-                  height: 1
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 1.25
+                    ..color = AppTheme.textPrimary,
+                  fontSize: 32,
+                  height: 1,
                 ),
               ),
+              const Text(
+                'Mahalla Members Details Collection Form',
+                style: TextStyle(
+                    color: AppTheme.textPrimary, fontSize: 32, height: 1),
+              ),
             ],
-          )
+          ),
+          const SizedBox(height: 2),
+          Text(
+            'Kohilawatta JM & Burial Ground',
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 20,
+              height: 1
+            ),
+          ),
         ],
       ),
     );
@@ -238,7 +228,8 @@ class MahallaForm extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-            label: const Text('Add Family Member', style: TextStyle(fontSize: 18)),
+            label:
+                const Text('Add Family Member', style: TextStyle(fontSize: 18)),
             onPressed: () => _handleAddMember(context, cubit, state),
           ),
         ),
