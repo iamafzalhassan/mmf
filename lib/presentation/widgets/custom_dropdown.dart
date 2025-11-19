@@ -64,8 +64,8 @@ class CustomDropdown extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Select ${label.toLowerCase()}',
             suffixIcon: Icon(
-              Icons.arrow_drop_down_circle_outlined,
               color: AppTheme.iconSecondary,
+              Icons.arrow_drop_down_circle_outlined,
               size: 20,
             ),
           ),
@@ -82,8 +82,8 @@ class CustomDropdown extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
                       color: AppTheme.dividerColor,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                     height: 4,
                     margin: const EdgeInsets.only(bottom: 16),
@@ -138,8 +138,8 @@ class CustomDropdown extends StatelessWidget {
                           ),
                           trailing: isSelected
                               ? const Icon(
-                                  Icons.check_circle_rounded,
                                   color: AppTheme.primaryColor,
+                                  Icons.check_circle_rounded,
                                   size: 24,
                                 )
                               : null,
@@ -156,7 +156,7 @@ class CustomDropdown extends StatelessWidget {
           style: const TextStyle(
             color: AppTheme.textPrimary,
             fontFamily: 'SFProDisplay',
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
           validator: isRequired ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null : null,

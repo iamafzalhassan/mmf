@@ -86,6 +86,13 @@ class FamilyMemberCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
+                  color: AppTheme.primaryColor,
+                  icon: const Icon(Icons.edit_rounded),
+                  onPressed: onTap,
+                  tooltip: 'Remove member',
+                ),
+                const SizedBox(width: 6),
+                IconButton(
                   color: AppTheme.errorColor,
                   icon: const Icon(Icons.delete_rounded),
                   onPressed: onRemove,
