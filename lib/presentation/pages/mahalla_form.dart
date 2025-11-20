@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/presentation/cubits/main_form_cubit.dart';
@@ -22,7 +23,7 @@ class MahallaForm extends StatelessWidget {
         ),
         child: BlocConsumer<MainFormCubit, MainFormState>(
           listenWhen: (prev, curr) =>
-              prev.isSuccess != curr.isSuccess || prev.error != curr.error,
+          prev.isSuccess != curr.isSuccess || prev.error != curr.error,
           listener: (context, state) {
             final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
@@ -94,8 +95,8 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFormCard(
-      BuildContext context, MainFormState state, MainFormCubit cubit) {
+  Widget _buildFormCard(BuildContext context, MainFormState state,
+      MainFormCubit cubit) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -164,12 +165,35 @@ class MahallaForm extends StatelessWidget {
           onChanged: cubit.updateOwnership,
           value: state.ownership,
         ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: cubit.familiesCountController,
+          hintText: 'Enter number of families',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(2),
+          ],
+          isRequired: true,
+          keyboardType: TextInputType.number,
+          label: 'Families in Home',
+          onChanged: cubit.updateFamiliesCount,
+          validator: (val) {
+            if (val?.isEmpty ?? true) {
+              return 'This field is required';
+            }
+            final num = int.tryParse(val!);
+            if (num == null || num < 1) {
+              return 'Please enter a valid number (min 1)';
+            }
+            return null;
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildFamilyMembersSection(
-      BuildContext context, MainFormCubit cubit, MainFormState state) {
+  Widget _buildFamilyMembersSection(BuildContext context, MainFormCubit cubit,
+      MainFormState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,7 +229,7 @@ class MahallaForm extends StatelessWidget {
         if (state.familyMembers.isNotEmpty) const SizedBox(height: 32),
         ...List.generate(
           state.familyMembers.length,
-          (index) {
+              (index) {
             final member = state.familyMembers[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
@@ -225,7 +249,7 @@ class MahallaForm extends StatelessWidget {
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
             label:
-                const Text('Add Family Member', style: TextStyle(fontSize: 18)),
+            const Text('Add Family Member', style: TextStyle(fontSize: 18)),
             onPressed: () => _handleAddMember(context, cubit, state),
           ),
         ),
@@ -233,8 +257,8 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Future<void> _handleAddMember(
-      BuildContext context, MainFormCubit cubit, MainFormState state) async {
+  Future<void> _handleAddMember(BuildContext context, MainFormCubit cubit,
+      MainFormState state) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const FamilyForm()),
@@ -259,20 +283,19 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Future<void> _handleEditMember(
-    BuildContext context,
-    MainFormCubit cubit,
-    MainFormState state,
-    int index,
-    dynamic member,
-  ) async {
+  Future<void> _handleEditMember(BuildContext context,
+      MainFormCubit cubit,
+      MainFormState state,
+      int index,
+      dynamic member,) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => FamilyForm(
-          existingMember: member,
-          memberIndex: index,
-        ),
+        builder: (_) =>
+            FamilyForm(
+              existingMember: member,
+              memberIndex: index,
+            ),
       ),
     );
 
@@ -296,8 +319,8 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Widget _buildSubmitButton(
-      BuildContext context, MainFormCubit cubit, MainFormState state) {
+  Widget _buildSubmitButton(BuildContext context, MainFormCubit cubit,
+      MainFormState state) {
     return GradientButton(
       icon: Icons.arrow_circle_right_rounded,
       isLoading: state.isLoading,

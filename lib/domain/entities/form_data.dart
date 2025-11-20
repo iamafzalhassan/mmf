@@ -5,6 +5,7 @@ class FormData {
   final String admissionNo;
   final String address;
   final String ownership;
+  final String familiesCount;
   final List<FamilyMember> familyMembers;
 
   FormData({
@@ -12,6 +13,7 @@ class FormData {
     required this.admissionNo,
     required this.address,
     required this.ownership,
+    required this.familiesCount,
     required this.familyMembers,
   });
 
@@ -21,6 +23,7 @@ class FormData {
       'admissionNo': admissionNo,
       'address': address,
       'ownership': ownership,
+      'familiesCount': familiesCount,
       'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
       'timestamp': DateTime.now().toIso8601String(),
     };

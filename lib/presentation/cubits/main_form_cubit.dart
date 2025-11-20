@@ -14,6 +14,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController admissionNoController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController familiesCountController = TextEditingController();
 
   MainFormCubit({required this.submitForm})
       : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
@@ -32,6 +33,10 @@ class MainFormCubit extends Cubit<MainFormState> {
 
   void updateOwnership(String value) {
     emit(state.copyWith(ownership: value));
+  }
+
+  void updateFamiliesCount(String value) {
+    emit(state.copyWith(familiesCount: value));
   }
 
   void addFamilyMember(FamilyMember member) {
@@ -113,6 +118,8 @@ class MainFormCubit extends Cubit<MainFormState> {
       admissionNo: state.admissionNo,
       address: state.address,
       ownership: state.ownership,
+      familiesCount: state.familiesCount,
+      // New field
       familyMembers: state.familyMembers,
     );
 
@@ -124,10 +131,6 @@ class MainFormCubit extends Cubit<MainFormState> {
         error: failure.message,
       )),
       (_) {
-        emit(state.copyWith(
-          isLoading: false,
-          isSuccess: true,
-        ));
         scrollToTop();
         resetForm();
       },
@@ -140,6 +143,10 @@ class MainFormCubit extends Cubit<MainFormState> {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+    emit(state.copyWith(
+      isLoading: false,
+      isSuccess: true,
+    ));
   }
 
   void showSuccessSnackBar(BuildContext context) {
@@ -178,6 +185,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   void resetForm() {
     admissionNoController.clear();
     addressController.clear();
+    familiesCountController.clear();
 
     Future.delayed(
         const Duration(seconds: 1), () => formKey.currentState?.reset());
@@ -187,6 +195,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       admissionNo: '',
       address: '',
       ownership: '',
+      familiesCount: '',
       familyMembers: [],
       isSuccess: false,
       error: null,
@@ -201,6 +210,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   Future<void> close() {
     admissionNoController.dispose();
     addressController.dispose();
+    familiesCountController.dispose();
     scrollController.dispose();
     return super.close();
   }
