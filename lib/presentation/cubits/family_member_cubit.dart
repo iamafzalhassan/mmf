@@ -10,7 +10,8 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
-  final TextEditingController alYearController = TextEditingController(); // New controller
+  final TextEditingController alYearController = TextEditingController();
+  final TextEditingController professionalQualificationsDetailsController = TextEditingController(); // New controller
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   FamilyMemberCubit() : super(FamilyMemberState());
@@ -21,7 +22,8 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     ageController.text = member.age;
     occupationController.text = member.occupation;
     mobileController.text = member.mobile;
-    alYearController.text = member.alYear; // Load A/L year
+    alYearController.text = member.alYear;
+    professionalQualificationsDetailsController.text = member.professionalQualificationsDetails;
 
     emit(FamilyMemberState(
       name: member.name,
@@ -34,9 +36,10 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       status: member.status,
       mobile: member.mobile,
       zakath: member.zakath,
-      alYear: member.alYear, // Load A/L year
+      alYear: member.alYear,
       schoolEducation: member.schoolEducation,
       professionalQualifications: member.professionalQualifications,
+      professionalQualificationsDetails: member.professionalQualificationsDetails,
       madarasa: member.madarasa,
       ulama: member.ulama,
       specialNeeds: member.specialNeeds,
@@ -111,6 +114,10 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(alYear: value));
   }
 
+  void updateProfessionalQualificationsDetails(String value) {
+    emit(state.copyWith(professionalQualificationsDetails: value));
+  }
+
   void toggleSchoolEducation(String value) {
     final list = List<String>.from(state.schoolEducation);
     if (list.contains(value)) {
@@ -131,6 +138,15 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     final list = List<String>.from(state.professionalQualifications);
     if (list.contains(value)) {
       list.remove(value);
+      // Clear details if all qualifications are removed
+      if (list.isEmpty) {
+        professionalQualificationsDetailsController.clear();
+        emit(state.copyWith(
+          professionalQualifications: list,
+          professionalQualificationsDetails: '',
+        ));
+        return;
+      }
     } else {
       list.add(value);
     }
@@ -178,6 +194,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     occupationController.clear();
     mobileController.clear();
     alYearController.clear();
+    professionalQualificationsDetailsController.clear();
     emit(FamilyMemberState());
   }
 
@@ -189,6 +206,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     occupationController.dispose();
     mobileController.dispose();
     alYearController.dispose();
+    professionalQualificationsDetailsController.dispose();
     return super.close();
   }
 }

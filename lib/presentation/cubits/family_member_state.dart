@@ -14,6 +14,7 @@ class FamilyMemberState {
   final String zakath;
   final List<String> schoolEducation;
   final List<String> professionalQualifications;
+  final String professionalQualificationsDetails;
   final List<String> madarasa;
   final List<String> ulama;
   final List<String> specialNeeds;
@@ -32,6 +33,7 @@ class FamilyMemberState {
     this.zakath = '',
     this.schoolEducation = const [],
     this.professionalQualifications = const [],
+    this.professionalQualificationsDetails = '',
     this.madarasa = const [],
     this.ulama = const [],
     this.specialNeeds = const [],
@@ -51,6 +53,7 @@ class FamilyMemberState {
     String? zakath,
     List<String>? schoolEducation,
     List<String>? professionalQualifications,
+    String? professionalQualificationsDetails,
     List<String>? madarasa,
     List<String>? ulama,
     List<String>? specialNeeds,
@@ -69,7 +72,9 @@ class FamilyMemberState {
       zakath: zakath ?? this.zakath,
       schoolEducation: schoolEducation ?? this.schoolEducation,
       professionalQualifications:
-          professionalQualifications ?? this.professionalQualifications,
+      professionalQualifications ?? this.professionalQualifications,
+      professionalQualificationsDetails:
+      professionalQualificationsDetails ?? this.professionalQualificationsDetails,
       madarasa: madarasa ?? this.madarasa,
       ulama: ulama ?? this.ulama,
       specialNeeds: specialNeeds ?? this.specialNeeds,
@@ -91,6 +96,7 @@ class FamilyMemberState {
       zakath: zakath,
       schoolEducation: schoolEducation,
       professionalQualifications: professionalQualifications,
+      professionalQualificationsDetails: professionalQualificationsDetails,
       madarasa: madarasa,
       ulama: ulama,
       specialNeeds: specialNeeds,

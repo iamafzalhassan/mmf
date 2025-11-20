@@ -136,8 +136,8 @@ class FamilyForm extends StatelessWidget {
               ],
               color: AppTheme.cardBackground,
             ),
-            height: 30,
-            width: 30,
+            height: 40,
+            width: 40,
             child: Material(
               color: Colors.transparent,
               child: InkWell(
@@ -147,7 +147,7 @@ class FamilyForm extends StatelessWidget {
                   child: Icon(
                     color: AppTheme.textPrimary,
                     Icons.arrow_back_rounded,
-                    size: 15,
+                    size: 20,
                   ),
                 ),
               ),
@@ -478,6 +478,9 @@ class FamilyForm extends StatelessWidget {
 
   Widget _buildProfessionalQualificationsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
+    final hasProfessionalQualifications =
+        state.professionalQualifications.isNotEmpty;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.borderColor),
@@ -518,6 +521,23 @@ class FamilyForm extends StatelessWidget {
             onChanged: cubit.toggleProfessionalQualification,
             selectedItems: state.professionalQualifications,
           ),
+          if (hasProfessionalQualifications) ...[
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: cubit.professionalQualificationsDetailsController,
+              hintText: 'e.g. Diploma in Nursing, BSc in Psychology',
+              isRequired: true,
+              label: 'Qualification Details',
+              maxLines: 1,
+              onChanged: cubit.updateProfessionalQualificationsDetails,
+              validator: (val) {
+                if (val?.isEmpty ?? true) {
+                  return 'Please specify your qualifications';
+                }
+                return null;
+              },
+            ),
+          ],
         ],
       ),
     );
