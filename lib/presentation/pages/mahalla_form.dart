@@ -251,6 +251,12 @@ class MahallaForm extends StatelessWidget {
             label:
             const Text('Add Family Member', style: TextStyle(fontSize: 18)),
             onPressed: () => _handleAddMember(context, cubit, state),
+            style: ButtonStyle(
+              minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
+              padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                const EdgeInsets.all(0),
+              ),
+            ),
           ),
         ),
       ],

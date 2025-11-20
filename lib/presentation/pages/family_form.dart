@@ -630,6 +630,12 @@ class FamilyForm extends StatelessWidget {
             height: 52,
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
+              style: ButtonStyle(
+                minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
+                padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.all(0),
+                ),
+              ),
               child: const Text(
                 'Cancel',
                 style: TextStyle(fontSize: 18),
