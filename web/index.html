@@ -18,12 +18,17 @@
     <link rel="manifest" href="manifest.json">
 
     <style>
-        #loading {
-          position: fixed;
-          top: 0;
-          left: 0;
+        html, body {
+          margin: 0;
+          padding: 0;
           width: 100%;
           height: 100%;
+          overflow: hidden;
+        }
+
+        #loading {
+          position: fixed;
+          inset: 0;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -35,13 +40,15 @@
           width: 45px;
           height: 45px;
           border: 5px solid #E0E0E0;
-          border-top-color: #7ED957; /* Flutter-like blue */
+          border-top-color: #7ED957;
           border-radius: 50%;
           animation: spin 1s linear infinite;
+          will-change: transform;
         }
 
         @keyframes spin {
-          to { transform: rotate(360deg); }
+          0%   { transform: rotate(0deg) translateZ(0); }
+          100% { transform: rotate(360deg) translateZ(0); }
         }
     </style>
 </head>
@@ -52,12 +59,16 @@
     <div class="loader"></div>
 </div>
 
-<script src="flutter_bootstrap.js" async></script>
+<script src="flutter_bootstrap.js" defer></script>
 
 <script>
     window.addEventListener('flutter-first-frame', function () {
-      const loader = document.getElementById('loading');
-      if (loader) loader.style.display = 'none';
+        const loader = document.getElementById('loading');
+        if (loader) {
+            loader.style.transition = 'opacity 0.3s ease';
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300);
+        }
     });
 </script>
 
