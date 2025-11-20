@@ -1,3 +1,4 @@
+import 'package:mmf/core/utils/data_sanitizer.dart';
 import 'family_member.dart';
 
 class FormData {
@@ -19,13 +20,12 @@ class FormData {
 
   Map<String, dynamic> toJson() {
     return {
-      'refNo': refNo,
-      'admissionNo': admissionNo,
-      'address': address,
-      'ownership': ownership,
-      'familiesCount': familiesCount,
+      'refNo': DataSanitizer.sanitizeString(refNo),
+      'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
+      'address': DataSanitizer.sanitizeAddress(address),
+      'ownership': DataSanitizer.sanitizeString(ownership),
+      'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
       'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
-      'timestamp': DateTime.now().toIso8601String(),
     };
   }
 }

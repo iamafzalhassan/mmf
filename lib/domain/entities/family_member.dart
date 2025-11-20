@@ -1,3 +1,5 @@
+import 'package:mmf/core/utils/data_sanitizer.dart';
+
 class FamilyMember {
   final String name;
   final String gender;
@@ -37,22 +39,22 @@ class FamilyMember {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'gender': gender,
-      'age': age,
-      'mobile': mobile,
-      'nic': nic,
-      'status': status,
-      'occupation': occupation,
-      'civilStatus': civilStatus,
-      'relationship': relationship,
-      'alYear': alYear,
-      'zakath': zakath,
-      'schoolEducation': schoolEducation.join(', '),
-      'professionalQualifications': professionalQualifications.join(', '),
-      'madarasa': madarasa.join(', '),
-      'ulama': ulama.join(', '),
-      'specialNeeds': specialNeeds.join(', '),
+      'name': DataSanitizer.sanitizeString(name),
+      'gender': DataSanitizer.sanitizeString(gender),
+      'age': DataSanitizer.sanitizeYear(age),
+      'mobile': DataSanitizer.sanitizePhone(mobile),
+      'nic': DataSanitizer.sanitizeNIC(nic),
+      'status': DataSanitizer.sanitizeString(status),
+      'occupation': DataSanitizer.sanitizeString(occupation),
+      'civilStatus': DataSanitizer.sanitizeString(civilStatus),
+      'relationship': DataSanitizer.sanitizeString(relationship),
+      'alYear': DataSanitizer.sanitizeYear(alYear),
+      'zakath': DataSanitizer.sanitizeString(zakath),
+      'schoolEducation': DataSanitizer.sanitizeList(schoolEducation).join(', '),
+      'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),
+      'madarasa': DataSanitizer.sanitizeList(madarasa).join(', '),
+      'ulama': DataSanitizer.sanitizeList(ulama).join(', '),
+      'specialNeeds': DataSanitizer.sanitizeList(specialNeeds).join(', '),
     };
   }
 }
