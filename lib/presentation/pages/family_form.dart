@@ -121,12 +121,12 @@ class FamilyForm extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 16, bottom: 32),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
                   blurRadius: 8,
@@ -136,54 +136,52 @@ class FamilyForm extends StatelessWidget {
               ],
               color: AppTheme.cardBackground,
             ),
-            height: 40,
-            width: 40,
+            height: 30,
+            width: 30,
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(50),
                 onTap: () => Navigator.pop(context),
                 child: const Center(
                   child: Icon(
                     color: AppTheme.textPrimary,
                     Icons.arrow_back_rounded,
-                    size: 20,
+                    size: 15,
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    Text(
-                      isEditing ? 'Edit Family Member' : 'Add Family Member',
-                      style: TextStyle(
-                        fontSize: 32,
-                        foreground: Paint()
-                          ..color = AppTheme.textPrimary
-                          ..strokeWidth = 1.25
-                          ..style = PaintingStyle.stroke,
-                        height: 1,
-                      ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  Text(
+                    isEditing ? 'Edit Family Member' : 'Add Family Member',
+                    style: TextStyle(
+                      fontSize: 32,
+                      foreground: Paint()
+                        ..color = AppTheme.textPrimary
+                        ..strokeWidth = 1.25
+                        ..style = PaintingStyle.stroke,
+                      height: 1,
                     ),
-                    Text(
-                      isEditing ? 'Edit Family Member' : 'Add Family Member',
-                      style: const TextStyle(
-                        color: AppTheme.textPrimary,
-                        fontSize: 32,
-                        height: 1,
-                      ),
+                  ),
+                  Text(
+                    isEditing ? 'Edit Family Member' : 'Add Family Member',
+                    style: const TextStyle(
+                      color: AppTheme.textPrimary,
+                      fontSize: 32,
+                      height: 1,
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+                  ),
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );

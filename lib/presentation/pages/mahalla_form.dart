@@ -84,11 +84,11 @@ class MahallaForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             'Kohilawatta JM & Burial Ground',
             style: TextStyle(
-                color: AppTheme.textSecondary, fontSize: 20, height: 1),
+                color: AppTheme.textSecondary, fontSize: 22, height: 1),
           ),
         ],
       ),
