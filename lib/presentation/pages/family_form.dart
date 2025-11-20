@@ -192,6 +192,8 @@ class FamilyForm extends StatelessWidget {
   Widget _buildPersonalInfoSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     final isHeadOfFamily = state.relationship == 'Head of Family';
+    final shouldShowOccupation = state.status == 'Working Only' ||
+        state.status == 'Studying and Working';
 
     // Get gender-specific relationship options
     List<String> relationshipItems;
@@ -328,14 +330,15 @@ class FamilyForm extends StatelessWidget {
           value: state.status,
         ),
         const SizedBox(height: 20),
-        CustomTextField(
-          controller: cubit.occupationController,
-          hintText: 'CIMA, Accountant',
-          isRequired: true,
-          label: 'Course/Occupation/Business',
-          onChanged: cubit.updateOccupation,
-        ),
-        const SizedBox(height: 20),
+        if (shouldShowOccupation)
+          CustomTextField(
+            controller: cubit.occupationController,
+            hintText: 'Enter Occupation/Business',
+            isRequired: true,
+            label: 'Occupation/Business',
+            onChanged: cubit.updateOccupation,
+          ),
+        if (shouldShowOccupation) const SizedBox(height: 20),
         CustomDropdown(
           isRequired: true,
           items: const ['Married', 'Single', 'Divorced', 'Widow'],
@@ -662,7 +665,7 @@ class FamilyForm extends StatelessWidget {
                 );
               }
             },
-            text: isEditing ? 'Update' : 'Save',
+            text: isEditing ? 'Update' : 'Add',
           ),
         ),
       ],

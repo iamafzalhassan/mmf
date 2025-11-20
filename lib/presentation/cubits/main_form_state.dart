@@ -6,6 +6,7 @@ class MainFormState extends Equatable {
   final String admissionNo;
   final String address;
   final String ownership;
+  final String familiesCount;
   final List<FamilyMember> familyMembers;
   final bool isLoading;
   final bool isSuccess;
@@ -16,6 +17,7 @@ class MainFormState extends Equatable {
     this.admissionNo = '',
     this.address = '',
     this.ownership = '',
+    this.familiesCount = '',
     this.familyMembers = const [],
     this.isLoading = false,
     this.isSuccess = false,
@@ -28,6 +30,7 @@ class MainFormState extends Equatable {
         admissionNo,
         address,
         ownership,
+        familiesCount,
         familyMembers,
         isLoading,
         isSuccess,
@@ -39,6 +42,7 @@ class MainFormState extends Equatable {
     String? admissionNo,
     String? address,
     String? ownership,
+    String? familiesCount,
     List<FamilyMember>? familyMembers,
     bool? isLoading,
     bool? isSuccess,
@@ -49,6 +53,7 @@ class MainFormState extends Equatable {
       admissionNo: admissionNo ?? this.admissionNo,
       address: address ?? this.address,
       ownership: ownership ?? this.ownership,
+      familiesCount: familiesCount ?? this.familiesCount,
       familyMembers: familyMembers ?? this.familyMembers,
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
