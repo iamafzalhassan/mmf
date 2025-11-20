@@ -67,7 +67,7 @@ class MahallaForm extends StatelessWidget {
           Stack(
             children: [
               Text(
-                'Mahalla Members Details Collection Form',
+                'Mahalla Members Details Collection Form 2025',
                 style: TextStyle(
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
@@ -78,7 +78,7 @@ class MahallaForm extends StatelessWidget {
                 ),
               ),
               const Text(
-                'Mahalla Members Details Collection Form',
+                'Mahalla Members Details Collection Form 2025',
                 style: TextStyle(
                     color: AppTheme.textPrimary, fontSize: 32, height: 1),
               ),
