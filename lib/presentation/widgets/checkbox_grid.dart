@@ -27,11 +27,11 @@ class CheckboxGrid extends StatelessWidget {
           child: AnimatedContainer(
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
+                color: isSelected ? AppTheme.green2 : AppTheme.gray3,
                 width: isSelected ? 2 : 1.5,
               ),
               borderRadius: BorderRadius.circular(12),
-              color: isSelected ? AppTheme.primaryColor.withOpacity(0.15) : AppTheme.cardBackground,
+              color: isSelected ? AppTheme.green2.withOpacity(0.15) : AppTheme.white1,
             ),
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -41,12 +41,12 @@ class CheckboxGrid extends StatelessWidget {
                 AnimatedContainer(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor,
+                      color: isSelected ? AppTheme.green2 : AppTheme.gray3,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(6),
                     color:
-                        isSelected ? AppTheme.primaryColor : Colors.transparent,
+                        isSelected ? AppTheme.green2 : Colors.transparent,
                   ),
                   duration: const Duration(milliseconds: 200),
                   height: 20,
@@ -54,7 +54,7 @@ class CheckboxGrid extends StatelessWidget {
                   child: isSelected
                       ? const Icon(
                           Icons.check_rounded,
-                          color: AppTheme.textOnPrimary,
+                          color: AppTheme.white1,
                           size: 14,
                         )
                       : null,
@@ -63,7 +63,7 @@ class CheckboxGrid extends StatelessWidget {
                 Text(
                   item,
                   style: TextStyle(
-                    color: isSelected ? AppTheme.primaryColor : AppTheme.textPrimary,
+                    color: isSelected ? AppTheme.green2 : AppTheme.black,
                     fontFamily: 'SFProDisplay',
                     fontSize: 16,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,

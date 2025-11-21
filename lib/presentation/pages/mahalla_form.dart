@@ -23,7 +23,7 @@ class MahallaForm extends StatelessWidget {
         ),
         child: BlocConsumer<MainFormCubit, MainFormState>(
           listenWhen: (prev, curr) =>
-          prev.isSuccess != curr.isSuccess || prev.error != curr.error,
+              prev.isSuccess != curr.isSuccess || prev.error != curr.error,
           listener: (context, state) {
             final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
@@ -72,31 +72,30 @@ class MahallaForm extends StatelessWidget {
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
                     ..strokeWidth = 1.25
-                    ..color = AppTheme.textPrimary,
+                    ..color = AppTheme.black,
                   fontSize: 32,
                   height: 1,
                 ),
               ),
               const Text(
                 'Mahalla Members Details Collection Form 2025',
-                style: TextStyle(
-                    color: AppTheme.textPrimary, fontSize: 32, height: 1),
+                style:
+                    TextStyle(color: AppTheme.black, fontSize: 32, height: 1),
               ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
             'Kohilawatta JM & Burial Ground',
-            style: TextStyle(
-                color: AppTheme.textSecondary, fontSize: 22, height: 1),
+            style: TextStyle(color: AppTheme.gray5, fontSize: 22, height: 1),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFormCard(BuildContext context, MainFormState state,
-      MainFormCubit cubit) {
+  Widget _buildFormCard(
+      BuildContext context, MainFormState state, MainFormCubit cubit) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -107,7 +106,7 @@ class MahallaForm extends StatelessWidget {
             offset: const Offset(0, 8),
           ),
         ],
-        color: AppTheme.cardBackground,
+        color: AppTheme.white1,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -192,8 +191,8 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFamilyMembersSection(BuildContext context, MainFormCubit cubit,
-      MainFormState state) {
+  Widget _buildFamilyMembersSection(
+      BuildContext context, MainFormCubit cubit, MainFormState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -209,7 +208,7 @@ class MahallaForm extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.info_outline_rounded,
-                  color: AppTheme.secondaryColor,
+                  color: AppTheme.green1,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -217,7 +216,7 @@ class MahallaForm extends StatelessWidget {
                   child: Text(
                     'Required to add at least one member as Head of Family.',
                     style: TextStyle(
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.gray5,
                       fontSize: 16,
                       height: 1.25,
                     ),
@@ -229,7 +228,7 @@ class MahallaForm extends StatelessWidget {
         if (state.familyMembers.isNotEmpty) const SizedBox(height: 32),
         ...List.generate(
           state.familyMembers.length,
-              (index) {
+          (index) {
             final member = state.familyMembers[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
@@ -249,7 +248,7 @@ class MahallaForm extends StatelessWidget {
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
             label:
-            const Text('Add Family Member', style: TextStyle(fontSize: 18)),
+                const Text('Add Family Member', style: TextStyle(fontSize: 18)),
             onPressed: () => _handleAddMember(context, cubit, state),
             style: ButtonStyle(
               minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
@@ -263,8 +262,8 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Future<void> _handleAddMember(BuildContext context, MainFormCubit cubit,
-      MainFormState state) async {
+  Future<void> _handleAddMember(
+      BuildContext context, MainFormCubit cubit, MainFormState state) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const FamilyForm()),
@@ -289,20 +288,13 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Future<void> _handleEditMember(BuildContext context,
-      MainFormCubit cubit,
-      MainFormState state,
-      int index,
-      dynamic member,) async {
+  Future<void> _handleEditMember(BuildContext context, MainFormCubit cubit,
+      MainFormState state, int index, dynamic member) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-            FamilyForm(
-              existingMember: member,
-              memberIndex: index,
-            ),
-      ),
+          builder: (_) =>
+              FamilyForm(existingMember: member, memberIndex: index)),
     );
 
     if (result != null && result is Map<String, dynamic>) {
@@ -325,8 +317,8 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Widget _buildSubmitButton(BuildContext context, MainFormCubit cubit,
-      MainFormState state) {
+  Widget _buildSubmitButton(
+      BuildContext context, MainFormCubit cubit, MainFormState state) {
     return GradientButton(
       icon: Icons.arrow_circle_right_rounded,
       isLoading: state.isLoading,

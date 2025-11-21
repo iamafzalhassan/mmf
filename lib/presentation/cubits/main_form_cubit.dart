@@ -152,7 +152,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   void showSuccessSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: AppTheme.successColor,
+        backgroundColor: AppTheme.green3,
         behavior: SnackBarBehavior.fixed,
         content: Row(
           children: [
@@ -169,7 +169,7 @@ class MainFormCubit extends Cubit<MainFormState> {
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: AppTheme.errorColor,
+        backgroundColor: AppTheme.red,
         behavior: SnackBarBehavior.fixed,
         content: Row(
           children: [

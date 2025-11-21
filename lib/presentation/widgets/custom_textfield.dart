@@ -53,12 +53,12 @@ class CustomTextField extends StatelessWidget {
               children: [
                 TextSpan(
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textPrimary,
+                            color: AppTheme.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ) ??
                       const TextStyle(
-                        color: AppTheme.textPrimary,
+                        color: AppTheme.black,
                         fontFamily: 'SFProDisplay',
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -68,12 +68,12 @@ class CustomTextField extends StatelessWidget {
                 if (isRequired)
                   TextSpan(
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.errorColor,
+                              color: AppTheme.red,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ) ??
                         const TextStyle(
-                          color: AppTheme.errorColor,
+                          color: AppTheme.red,
                           fontFamily: 'SFProDisplay',
                           fontWeight: FontWeight.w600,
                         ),
@@ -91,14 +91,14 @@ class CustomTextField extends StatelessWidget {
             hintText: hintText,
             prefixIcon: prefixIcon,
             prefixStyle: const TextStyle(
-              color: AppTheme.textPrimary,
+              color: AppTheme.black,
               fontFamily: 'SFProDisplay',
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
             prefixText: prefixText,
             suffixIcon: suffixIcon,
-            suffixIconColor: AppTheme.iconSecondary,
+            suffixIconColor: AppTheme.gray6,
           ),
           initialValue: initialValue,
           inputFormatters: inputFormatters,
@@ -110,7 +110,7 @@ class CustomTextField extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           style: const TextStyle(
-            color: AppTheme.textPrimary,
+            color: AppTheme.black,
             fontFamily: 'SFProDisplay',
             fontSize: 16,
             fontWeight: FontWeight.w400,
