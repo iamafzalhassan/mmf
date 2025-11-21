@@ -2,19 +2,19 @@ import 'package:mmf/core/utils/data_sanitizer.dart';
 import 'family_member.dart';
 
 class FormData {
-  final String refNo;
-  final String admissionNo;
   final String address;
-  final String ownership;
+  final String admissionNo;
   final String familiesCount;
+  final String ownership;
+  final String refNo;
   final List<FamilyMember> familyMembers;
 
   FormData({
-    required this.refNo,
-    required this.admissionNo,
     required this.address,
-    required this.ownership,
+    required this.admissionNo,
     required this.familiesCount,
+    required this.ownership,
+    required this.refNo,
     required this.familyMembers,
   });
 

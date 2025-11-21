@@ -5,24 +5,25 @@ import 'package:mmf/domain/entities/family_member.dart';
 part 'family_member_state.dart';
 
 class FamilyMemberCubit extends Cubit<FamilyMemberState> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController alYearController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController nicController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
-  final TextEditingController mobileController = TextEditingController();
-  final TextEditingController alYearController = TextEditingController();
-  final TextEditingController professionalQualificationsDetailsController = TextEditingController(); // New controller
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController professionalQualificationsDetailsController = TextEditingController();
 
   FamilyMemberCubit() : super(FamilyMemberState());
 
   void loadMember(FamilyMember member) {
+    ageController.text = member.age;
+    alYearController.text = member.alYear;
+    mobileController.text = member.mobile;
     nameController.text = member.name;
     nicController.text = member.nic;
-    ageController.text = member.age;
     occupationController.text = member.occupation;
-    mobileController.text = member.mobile;
-    alYearController.text = member.alYear;
     professionalQualificationsDetailsController.text = member.professionalQualificationsDetails;
 
     emit(FamilyMemberState(
@@ -63,7 +64,6 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       updatedUlama.removeWhere((item) => item == 'Hafiz' || item == 'Alim');
     }
 
-    // Reset relationship if it's a gender-specific one
     String updatedRelationship = state.relationship;
     if (value == 'Male') {
       if (['Mother', 'Daughter', 'Sister', 'Granddaughter'].contains(state.relationship)) {
@@ -77,8 +77,8 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
     emit(state.copyWith(
       gender: value,
-      ulama: updatedUlama,
       relationship: updatedRelationship,
+      ulama: updatedUlama,
     ));
   }
 
@@ -122,7 +122,6 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     final list = List<String>.from(state.schoolEducation);
     if (list.contains(value)) {
       list.remove(value);
-      // Clear A/L year if A/L is deselected
       if (value == 'A/L') {
         alYearController.clear();
         emit(state.copyWith(schoolEducation: list, alYear: ''));
@@ -138,7 +137,6 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     final list = List<String>.from(state.professionalQualifications);
     if (list.contains(value)) {
       list.remove(value);
-      // Clear details if all qualifications are removed
       if (list.isEmpty) {
         professionalQualificationsDetailsController.clear();
         emit(state.copyWith(
@@ -188,24 +186,24 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void reset() {
+    ageController.clear();
+    alYearController.clear();
+    mobileController.clear();
     nameController.clear();
     nicController.clear();
-    ageController.clear();
     occupationController.clear();
-    mobileController.clear();
-    alYearController.clear();
     professionalQualificationsDetailsController.clear();
     emit(FamilyMemberState());
   }
 
   @override
   Future<void> close() {
+    ageController.dispose();
+    alYearController.dispose();
+    mobileController.dispose();
     nameController.dispose();
     nicController.dispose();
-    ageController.dispose();
     occupationController.dispose();
-    mobileController.dispose();
-    alYearController.dispose();
     professionalQualificationsDetailsController.dispose();
     return super.close();
   }
