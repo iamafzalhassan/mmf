@@ -1,42 +1,42 @@
 import 'package:mmf/core/utils/data_sanitizer.dart';
 
 class FamilyMember {
-  final String name;
-  final String gender;
   final String age;
-  final String mobile;
-  final String nic;
-  final String status;
-  final String occupation;
-  final String civilStatus;
-  final String relationship;
   final String alYear;
-  final String zakath;
+  final String civilStatus;
+  final String gender;
+  final String mobile;
+  final String name;
+  final String nic;
+  final String occupation;
   final String professionalQualificationsDetails;
-  final List<String> schoolEducation;
-  final List<String> professionalQualifications;
+  final String relationship;
+  final String status;
+  final String zakath;
   final List<String> madarasa;
-  final List<String> ulama;
+  final List<String> professionalQualifications;
+  final List<String> schoolEducation;
   final List<String> specialNeeds;
+  final List<String> ulama;
 
   FamilyMember({
-    required this.name,
-    required this.gender,
     required this.age,
-    required this.mobile,
-    required this.nic,
-    required this.status,
-    required this.occupation,
-    required this.civilStatus,
-    required this.relationship,
     required this.alYear,
-    required this.zakath,
+    required this.civilStatus,
+    required this.gender,
+    required this.mobile,
+    required this.name,
+    required this.nic,
+    required this.occupation,
     required this.professionalQualificationsDetails,
-    required this.schoolEducation,
-    required this.professionalQualifications,
+    required this.relationship,
+    required this.status,
+    required this.zakath,
     required this.madarasa,
-    required this.ulama,
+    required this.professionalQualifications,
+    required this.schoolEducation,
     required this.specialNeeds,
+    required this.ulama,
   });
 
   Map<String, dynamic> toJson() {
@@ -54,8 +54,7 @@ class FamilyMember {
       'zakath': DataSanitizer.sanitizeString(zakath),
       'professionalQualificationsDetails': DataSanitizer.sanitizeString(professionalQualificationsDetails),
       'schoolEducation': DataSanitizer.sanitizeList(schoolEducation).join(', '),
-      'professionalQualifications':
-      DataSanitizer.sanitizeList(professionalQualifications).join(', '),
+      'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),
       'madarasa': DataSanitizer.sanitizeList(madarasa).join(', '),
       'ulama': DataSanitizer.sanitizeList(ulama).join(', '),
       'specialNeeds': DataSanitizer.sanitizeList(specialNeeds).join(', '),

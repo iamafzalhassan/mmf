@@ -2,62 +2,62 @@ import 'package:equatable/equatable.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 
 class MainFormState extends Equatable {
-  final String refNo;
-  final String admissionNo;
-  final String address;
-  final String ownership;
-  final String familiesCount;
-  final List<FamilyMember> familyMembers;
   final bool isLoading;
   final bool isSuccess;
+  final String address;
+  final String admissionNo;
+  final String familiesCount;
+  final String ownership;
+  final String refNo;
   final String? error;
+  final List<FamilyMember> familyMembers;
 
   const MainFormState({
-    required this.refNo,
-    this.admissionNo = '',
-    this.address = '',
-    this.ownership = '',
-    this.familiesCount = '',
-    this.familyMembers = const [],
     this.isLoading = false,
     this.isSuccess = false,
+    this.address = '',
+    this.admissionNo = '',
+    this.familiesCount = '',
+    this.ownership = '',
+    required this.refNo,
     this.error,
+    this.familyMembers = const [],
   });
 
   @override
   List<Object?> get props => [
-        refNo,
-        admissionNo,
-        address,
-        ownership,
-        familiesCount,
-        familyMembers,
-        isLoading,
-        isSuccess,
-        error,
-      ];
+    isLoading,
+    isSuccess,
+    address,
+    admissionNo,
+    familiesCount,
+    ownership,
+    refNo,
+    error,
+    familyMembers,
+  ];
 
   MainFormState copyWith({
-    String? refNo,
-    String? admissionNo,
-    String? address,
-    String? ownership,
-    String? familiesCount,
-    List<FamilyMember>? familyMembers,
     bool? isLoading,
     bool? isSuccess,
+    String? address,
+    String? admissionNo,
+    String? familiesCount,
+    String? ownership,
+    String? refNo,
     String? error,
+    List<FamilyMember>? familyMembers,
   }) {
     return MainFormState(
-      refNo: refNo ?? this.refNo,
-      admissionNo: admissionNo ?? this.admissionNo,
-      address: address ?? this.address,
-      ownership: ownership ?? this.ownership,
-      familiesCount: familiesCount ?? this.familiesCount,
-      familyMembers: familyMembers ?? this.familyMembers,
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
+      address: address ?? this.address,
+      admissionNo: admissionNo ?? this.admissionNo,
+      familiesCount: familiesCount ?? this.familiesCount,
+      ownership: ownership ?? this.ownership,
+      refNo: refNo ?? this.refNo,
       error: error,
+      familyMembers: familyMembers ?? this.familyMembers,
     );
   }
 }

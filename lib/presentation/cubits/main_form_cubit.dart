@@ -11,13 +11,14 @@ class MainFormCubit extends Cubit<MainFormState> {
   final SubmitForm submitForm;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final ScrollController scrollController = ScrollController();
+
   final TextEditingController admissionNoController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController familiesCountController = TextEditingController();
 
-  MainFormCubit({required this.submitForm})
-      : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
+  MainFormCubit({required this.submitForm}) : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
 
   void updateRefNo(String value) {
     emit(state.copyWith(refNo: value));
@@ -40,15 +41,13 @@ class MainFormCubit extends Cubit<MainFormState> {
   }
 
   void addFamilyMember(FamilyMember member) {
-    final updatedMembers = List<FamilyMember>.from(state.familyMembers)
-      ..add(member);
+    final updatedMembers = List<FamilyMember>.from(state.familyMembers)..add(member);
     emit(state.copyWith(familyMembers: updatedMembers));
   }
 
   void removeFamilyMember(int index) {
     if (index >= 0 && index < state.familyMembers.length) {
-      final updatedMembers = List<FamilyMember>.from(state.familyMembers)
-        ..removeAt(index);
+      final updatedMembers = List<FamilyMember>.from(state.familyMembers)..removeAt(index);
       emit(state.copyWith(familyMembers: updatedMembers));
     }
   }
@@ -83,8 +82,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       return false;
     }
 
-    final status =
-        state.familyMembers.any((m) => m.relationship == 'Head of Family');
+    final status = state.familyMembers.any((m) => m.relationship == 'Head of Family');
     return status;
   }
 
@@ -98,8 +96,7 @@ class MainFormCubit extends Cubit<MainFormState> {
         return;
       }
 
-      final status =
-          state.familyMembers.any((m) => m.relationship == 'Head of Family');
+      final status = state.familyMembers.any((m) => m.relationship == 'Head of Family');
       if (!status) {
         showErrorSnackBar(
           context,
@@ -119,7 +116,6 @@ class MainFormCubit extends Cubit<MainFormState> {
       address: state.address,
       ownership: state.ownership,
       familiesCount: state.familiesCount,
-      // New field
       familyMembers: state.familyMembers,
     );
 
@@ -158,8 +154,7 @@ class MainFormCubit extends Cubit<MainFormState> {
           children: [
             Icon(Icons.check_circle_rounded, color: Colors.white),
             SizedBox(width: 12),
-            Text('Form submitted successfully.',
-                style: TextStyle(fontSize: 16)),
+            Text('Form submitted successfully.', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
@@ -187,8 +182,7 @@ class MainFormCubit extends Cubit<MainFormState> {
     addressController.clear();
     familiesCountController.clear();
 
-    Future.delayed(
-        const Duration(seconds: 1), () => formKey.currentState?.reset());
+    Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
 
     emit(state.copyWith(
       refNo: DateTimeUtils.generateRefNo(),

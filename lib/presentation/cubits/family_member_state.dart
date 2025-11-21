@@ -1,105 +1,105 @@
 part of 'family_member_cubit.dart';
 
 class FamilyMemberState {
+  final String age;
+  final String alYear;
+  final String civilStatus;
+  final String gender;
+  final String mobile;
   final String name;
   final String nic;
-  final String gender;
-  final String civilStatus;
-  final String age;
-  final String relationship;
   final String occupation;
-  final String status;
-  final String mobile;
-  final String alYear;
-  final String zakath;
-  final List<String> schoolEducation;
-  final List<String> professionalQualifications;
   final String professionalQualificationsDetails;
+  final String relationship;
+  final String status;
+  final String zakath;
   final List<String> madarasa;
-  final List<String> ulama;
+  final List<String> professionalQualifications;
+  final List<String> schoolEducation;
   final List<String> specialNeeds;
+  final List<String> ulama;
 
   FamilyMemberState({
+    this.age = '',
+    this.alYear = '',
+    this.civilStatus = '',
+    this.gender = '',
+    this.mobile = '',
     this.name = '',
     this.nic = '',
-    this.gender = '',
-    this.civilStatus = '',
-    this.age = '',
-    this.relationship = '',
     this.occupation = '',
-    this.status = '',
-    this.mobile = '',
-    this.alYear = '',
-    this.zakath = '',
-    this.schoolEducation = const [],
-    this.professionalQualifications = const [],
     this.professionalQualificationsDetails = '',
+    this.relationship = '',
+    this.status = '',
+    this.zakath = '',
     this.madarasa = const [],
-    this.ulama = const [],
+    this.professionalQualifications = const [],
+    this.schoolEducation = const [],
     this.specialNeeds = const [],
+    this.ulama = const [],
   });
 
   FamilyMemberState copyWith({
+    String? age,
+    String? alYear,
+    String? civilStatus,
+    String? gender,
+    String? mobile,
     String? name,
     String? nic,
-    String? gender,
-    String? civilStatus,
-    String? age,
-    String? relationship,
     String? occupation,
-    String? status,
-    String? mobile,
-    String? alYear,
-    String? zakath,
-    List<String>? schoolEducation,
-    List<String>? professionalQualifications,
     String? professionalQualificationsDetails,
+    String? relationship,
+    String? status,
+    String? zakath,
     List<String>? madarasa,
-    List<String>? ulama,
+    List<String>? professionalQualifications,
+    List<String>? schoolEducation,
     List<String>? specialNeeds,
+    List<String>? ulama,
   }) {
     return FamilyMemberState(
+      age: age ?? this.age,
+      alYear: alYear ?? this.alYear,
+      civilStatus: civilStatus ?? this.civilStatus,
+      gender: gender ?? this.gender,
+      mobile: mobile ?? this.mobile,
       name: name ?? this.name,
       nic: nic ?? this.nic,
-      gender: gender ?? this.gender,
-      civilStatus: civilStatus ?? this.civilStatus,
-      age: age ?? this.age,
-      relationship: relationship ?? this.relationship,
       occupation: occupation ?? this.occupation,
-      status: status ?? this.status,
-      mobile: mobile ?? this.mobile,
-      alYear: alYear ?? this.alYear,
-      zakath: zakath ?? this.zakath,
-      schoolEducation: schoolEducation ?? this.schoolEducation,
-      professionalQualifications:
-      professionalQualifications ?? this.professionalQualifications,
       professionalQualificationsDetails:
       professionalQualificationsDetails ?? this.professionalQualificationsDetails,
+      relationship: relationship ?? this.relationship,
+      status: status ?? this.status,
+      zakath: zakath ?? this.zakath,
       madarasa: madarasa ?? this.madarasa,
-      ulama: ulama ?? this.ulama,
+      professionalQualifications:
+      professionalQualifications ?? this.professionalQualifications,
+      schoolEducation: schoolEducation ?? this.schoolEducation,
       specialNeeds: specialNeeds ?? this.specialNeeds,
+      ulama: ulama ?? this.ulama,
     );
   }
 
   FamilyMember toEntity() {
     return FamilyMember(
+      age: age,
+      alYear: alYear,
+      civilStatus: civilStatus,
+      gender: gender,
+      mobile: mobile,
       name: name,
       nic: nic,
-      gender: gender,
-      civilStatus: civilStatus,
-      age: age,
-      relationship: relationship,
       occupation: occupation,
-      status: status,
-      mobile: mobile,
-      alYear: alYear,
-      zakath: zakath,
-      schoolEducation: schoolEducation,
-      professionalQualifications: professionalQualifications,
       professionalQualificationsDetails: professionalQualificationsDetails,
+      relationship: relationship,
+      status: status,
+      zakath: zakath,
       madarasa: madarasa,
-      ulama: ulama,
+      professionalQualifications: professionalQualifications,
+      schoolEducation: schoolEducation,
       specialNeeds: specialNeeds,
+      ulama: ulama,
     );
   }
 }
