@@ -54,7 +54,8 @@ class FamilyMember {
       'zakath': DataSanitizer.sanitizeString(zakath),
       'professionalQualificationsDetails': DataSanitizer.sanitizeString(professionalQualificationsDetails),
       'schoolEducation': DataSanitizer.sanitizeList(schoolEducation).join(', '),
-      'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),
+      'professionalQualifications':
+      DataSanitizer.sanitizeList(professionalQualifications).join(', '),
       'madarasa': DataSanitizer.sanitizeList(madarasa).join(', '),
       'ulama': DataSanitizer.sanitizeList(ulama).join(', '),
       'specialNeeds': DataSanitizer.sanitizeList(specialNeeds).join(', '),

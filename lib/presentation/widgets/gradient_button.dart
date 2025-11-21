@@ -25,11 +25,11 @@ class GradientButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             blurRadius: 12,
-            color: AppTheme.primaryColor.withOpacity(0.3),
+            color: AppTheme.green2.withOpacity(0.3),
             offset: const Offset(0, 4),
           ),
         ],
-        color: AppTheme.primaryColor,
+        color: AppTheme.green2,
       ),
       child: Material(
         color: AppTheme.transparent,
@@ -44,7 +44,7 @@ class GradientButton extends StatelessWidget {
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.textOnPrimary,
+                        AppTheme.white1,
                       ),
                     ),
                   )
@@ -54,7 +54,7 @@ class GradientButton extends StatelessWidget {
                       Text(
                         text,
                         style: const TextStyle(
-                          color: AppTheme.textOnPrimary,
+                          color: AppTheme.white1,
                           fontFamily: 'SFProDisplay',
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -65,7 +65,7 @@ class GradientButton extends StatelessWidget {
                         const SizedBox(width: 8),
                         Icon(
                           icon,
-                          color: AppTheme.textOnPrimary,
+                          color: AppTheme.white1,
                           size: 20,
                         ),
                       ],

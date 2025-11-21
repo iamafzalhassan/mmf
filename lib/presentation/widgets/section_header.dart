@@ -19,12 +19,12 @@ class SectionHeader extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: AppTheme.primaryColor.withOpacity(0.15),
+              color: AppTheme.green2.withOpacity(0.15),
             ),
             padding: const EdgeInsets.all(8),
             child: Icon(
               icon,
-              color: AppTheme.primaryColor,
+              color: AppTheme.green2,
               size: 22,
             ),
           ),
@@ -33,7 +33,7 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: AppTheme.textPrimary,
+            color: AppTheme.black,
             fontFamily: 'SFProDisplay',
             fontSize: 18,
             fontWeight: FontWeight.w600,

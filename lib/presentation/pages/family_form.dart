@@ -58,7 +58,7 @@ class FamilyForm extends StatelessWidget {
                                 offset: const Offset(0, 8),
                               ),
                             ],
-                            color: AppTheme.cardBackground,
+                            color: AppTheme.white1,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16),
@@ -134,7 +134,7 @@ class FamilyForm extends StatelessWidget {
                   offset: const Offset(0, 2),
                 ),
               ],
-              color: AppTheme.cardBackground,
+              color: AppTheme.white1,
             ),
             height: 40,
             width: 40,
@@ -145,7 +145,7 @@ class FamilyForm extends StatelessWidget {
                 onTap: () => Navigator.pop(context),
                 child: const Center(
                   child: Icon(
-                    color: AppTheme.textPrimary,
+                    color: AppTheme.black,
                     Icons.arrow_back_rounded,
                     size: 20,
                   ),
@@ -164,7 +164,7 @@ class FamilyForm extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 32,
                       foreground: Paint()
-                        ..color = AppTheme.textPrimary
+                        ..color = AppTheme.black
                         ..strokeWidth = 1.25
                         ..style = PaintingStyle.stroke,
                       height: 1,
@@ -173,7 +173,7 @@ class FamilyForm extends StatelessWidget {
                   Text(
                     isEditing ? 'Edit Family Member' : 'Add Family Member',
                     style: const TextStyle(
-                      color: AppTheme.textPrimary,
+                      color: AppTheme.black,
                       fontSize: 32,
                       height: 1,
                     ),
@@ -238,7 +238,7 @@ class FamilyForm extends StatelessWidget {
         const Row(
           children: [
             Icon(
-              color: AppTheme.primaryColor,
+              color: AppTheme.green2,
               Icons.person_rounded,
               size: 24,
             ),
@@ -246,7 +246,7 @@ class FamilyForm extends StatelessWidget {
             Text(
               'Personal Information',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: AppTheme.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -360,9 +360,9 @@ class FamilyForm extends StatelessWidget {
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.gray3),
         borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        color: AppTheme.white5.withOpacity(0.3),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -371,7 +371,7 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.primaryColor,
+                color: AppTheme.green2,
                 Icons.favorite_rounded,
                 size: 22,
               ),
@@ -379,7 +379,7 @@ class FamilyForm extends StatelessWidget {
               Text(
                 'Special Needs',
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -406,9 +406,9 @@ class FamilyForm extends StatelessWidget {
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.gray3),
         borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        color: AppTheme.white5.withOpacity(0.3),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -417,7 +417,7 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.primaryColor,
+                color: AppTheme.green2,
                 Icons.local_library_rounded,
                 size: 22,
               ),
@@ -425,7 +425,7 @@ class FamilyForm extends StatelessWidget {
               Text(
                 'School Education',
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -483,9 +483,9 @@ class FamilyForm extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.gray3),
         borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        color: AppTheme.white5.withOpacity(0.3),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -494,7 +494,7 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.primaryColor,
+                color: AppTheme.green2,
                 Icons.school_rounded,
                 size: 22,
               ),
@@ -502,7 +502,7 @@ class FamilyForm extends StatelessWidget {
               Text(
                 'Professional Qualifications',
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -547,9 +547,9 @@ class FamilyForm extends StatelessWidget {
       FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.gray3),
         borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        color: AppTheme.white5.withOpacity(0.3),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -558,7 +558,7 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.primaryColor,
+                color: AppTheme.green2,
                 Icons.local_library_rounded,
                 size: 22,
               ),
@@ -566,7 +566,7 @@ class FamilyForm extends StatelessWidget {
               Text(
                 'Madarasa Education',
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -602,9 +602,9 @@ class FamilyForm extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.gray3),
         borderRadius: BorderRadius.circular(16),
-        color: AppTheme.scaffoldBackground.withOpacity(0.3),
+        color: AppTheme.white5.withOpacity(0.3),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -613,7 +613,7 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.primaryColor,
+                color: AppTheme.green2,
                 Icons.school_rounded,
                 size: 22,
               ),
@@ -621,7 +621,7 @@ class FamilyForm extends StatelessWidget {
               Text(
                 'Ulama Qualifications',
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -675,7 +675,7 @@ class FamilyForm extends StatelessWidget {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    backgroundColor: AppTheme.errorColor,
+                    backgroundColor: AppTheme.red,
                     behavior: SnackBarBehavior.fixed,
                     content: Row(
                       children: [

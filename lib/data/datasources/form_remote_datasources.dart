@@ -13,15 +13,12 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
 
   @override
   Future<void> submitForm(FormData formData) async {
-    const scriptUrl =
-        'https://script.google.com/macros/s/AKfycby0TSJ9FXROa-VnQoXIQypT6GxkvaqxP5vscRP8lmiNaUa-3tp8VSDUCVYUgIjZD3U1/exec';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycby0TSJ9FXROa-VnQoXIQypT6GxkvaqxP5vscRP8lmiNaUa-3tp8VSDUCVYUgIjZD3U1/exec';
 
     try {
-      // Encode form data as base64
       final jsonData = jsonEncode(formData.toJson());
       final encodedData = base64Url.encode(utf8.encode(jsonData));
 
-      // Build GET request URL with query parameters
       final uri = Uri.parse(scriptUrl).replace(
         queryParameters: {
           'data': encodedData,
@@ -29,7 +26,6 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
         },
       );
 
-      // Send GET request
       final response = await client.get(uri).timeout(
         const Duration(seconds: 30),
         onTimeout: () {
@@ -37,7 +33,6 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
         },
       );
 
-      // Handle response
       if (response.statusCode == 200 || response.statusCode == 302) {
         try {
           final responseData = jsonDecode(response.body);
@@ -47,7 +42,6 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
             throw Exception(responseData['message'] ?? 'Submission failed');
           }
         } catch (e) {
-          // If JSON parsing fails but status is 200/302, consider it successful
           if (response.statusCode == 200 || response.statusCode == 302) {
             return;
           }

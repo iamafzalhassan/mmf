@@ -8,7 +8,6 @@ class DateTimeUtils {
     final minutes = now.minute.toString().padLeft(2, '0');
     final seconds = now.second.toString().padLeft(2, '0');
     final random = (DateTime.now().millisecond % 1000).toString().padLeft(3, '0');
-
     return 'KJM-$year$month$day-$hours$minutes$seconds-$random';
   }
 }

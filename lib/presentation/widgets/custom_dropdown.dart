@@ -28,12 +28,12 @@ class CustomDropdown extends StatelessWidget {
               children: [
                 TextSpan(
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textPrimary,
+                            color: AppTheme.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ) ??
                       const TextStyle(
-                        color: AppTheme.textPrimary,
+                        color: AppTheme.black,
                         fontFamily: 'SFProDisplay',
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -43,12 +43,12 @@ class CustomDropdown extends StatelessWidget {
                 if (isRequired)
                   TextSpan(
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.errorColor,
+                              color: AppTheme.red,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ) ??
                         const TextStyle(
-                          color: AppTheme.errorColor,
+                          color: AppTheme.red,
                           fontFamily: 'SFProDisplay',
                           fontWeight: FontWeight.w600,
                         ),
@@ -64,13 +64,13 @@ class CustomDropdown extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Select ${label.toLowerCase()}',
             suffixIcon: Icon(
-              color: AppTheme.iconSecondary,
+              color: AppTheme.gray6,
               Icons.arrow_drop_down_circle_outlined,
               size: 20,
             ),
           ),
           onTap: () => showModalBottomSheet(
-            backgroundColor: AppTheme.cardBackground,
+            backgroundColor: AppTheme.white1,
             context: context,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
@@ -82,7 +82,7 @@ class CustomDropdown extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.dividerColor,
+                      color: AppTheme.gray2,
                       borderRadius: BorderRadius.circular(2),
                     ),
                     height: 4,
@@ -96,7 +96,7 @@ class CustomDropdown extends StatelessWidget {
                         Text(
                           label,
                           style: const TextStyle(
-                            color: AppTheme.textPrimary,
+                            color: AppTheme.black,
                             fontFamily: 'SFProDisplay',
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -127,8 +127,8 @@ class CustomDropdown extends StatelessWidget {
                             item,
                             style: TextStyle(
                               color: isSelected
-                                  ? AppTheme.primaryColor
-                                  : AppTheme.textPrimary,
+                                  ? AppTheme.green2
+                                  : AppTheme.black,
                               fontFamily: 'SFProDisplay',
                               fontSize: 16,
                               fontWeight: isSelected
@@ -138,7 +138,7 @@ class CustomDropdown extends StatelessWidget {
                           ),
                           trailing: isSelected
                               ? const Icon(
-                                  color: AppTheme.primaryColor,
+                                  color: AppTheme.green2,
                                   Icons.check_circle_rounded,
                                   size: 24,
                                 )
@@ -154,7 +154,7 @@ class CustomDropdown extends StatelessWidget {
           ),
           readOnly: true,
           style: const TextStyle(
-            color: AppTheme.textPrimary,
+            color: AppTheme.black,
             fontFamily: 'SFProDisplay',
             fontSize: 16,
             fontWeight: FontWeight.w400,
