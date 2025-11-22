@@ -45,7 +45,7 @@ class FamilyForm extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      _buildHeader(context),
+                      buildHeader(context),
                       Form(
                         key: cubit.formKey,
                         child: Container(
@@ -65,39 +65,39 @@ class FamilyForm extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildPersonalInfoSection(
+                                buildPersonalInfoSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 32),
                                 const Divider(height: 1),
                                 const SizedBox(height: 32),
-                                _buildSpecialNeedsSection(
+                                buildSpecialNeedsSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 24),
-                                _buildSchoolEducationSection(
+                                buildSchoolEducationSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 24),
-                                _buildProfessionalQualificationsSection(
+                                buildProfessionalQualificationsSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 24),
-                                _buildMadarasaEducationSection(
+                                buildMadarasaEducationSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 24),
-                                _buildUlamaQualificationsSection(
+                                buildUlamaQualificationsSection(
                                   cubit,
                                   state,
                                 ),
                                 const SizedBox(height: 32),
-                                _buildActionButtons(
+                                buildActionButtons(
                                   context,
                                   cubit,
                                   state,
@@ -118,7 +118,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 16, bottom: 32),
       child: Column(
@@ -187,13 +187,10 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalInfoSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildPersonalInfoSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     final isHeadOfFamily = state.relationship == 'Head of Family';
-    final shouldShowOccupation = state.status == 'Working Only' ||
-        state.status == 'Studying and Working';
+    final shouldShowOccupation = state.status == 'Working Only' || state.status == 'Studying and Working';
 
-    // Get gender-specific relationship options
     List<String> relationshipItems;
     if (state.gender == 'Male') {
       relationshipItems = const [
@@ -216,7 +213,6 @@ class FamilyForm extends StatelessWidget {
         'Other'
       ];
     } else {
-      // Show all options if gender not selected yet
       relationshipItems = const [
         'Head of Family',
         'Spouse',
@@ -232,8 +228,7 @@ class FamilyForm extends StatelessWidget {
       ];
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Row(
           children: [
@@ -356,8 +351,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildSpecialNeedsSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildSpecialNeedsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.gray3),
@@ -402,8 +396,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildSchoolEducationSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildSchoolEducationSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.gray3),
@@ -443,7 +436,6 @@ class FamilyForm extends StatelessWidget {
             onChanged: cubit.toggleSchoolEducation,
             selectedItems: state.schoolEducation,
           ),
-          // Show A/L Year field if A/L is selected
           if (state.schoolEducation.contains('A/L')) ...[
             const SizedBox(height: 16),
             CustomTextField(
@@ -462,9 +454,7 @@ class FamilyForm extends StatelessWidget {
                   return 'A/L year is required';
                 }
                 final year = int.tryParse(val!);
-                if (year == null ||
-                    year < 1950 ||
-                    year > DateTime.now().year + 1) {
+                if (year == null || year < 1950 || year > DateTime.now().year + 1) {
                   return 'Enter a valid year';
                 }
                 return null;
@@ -476,10 +466,8 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildProfessionalQualificationsSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
-    final hasProfessionalQualifications =
-        state.professionalQualifications.isNotEmpty;
+  Widget buildProfessionalQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+    final hasProfessionalQualifications = state.professionalQualifications.isNotEmpty;
 
     return Container(
       decoration: BoxDecoration(
@@ -543,8 +531,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildMadarasaEducationSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildMadarasaEducationSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.gray3),
@@ -589,7 +576,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildUlamaQualificationsSection(
+  Widget buildUlamaQualificationsSection(
       FamilyMemberCubit cubit, FamilyMemberState state) {
     final List<String> ulamaItems;
     if (state.gender == 'Female') {
@@ -639,8 +626,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(
-      BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildActionButtons(BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
     return Row(
       children: [
         Expanded(
@@ -681,8 +667,7 @@ class FamilyForm extends StatelessWidget {
                       children: [
                         Icon(Icons.info_rounded, color: Colors.white),
                         SizedBox(width: 12),
-                        Text('Please fill all required fields correctly.',
-                            style: TextStyle(fontSize: 16)),
+                        Text('Please fill all required fields correctly.', style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),

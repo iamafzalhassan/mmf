@@ -12,11 +12,11 @@ class CustomTextField extends StatelessWidget {
   final String? prefixText;
   final int? maxLength;
   final int? maxLines;
+  final FormFieldValidator<String>? validator;
+  final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
-  final FormFieldValidator<String>? validator;
-  final List<TextInputFormatter>? inputFormatters;
   final VoidCallback? onTap;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -32,11 +32,11 @@ class CustomTextField extends StatelessWidget {
     this.prefixText,
     this.maxLength,
     this.maxLines = 1,
+    this.validator,
+    this.inputFormatters,
     this.controller,
     this.keyboardType,
     this.onChanged,
-    this.validator,
-    this.inputFormatters,
     this.onTap,
     this.prefixIcon,
     this.suffixIcon,

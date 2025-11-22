@@ -5,15 +5,15 @@ import 'package:mmf/domain/entities/family_member.dart';
 class FamilyMemberCard extends StatelessWidget {
   final int index;
   final FamilyMember member;
-  final VoidCallback onTap;
   final VoidCallback onRemove;
+  final VoidCallback onTap;
 
   const FamilyMemberCard({
     super.key,
     required this.index,
     required this.member,
-    required this.onTap,
     required this.onRemove,
+    required this.onTap,
   });
 
   @override
