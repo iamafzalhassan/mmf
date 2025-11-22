@@ -22,8 +22,7 @@ class MahallaForm extends StatelessWidget {
           gradient: AppTheme.backgroundGradient,
         ),
         child: BlocConsumer<MainFormCubit, MainFormState>(
-          listenWhen: (prev, curr) =>
-              prev.isSuccess != curr.isSuccess || prev.error != curr.error,
+          listenWhen: (prev, curr) => prev.isSuccess != curr.isSuccess || prev.error != curr.error,
           listener: (context, state) {
             final cubit = context.read<MainFormCubit>();
             if (state.isSuccess) {
@@ -44,9 +43,9 @@ class MahallaForm extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildHeader(),
+                      buildHeader(),
                       const SizedBox(height: 16),
-                      _buildFormCard(context, state, cubit),
+                      buildFormCard(context, state, cubit),
                     ],
                   ),
                 ),
@@ -58,7 +57,7 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget buildHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -79,8 +78,7 @@ class MahallaForm extends StatelessWidget {
               ),
               const Text(
                 'Mahalla Members Details Collection Form 2025',
-                style:
-                    TextStyle(color: AppTheme.black, fontSize: 32, height: 1),
+                style: TextStyle(color: AppTheme.black, fontSize: 32, height: 1),
               ),
             ],
           ),
@@ -94,8 +92,7 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFormCard(
-      BuildContext context, MainFormState state, MainFormCubit cubit) {
+  Widget buildFormCard(BuildContext context, MainFormState state, MainFormCubit cubit) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -113,20 +110,25 @@ class MahallaForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHouseholdSection(state, cubit),
+            buildHouseholdSection(state, cubit),
             const SizedBox(height: 32),
             const Divider(height: 1),
             const SizedBox(height: 32),
-            _buildFamilyMembersSection(context, cubit, state),
+            buildFamilyMembersSection(context, cubit, state),
             const SizedBox(height: 32),
-            _buildSubmitButton(context, cubit, state),
+            GradientButton(
+              icon: Icons.arrow_circle_right_rounded,
+              isLoading: state.isLoading,
+              onPressed: () => cubit.submit(context),
+              text: 'Submit Form',
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHouseholdSection(MainFormState state, MainFormCubit cubit) {
+  Widget buildHouseholdSection(MainFormState state, MainFormCubit cubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -191,8 +193,7 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget _buildFamilyMembersSection(
-      BuildContext context, MainFormCubit cubit, MainFormState state) {
+  Widget buildFamilyMembersSection(BuildContext context, MainFormCubit cubit, MainFormState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -236,8 +237,7 @@ class MahallaForm extends StatelessWidget {
                 index: index,
                 member: member,
                 onRemove: () => cubit.removeFamilyMember(index),
-                onTap: () =>
-                    _handleEditMember(context, cubit, state, index, member),
+                onTap: () => editMember(context, cubit, state, index, member),
               ),
             );
           },
@@ -247,9 +247,8 @@ class MahallaForm extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-            label:
-                const Text('Add Family Member', style: TextStyle(fontSize: 18)),
-            onPressed: () => _handleAddMember(context, cubit, state),
+            label: const Text('Add Family Member', style: TextStyle(fontSize: 18)),
+            onPressed: () => addMember(context, cubit, state),
             style: ButtonStyle(
               minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
               padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
@@ -262,8 +261,7 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Future<void> _handleAddMember(
-      BuildContext context, MainFormCubit cubit, MainFormState state) async {
+  Future<void> addMember(BuildContext context, MainFormCubit cubit, MainFormState state) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const FamilyForm()),
@@ -288,13 +286,10 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
-  Future<void> _handleEditMember(BuildContext context, MainFormCubit cubit,
-      MainFormState state, int index, dynamic member) async {
+  Future<void> editMember(BuildContext context, MainFormCubit cubit, MainFormState state, int index, dynamic member) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (_) =>
-              FamilyForm(existingMember: member, memberIndex: index)),
+      MaterialPageRoute(builder: (_) => FamilyForm(existingMember: member, memberIndex: index)),
     );
 
     if (result != null && result is Map<String, dynamic>) {
@@ -315,15 +310,5 @@ class MahallaForm extends StatelessWidget {
 
       cubit.updateFamilyMember(index, updatedMember);
     }
-  }
-
-  Widget _buildSubmitButton(
-      BuildContext context, MainFormCubit cubit, MainFormState state) {
-    return GradientButton(
-      icon: Icons.arrow_circle_right_rounded,
-      isLoading: state.isLoading,
-      onPressed: () => cubit.submit(context),
-      text: 'Submit Form',
-    );
   }
 }

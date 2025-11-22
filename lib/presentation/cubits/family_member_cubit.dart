@@ -27,32 +27,36 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     professionalQualificationsDetailsController.text = member.professionalQualificationsDetails;
 
     emit(FamilyMemberState(
+      age: member.age,
+      alYear: member.alYear,
+      civilStatus: member.civilStatus,
+      gender: member.gender,
+      mobile: member.mobile,
       name: member.name,
       nic: member.nic,
-      gender: member.gender,
-      civilStatus: member.civilStatus,
-      age: member.age,
-      relationship: member.relationship,
       occupation: member.occupation,
-      status: member.status,
-      mobile: member.mobile,
-      zakath: member.zakath,
-      alYear: member.alYear,
-      schoolEducation: member.schoolEducation,
       professionalQualifications: member.professionalQualifications,
-      professionalQualificationsDetails: member.professionalQualificationsDetails,
+      relationship: member.relationship,
+      status: member.status,
+      zakath: member.zakath,
       madarasa: member.madarasa,
-      ulama: member.ulama,
+      professionalQualificationsDetails: member.professionalQualificationsDetails,
+      schoolEducation: member.schoolEducation,
       specialNeeds: member.specialNeeds,
+      ulama: member.ulama,
     ));
   }
 
-  void updateName(String value) {
-    emit(state.copyWith(name: value));
+  void updateAge(String value) {
+    emit(state.copyWith(age: value));
   }
 
-  void updateNic(String value) {
-    emit(state.copyWith(nic: value));
+  void updateAlYear(String value) {
+    emit(state.copyWith(alYear: value));
+  }
+
+  void updateCivilStatus(String value) {
+    emit(state.copyWith(civilStatus: value));
   }
 
   void updateGender(String value) {
@@ -82,55 +86,46 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     ));
   }
 
-  void updateCivilStatus(String value) {
-    emit(state.copyWith(civilStatus: value));
+  void updateMobile(String value) {
+    emit(state.copyWith(mobile: value));
   }
 
-  void updateAge(String value) {
-    emit(state.copyWith(age: value));
+  void updateName(String value) {
+    emit(state.copyWith(name: value));
   }
 
-  void updateRelationship(String value) {
-    emit(state.copyWith(relationship: value));
+  void updateNic(String value) {
+    emit(state.copyWith(nic: value));
   }
 
   void updateOccupation(String value) {
     emit(state.copyWith(occupation: value));
   }
 
-  void updateStatus(String value) {
-    emit(state.copyWith(status: value));
+  void updateProfessionalQualificationsDetails(String value) {
+    emit(state.copyWith(professionalQualificationsDetails: value));
   }
 
-  void updateMobile(String value) {
-    emit(state.copyWith(mobile: value));
+  void updateRelationship(String value) {
+    emit(state.copyWith(relationship: value));
+  }
+
+  void updateStatus(String value) {
+    emit(state.copyWith(status: value));
   }
 
   void updateZakath(String value) {
     emit(state.copyWith(zakath: value));
   }
 
-  void updateAlYear(String value) {
-    emit(state.copyWith(alYear: value));
-  }
-
-  void updateProfessionalQualificationsDetails(String value) {
-    emit(state.copyWith(professionalQualificationsDetails: value));
-  }
-
-  void toggleSchoolEducation(String value) {
-    final list = List<String>.from(state.schoolEducation);
+  void toggleMadarasa(String value) {
+    final list = List<String>.from(state.madarasa);
     if (list.contains(value)) {
       list.remove(value);
-      if (value == 'A/L') {
-        alYearController.clear();
-        emit(state.copyWith(schoolEducation: list, alYear: ''));
-        return;
-      }
     } else {
       list.add(value);
     }
-    emit(state.copyWith(schoolEducation: list));
+    emit(state.copyWith(madarasa: list));
   }
 
   void toggleProfessionalQualification(String value) {
@@ -151,24 +146,19 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(professionalQualifications: list));
   }
 
-  void toggleMadarasa(String value) {
-    final list = List<String>.from(state.madarasa);
+  void toggleSchoolEducation(String value) {
+    final list = List<String>.from(state.schoolEducation);
     if (list.contains(value)) {
       list.remove(value);
+      if (value == 'A/L') {
+        alYearController.clear();
+        emit(state.copyWith(alYear: '', schoolEducation: list));
+        return;
+      }
     } else {
       list.add(value);
     }
-    emit(state.copyWith(madarasa: list));
-  }
-
-  void toggleUlama(String value) {
-    final list = List<String>.from(state.ulama);
-    if (list.contains(value)) {
-      list.remove(value);
-    } else {
-      list.add(value);
-    }
-    emit(state.copyWith(ulama: list));
+    emit(state.copyWith(schoolEducation: list));
   }
 
   void toggleSpecialNeeds(String value) {
@@ -179,6 +169,16 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       list.add(value);
     }
     emit(state.copyWith(specialNeeds: list));
+  }
+
+  void toggleUlama(String value) {
+    final list = List<String>.from(state.ulama);
+    if (list.contains(value)) {
+      list.remove(value);
+    } else {
+      list.add(value);
+    }
+    emit(state.copyWith(ulama: list));
   }
 
   bool validateAndSave() {

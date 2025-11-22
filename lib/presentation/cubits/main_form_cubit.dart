@@ -8,8 +8,6 @@ import 'package:mmf/domain/usecases/submit_form.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
 
 class MainFormCubit extends Cubit<MainFormState> {
-  final SubmitForm submitForm;
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final ScrollController scrollController = ScrollController();
@@ -17,6 +15,8 @@ class MainFormCubit extends Cubit<MainFormState> {
   final TextEditingController admissionNoController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController familiesCountController = TextEditingController();
+
+  final SubmitForm submitForm;
 
   MainFormCubit({required this.submitForm}) : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
 
@@ -108,14 +108,14 @@ class MainFormCubit extends Cubit<MainFormState> {
       return;
     }
 
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(error: null, isLoading: true));
 
     final formData = FormData(
-      refNo: state.refNo,
-      admissionNo: state.admissionNo,
       address: state.address,
-      ownership: state.ownership,
+      admissionNo: state.admissionNo,
       familiesCount: state.familiesCount,
+      ownership: state.ownership,
+      refNo: state.refNo,
       familyMembers: state.familyMembers,
     );
 
@@ -185,14 +185,14 @@ class MainFormCubit extends Cubit<MainFormState> {
     Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
 
     emit(state.copyWith(
-      refNo: DateTimeUtils.generateRefNo(),
-      admissionNo: '',
-      address: '',
-      ownership: '',
-      familiesCount: '',
-      familyMembers: [],
       isSuccess: false,
+      address: '',
+      admissionNo: '',
+      familiesCount: '',
+      ownership: '',
+      refNo: DateTimeUtils.generateRefNo(),
       error: null,
+      familyMembers: [],
     ));
   }
 
