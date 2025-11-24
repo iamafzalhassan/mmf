@@ -96,13 +96,6 @@ class MahallaForm extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 24,
-            color: Colors.black.withOpacity(0.08),
-            offset: const Offset(0, 8),
-          ),
-        ],
         color: AppTheme.white1,
       ),
       child: Padding(
