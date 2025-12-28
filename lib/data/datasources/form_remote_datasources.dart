@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mmf/domain/entities/form_data.dart';
+import 'package:mmf/domain/entities/main_form.dart';
 
 abstract class FormRemoteDataSource {
-  Future<void> submitForm(FormData formData);
+  Future<void> submitForm(MainForm mainForm);
 }
 
 class FormRemoteDataSourceImpl implements FormRemoteDataSource {
@@ -12,11 +12,11 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
   FormRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<void> submitForm(FormData formData) async {
+  Future<void> submitForm(MainForm mainForm) async {
     const scriptUrl = 'https://script.google.com/macros/s/AKfycby0TSJ9FXROa-VnQoXIQypT6GxkvaqxP5vscRP8lmiNaUa-3tp8VSDUCVYUgIjZD3U1/exec';
 
     try {
-      final jsonData = jsonEncode(formData.toJson());
+      final jsonData = jsonEncode(mainForm.toJson());
       final encodedData = base64Url.encode(utf8.encode(jsonData));
 
       final uri = Uri.parse(scriptUrl).replace(
