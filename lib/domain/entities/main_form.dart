@@ -1,7 +1,7 @@
 import 'package:mmf/core/utils/data_sanitizer.dart';
 import 'family_member.dart';
 
-class FormData {
+class MainForm {
   final String address;
   final String admissionNo;
   final String familiesCount;
@@ -9,7 +9,7 @@ class FormData {
   final String refNo;
   final List<FamilyMember> familyMembers;
 
-  FormData({
+  MainForm({
     required this.address,
     required this.admissionNo,
     required this.familiesCount,

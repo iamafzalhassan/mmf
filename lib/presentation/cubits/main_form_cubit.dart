@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 import 'package:mmf/core/utils/date_utils.dart';
 import 'package:mmf/domain/entities/family_member.dart';
-import 'package:mmf/domain/entities/form_data.dart';
+import 'package:mmf/domain/entities/main_form.dart';
 import 'package:mmf/domain/usecases/submit_form.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
 
@@ -110,7 +110,7 @@ class MainFormCubit extends Cubit<MainFormState> {
 
     emit(state.copyWith(error: null, isLoading: true));
 
-    final formData = FormData(
+    final mainForm = MainForm(
       address: state.address,
       admissionNo: state.admissionNo,
       familiesCount: state.familiesCount,
@@ -119,7 +119,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       familyMembers: state.familyMembers,
     );
 
-    final result = await submitForm(formData);
+    final result = await submitForm(mainForm);
 
     result.fold(
       (failure) => emit(state.copyWith(
