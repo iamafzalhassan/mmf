@@ -57,7 +57,7 @@ class FamilyMemberCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        member.name.isNotEmpty ? member.name : 'Unnamed Member',
+                        member.fullName.isNotEmpty ? member.fullName : 'Unnamed Member',
                         style: const TextStyle(
                           color: AppTheme.black,
                           fontSize: 16,

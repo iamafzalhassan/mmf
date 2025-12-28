@@ -9,9 +9,9 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   final TextEditingController ageController = TextEditingController();
   final TextEditingController alYearController = TextEditingController();
-  final TextEditingController mobileController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController nicController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController mobileNoController = TextEditingController();
+  final TextEditingController nationalIdNoController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController professionalQualificationsDetailsController = TextEditingController();
 
@@ -20,9 +20,9 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   void loadMember(FamilyMember member) {
     ageController.text = member.age;
     alYearController.text = member.alYear;
-    mobileController.text = member.mobile;
-    nameController.text = member.name;
-    nicController.text = member.nic;
+    fullNameController.text = member.fullName;
+    mobileNoController.text = member.mobile;
+    nationalIdNoController.text = member.nationalIdNo;
     occupationController.text = member.occupation;
     professionalQualificationsDetailsController.text = member.professionalQualificationsDetails;
 
@@ -30,10 +30,10 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       age: member.age,
       alYear: member.alYear,
       civilStatus: member.civilStatus,
+      fullName: member.fullName,
       gender: member.gender,
       mobile: member.mobile,
-      name: member.name,
-      nic: member.nic,
+      nationalIdNo: member.nationalIdNo,
       occupation: member.occupation,
       professionalQualificationsDetails: member.professionalQualificationsDetails,
       relationship: member.relationship,
@@ -93,11 +93,11 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void updateName(String value) {
-    emit(state.copyWith(name: value));
+    emit(state.copyWith(fullName: value));
   }
 
   void updateNic(String value) {
-    emit(state.copyWith(nic: value));
+    emit(state.copyWith(nationalIdNo: value));
   }
 
   void updateOccupation(String value) {
@@ -193,9 +193,9 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   void reset() {
     ageController.clear();
     alYearController.clear();
-    mobileController.clear();
-    nameController.clear();
-    nicController.clear();
+    mobileNoController.clear();
+    fullNameController.clear();
+    nationalIdNoController.clear();
     occupationController.clear();
     professionalQualificationsDetailsController.clear();
     emit(FamilyMemberState());
@@ -205,9 +205,9 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   Future<void> close() {
     ageController.dispose();
     alYearController.dispose();
-    mobileController.dispose();
-    nameController.dispose();
-    nicController.dispose();
+    mobileNoController.dispose();
+    fullNameController.dispose();
+    nationalIdNoController.dispose();
     occupationController.dispose();
     professionalQualificationsDetailsController.dispose();
     return super.close();
