@@ -23,9 +23,9 @@ class MainForm {
       'address': DataSanitizer.sanitizeAddress(address),
       'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
       'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
-      'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
       'ownership': DataSanitizer.sanitizeString(ownership),
       'refNo': DataSanitizer.sanitizeString(refNo),
+      'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
     };
   }
 }
