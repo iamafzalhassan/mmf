@@ -243,7 +243,7 @@ class FamilyForm extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         CustomTextField(
-          controller: cubit.nameController,
+          controller: cubit.fullNameController,
           hintText: 'Enter full name',
           isRequired: true,
           label: 'Full Name',
@@ -269,7 +269,7 @@ class FamilyForm extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          controller: cubit.mobileController,
+          controller: cubit.mobileNoController,
           hintText: 'Enter phone number',
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
@@ -297,7 +297,7 @@ class FamilyForm extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         CustomTextField(
-          controller: cubit.nicController,
+          controller: cubit.nationalIdNoController,
           hintText: 'Enter NIC',
           label: 'National ID No',
           onChanged: cubit.updateNic,

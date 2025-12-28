@@ -4,10 +4,10 @@ class FamilyMemberState {
   final String age;
   final String alYear;
   final String civilStatus;
+  final String fullName;
   final String gender;
   final String mobile;
-  final String name;
-  final String nic;
+  final String nationalIdNo;
   final String occupation;
   final String professionalQualificationsDetails;
   final String relationship;
@@ -23,10 +23,10 @@ class FamilyMemberState {
     this.age = '',
     this.alYear = '',
     this.civilStatus = '',
+    this.fullName = '',
     this.gender = '',
     this.mobile = '',
-    this.name = '',
-    this.nic = '',
+    this.nationalIdNo = '',
     this.occupation = '',
     this.professionalQualificationsDetails = '',
     this.relationship = '',
@@ -43,10 +43,10 @@ class FamilyMemberState {
     String? age,
     String? alYear,
     String? civilStatus,
+    String? fullName,
     String? gender,
     String? mobile,
-    String? name,
-    String? nic,
+    String? nationalIdNo,
     String? occupation,
     String? professionalQualificationsDetails,
     String? relationship,
@@ -62,10 +62,10 @@ class FamilyMemberState {
       age: age ?? this.age,
       alYear: alYear ?? this.alYear,
       civilStatus: civilStatus ?? this.civilStatus,
+      fullName: fullName ?? this.fullName,
       gender: gender ?? this.gender,
       mobile: mobile ?? this.mobile,
-      name: name ?? this.name,
-      nic: nic ?? this.nic,
+      nationalIdNo: nationalIdNo ?? this.nationalIdNo,
       occupation: occupation ?? this.occupation,
       professionalQualificationsDetails:
       professionalQualificationsDetails ?? this.professionalQualificationsDetails,
@@ -86,10 +86,10 @@ class FamilyMemberState {
       age: age,
       alYear: alYear,
       civilStatus: civilStatus,
+      fullName: fullName,
       gender: gender,
       mobile: mobile,
-      name: name,
-      nic: nic,
+      nationalIdNo: nationalIdNo,
       occupation: occupation,
       professionalQualificationsDetails: professionalQualificationsDetails,
       relationship: relationship,

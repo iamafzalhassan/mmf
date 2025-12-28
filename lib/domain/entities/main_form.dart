@@ -20,12 +20,12 @@ class MainForm {
 
   Map<String, dynamic> toJson() {
     return {
-      'refNo': DataSanitizer.sanitizeString(refNo),
-      'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
       'address': DataSanitizer.sanitizeAddress(address),
-      'ownership': DataSanitizer.sanitizeString(ownership),
+      'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
       'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
       'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
+      'ownership': DataSanitizer.sanitizeString(ownership),
+      'refNo': DataSanitizer.sanitizeString(refNo),
     };
   }
 }

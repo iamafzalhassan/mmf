@@ -4,10 +4,10 @@ class FamilyMember {
   final String age;
   final String alYear;
   final String civilStatus;
+  final String fullName;
   final String gender;
   final String mobile;
-  final String name;
-  final String nic;
+  final String nationalIdNo;
   final String occupation;
   final String professionalQualificationsDetails;
   final String relationship;
@@ -23,10 +23,10 @@ class FamilyMember {
     required this.age,
     required this.alYear,
     required this.civilStatus,
+    required this.fullName,
     required this.gender,
     required this.mobile,
-    required this.name,
-    required this.nic,
+    required this.nationalIdNo,
     required this.occupation,
     required this.professionalQualificationsDetails,
     required this.relationship,
@@ -41,23 +41,23 @@ class FamilyMember {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': DataSanitizer.sanitizeString(name),
-      'gender': DataSanitizer.sanitizeString(gender),
       'age': DataSanitizer.sanitizeYear(age),
-      'mobile': DataSanitizer.sanitizePhone(mobile),
-      'nic': DataSanitizer.sanitizeNIC(nic),
-      'status': DataSanitizer.sanitizeString(status),
-      'occupation': DataSanitizer.sanitizeString(occupation),
-      'civilStatus': DataSanitizer.sanitizeString(civilStatus),
-      'relationship': DataSanitizer.sanitizeString(relationship),
       'alYear': DataSanitizer.sanitizeYear(alYear),
-      'zakath': DataSanitizer.sanitizeString(zakath),
+      'civilStatus': DataSanitizer.sanitizeString(civilStatus),
+      'fullName': DataSanitizer.sanitizeString(fullName),
+      'gender': DataSanitizer.sanitizeString(gender),
+      'mobile': DataSanitizer.sanitizePhone(mobile),
+      'nationalIdNo': DataSanitizer.sanitizeNIC(nationalIdNo),
+      'occupation': DataSanitizer.sanitizeString(occupation),
       'professionalQualificationsDetails': DataSanitizer.sanitizeString(professionalQualificationsDetails),
-      'schoolEducation': DataSanitizer.sanitizeList(schoolEducation).join(', '),
-      'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),
+      'relationship': DataSanitizer.sanitizeString(relationship),
+      'status': DataSanitizer.sanitizeString(status),
+      'zakath': DataSanitizer.sanitizeString(zakath),
       'madarasa': DataSanitizer.sanitizeList(madarasa).join(', '),
-      'ulama': DataSanitizer.sanitizeList(ulama).join(', '),
+      'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),
+      'schoolEducation': DataSanitizer.sanitizeList(schoolEducation).join(', '),
       'specialNeeds': DataSanitizer.sanitizeList(specialNeeds).join(', '),
+      'ulama': DataSanitizer.sanitizeList(ulama).join(', '),
     };
   }
 }
