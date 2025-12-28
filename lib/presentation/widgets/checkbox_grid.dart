@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 
 class CheckboxGrid extends StatelessWidget {
-  final ValueChanged<String> onChanged;
   final List<String> items;
   final List<String> selectedItems;
+  final ValueChanged<String> onChanged;
 
   const CheckboxGrid({
     super.key,
-    required this.onChanged,
     required this.items,
     required this.selectedItems,
+    required this.onChanged,
   });
 
   @override
@@ -31,7 +31,9 @@ class CheckboxGrid extends StatelessWidget {
                 width: isSelected ? 2 : 1.5,
               ),
               borderRadius: BorderRadius.circular(12),
-              color: isSelected ? AppTheme.green2.withOpacity(0.15) : AppTheme.white1,
+              color: isSelected
+                  ? AppTheme.green2.withOpacity(0.15)
+                  : AppTheme.white1,
             ),
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -45,8 +47,7 @@ class CheckboxGrid extends StatelessWidget {
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(6),
-                    color:
-                        isSelected ? AppTheme.green2 : Colors.transparent,
+                    color: isSelected ? AppTheme.green2 : Colors.transparent,
                   ),
                   duration: const Duration(milliseconds: 200),
                   height: 20,

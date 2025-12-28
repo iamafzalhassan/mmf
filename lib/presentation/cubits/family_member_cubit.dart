@@ -35,12 +35,12 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       name: member.name,
       nic: member.nic,
       occupation: member.occupation,
-      professionalQualifications: member.professionalQualifications,
+      professionalQualificationsDetails: member.professionalQualificationsDetails,
       relationship: member.relationship,
       status: member.status,
       zakath: member.zakath,
       madarasa: member.madarasa,
-      professionalQualificationsDetails: member.professionalQualificationsDetails,
+      professionalQualifications: member.professionalQualifications,
       schoolEducation: member.schoolEducation,
       specialNeeds: member.specialNeeds,
       ulama: member.ulama,
@@ -70,11 +70,13 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
     String updatedRelationship = state.relationship;
     if (value == 'Male') {
-      if (['Mother', 'Daughter', 'Sister', 'Granddaughter'].contains(state.relationship)) {
+      if (['Mother', 'Daughter', 'Sister', 'Granddaughter']
+          .contains(state.relationship)) {
         updatedRelationship = '';
       }
     } else if (value == 'Female') {
-      if (['Father', 'Son', 'Brother', 'Grandson'].contains(state.relationship)) {
+      if (['Father', 'Son', 'Brother', 'Grandson']
+          .contains(state.relationship)) {
         updatedRelationship = '';
       }
     }
@@ -152,7 +154,10 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       list.remove(value);
       if (value == 'A/L') {
         alYearController.clear();
-        emit(state.copyWith(alYear: '', schoolEducation: list));
+        emit(state.copyWith(
+          alYear: '',
+          schoolEducation: list,
+        ));
         return;
       }
     } else {

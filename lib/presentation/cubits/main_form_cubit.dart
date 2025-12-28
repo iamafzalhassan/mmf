@@ -96,7 +96,8 @@ class MainFormCubit extends Cubit<MainFormState> {
         return;
       }
 
-      final status = state.familyMembers.any((m) => m.relationship == 'Head of Family');
+      final status =
+          state.familyMembers.any((m) => m.relationship == 'Head of Family');
       if (!status) {
         showErrorSnackBar(
           context,
@@ -108,7 +109,10 @@ class MainFormCubit extends Cubit<MainFormState> {
       return;
     }
 
-    emit(state.copyWith(error: null, isLoading: true));
+    emit(state.copyWith(
+      error: null,
+      isLoading: true,
+    ));
 
     final mainForm = MainForm(
       address: state.address,
@@ -123,8 +127,8 @@ class MainFormCubit extends Cubit<MainFormState> {
 
     result.fold(
       (failure) => emit(state.copyWith(
-        isLoading: false,
         error: failure.message,
+        isLoading: false,
       )),
       (_) {
         scrollToTop();
@@ -136,8 +140,8 @@ class MainFormCubit extends Cubit<MainFormState> {
   void scrollToTop() {
     scrollController.animateTo(
       0,
-      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 500),
     );
     emit(state.copyWith(
       isLoading: false,
@@ -185,14 +189,14 @@ class MainFormCubit extends Cubit<MainFormState> {
     Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
 
     emit(state.copyWith(
-      isSuccess: false,
       address: '',
       admissionNo: '',
+      error: null,
       familiesCount: '',
+      familyMembers: [],
+      isSuccess: false,
       ownership: '',
       refNo: DateTimeUtils.generateRefNo(),
-      error: null,
-      familyMembers: [],
     ));
   }
 

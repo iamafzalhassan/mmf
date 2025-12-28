@@ -5,16 +5,16 @@ class CustomDropdown extends StatelessWidget {
   final bool isRequired;
   final String label;
   final String value;
-  final ValueChanged<String> onChanged;
   final List<String> items;
+  final ValueChanged<String> onChanged;
 
   const CustomDropdown({
     super.key,
     this.isRequired = false,
     required this.label,
     required this.value,
-    required this.onChanged,
     required this.items,
+    required this.onChanged,
   });
 
   @override
@@ -64,8 +64,8 @@ class CustomDropdown extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Select ${label.toLowerCase()}',
             suffixIcon: Icon(
-              color: AppTheme.gray6,
               Icons.arrow_drop_down_circle_outlined,
+              color: AppTheme.gray6,
               size: 20,
             ),
           ),
@@ -82,8 +82,8 @@ class CustomDropdown extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.gray2,
                       borderRadius: BorderRadius.circular(2),
+                      color: AppTheme.gray2,
                     ),
                     height: 4,
                     margin: const EdgeInsets.only(bottom: 16),
@@ -110,6 +110,7 @@ class CustomDropdown extends StatelessWidget {
                   Flexible(
                     child: ListView.builder(
                       itemCount: items.length,
+                      shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final item = items[index];
                         final isSelected = value == item;
@@ -126,9 +127,7 @@ class CustomDropdown extends StatelessWidget {
                           title: Text(
                             item,
                             style: TextStyle(
-                              color: isSelected
-                                  ? AppTheme.green2
-                                  : AppTheme.black,
+                              color: isSelected ? AppTheme.green2 : AppTheme.black,
                               fontFamily: 'SFProDisplay',
                               fontSize: 16,
                               fontWeight: isSelected
@@ -138,14 +137,13 @@ class CustomDropdown extends StatelessWidget {
                           ),
                           trailing: isSelected
                               ? const Icon(
-                                  color: AppTheme.green2,
                                   Icons.check_circle_rounded,
+                                  color: AppTheme.green2,
                                   size: 24,
                                 )
                               : null,
                         );
                       },
-                      shrinkWrap: true,
                     ),
                   ),
                 ],
