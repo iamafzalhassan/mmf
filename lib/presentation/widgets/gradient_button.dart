@@ -18,8 +18,6 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
-      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -31,6 +29,8 @@ class GradientButton extends StatelessWidget {
         ],
         color: AppTheme.green2,
       ),
+      height: 52,
+      width: double.infinity,
       child: Material(
         color: AppTheme.transparent,
         child: InkWell(

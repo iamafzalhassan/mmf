@@ -6,12 +6,12 @@ class CustomTextField extends StatelessWidget {
   final bool isRequired;
   final bool obscureText;
   final bool readOnly;
+  final int? maxLength;
+  final int? maxLines;
   final String label;
   final String? hintText;
   final String? initialValue;
   final String? prefixText;
-  final int? maxLength;
-  final int? maxLines;
   final FormFieldValidator<String>? validator;
   final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
@@ -26,12 +26,12 @@ class CustomTextField extends StatelessWidget {
     this.isRequired = false,
     this.obscureText = false,
     this.readOnly = false,
+    this.maxLength,
+    this.maxLines = 1,
     required this.label,
     this.hintText,
     this.initialValue,
     this.prefixText,
-    this.maxLength,
-    this.maxLines = 1,
     this.validator,
     this.inputFormatters,
     this.controller,
