@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 
 class CheckboxGrid extends StatelessWidget {
+  final ValueChanged<String> onChanged;
   final List<String> items;
   final List<String> selectedItems;
-  final ValueChanged<String> onChanged;
 
   const CheckboxGrid({
     super.key,
+    required this.onChanged,
     required this.items,
     required this.selectedItems,
-    required this.onChanged,
   });
 
   @override

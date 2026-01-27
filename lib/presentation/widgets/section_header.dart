@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mmf/core/theme/app_theme.dart';
 
 class SectionHeader extends StatelessWidget {
-  final String title;
   final IconData? icon;
+  final String title;
 
   const SectionHeader({
     super.key,
-    required this.title,
     this.icon,
+    required this.title,
   });
 
   @override

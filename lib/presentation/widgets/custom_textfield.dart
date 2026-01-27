@@ -13,13 +13,13 @@ class CustomTextField extends StatelessWidget {
   final String? initialValue;
   final String? prefixText;
   final FormFieldValidator<String>? validator;
-  final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onTap;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -33,13 +33,13 @@ class CustomTextField extends StatelessWidget {
     this.initialValue,
     this.prefixText,
     this.validator,
-    this.inputFormatters,
     this.controller,
     this.keyboardType,
     this.onChanged,
     this.onTap,
     this.prefixIcon,
     this.suffixIcon,
+    this.inputFormatters,
   });
 
   @override
