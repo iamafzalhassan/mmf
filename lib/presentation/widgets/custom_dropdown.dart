@@ -5,16 +5,16 @@ class CustomDropdown extends StatelessWidget {
   final bool isRequired;
   final String label;
   final String value;
-  final List<String> items;
   final ValueChanged<String> onChanged;
+  final List<String> items;
 
   const CustomDropdown({
     super.key,
     this.isRequired = false,
     required this.label,
     required this.value,
-    required this.items,
     required this.onChanged,
+    required this.items,
   });
 
   @override

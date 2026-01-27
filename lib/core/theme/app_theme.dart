@@ -2,24 +2,29 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   /* Colors */
-  static const Color transparent = Colors.transparent;
-  static const Color white1 = Colors.white;
-  static const Color white2 = Color(0xFFF8F9FA);
-  static const Color white3 = Color(0xFFF5F3E8);
-  static const Color white4 = Color(0xFFD4EDD4);
-  static const Color white5 = Color(0xFFE8F5E8);
+  static const Color black = Color(0xFF1A1A1A);
+
   static final Color gray1 = Colors.grey[100]!;
   static final Color gray2 = Colors.grey[300]!;
   static const Color gray3 = Color(0xFFE0E0E0);
   static final Color gray4 = Colors.grey[400]!;
   static final Color gray5 = Colors.grey[600]!;
   static final Color gray6 = Colors.grey[600]!;
+
   static const Color green1 = Color(0xFF6BC747);
   static const Color green2 = Color(0xFF7ED957);
   static const Color green3 = Color(0xFF7ED957);
+
   static const Color orange = Colors.orange;
   static const Color red = Color(0xFFE74C3C);
-  static const Color black = Color(0xFF1A1A1A);
+
+  static const Color transparent = Colors.transparent;
+
+  static const Color white1 = Colors.white;
+  static const Color white2 = Color(0xFFF8F9FA);
+  static const Color white3 = Color(0xFFF5F3E8);
+  static const Color white4 = Color(0xFFD4EDD4);
+  static const Color white5 = Color(0xFFE8F5E8);
 
   /* Gradients */
   static const LinearGradient backgroundGradient = LinearGradient(
