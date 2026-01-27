@@ -111,9 +111,64 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
+  Widget buildActionButtons(BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 52,
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ButtonStyle(
+                minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
+                padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.all(0),
+                ),
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: GradientButton(
+            icon: Icons.check_circle_rounded,
+            onPressed: () {
+              if (cubit.validateAndSave()) {
+                Navigator.pop(context, {
+                  'isEditing': isEditing,
+                  'member': state.toEntity(),
+                  'memberIndex': memberIndex,
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: AppTheme.red,
+                    behavior: SnackBarBehavior.fixed,
+                    content: Row(
+                      children: [
+                        Icon(Icons.info_rounded, color: Colors.white),
+                        SizedBox(width: 12),
+                        Text('Please fill all required fields correctly.', style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
+            text: isEditing ? 'Update' : 'Add',
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 16, bottom: 32),
+      padding: const EdgeInsets.only(bottom: 32, top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -138,8 +193,8 @@ class FamilyForm extends StatelessWidget {
                 onTap: () => Navigator.pop(context),
                 child: const Center(
                   child: Icon(
-                    color: AppTheme.black,
                     Icons.arrow_back_rounded,
+                    color: AppTheme.black,
                     size: 20,
                   ),
                 ),
@@ -175,6 +230,51 @@ class FamilyForm extends StatelessWidget {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget buildMadarasaEducationSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppTheme.gray3),
+        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.white5.withOpacity(0.3),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(
+                Icons.local_library_rounded,
+                color: AppTheme.green2,
+                size: 22,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Madarasa Education',
+                style: TextStyle(
+                  color: AppTheme.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          CheckboxGrid(
+            items: const [
+              'Kitab Part Time',
+              'Kitab Full Time',
+              'Hifz Part Time',
+              'Hifz Full Time',
+            ],
+            onChanged: cubit.toggleMadarasa,
+            selectedItems: state.madarasa,
+          ),
         ],
       ),
     );
@@ -221,13 +321,14 @@ class FamilyForm extends StatelessWidget {
       ];
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Row(
           children: [
             Icon(
-              color: AppTheme.green2,
               Icons.person_rounded,
+              color: AppTheme.green2,
               size: 24,
             ),
             SizedBox(width: 12),
@@ -344,7 +445,9 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget buildSpecialNeedsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildProfessionalQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
+    final hasProfessionalQualifications = state.professionalQualifications.isNotEmpty;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.gray3),
@@ -358,13 +461,13 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
+                Icons.school_rounded,
                 color: AppTheme.green2,
-                Icons.favorite_rounded,
                 size: 22,
               ),
               SizedBox(width: 10),
               Text(
-                'Special Needs',
+                'Professional Qualifications',
                 style: TextStyle(
                   color: AppTheme.black,
                   fontSize: 16,
@@ -376,14 +479,32 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
-              'Disabled',
-              'Medical Support',
-              'Education Support',
-              'Converted'
+              'Certificate',
+              'Diploma',
+              'Degree',
+              "Master's Degree",
+              'Phd',
             ],
-            onChanged: cubit.toggleSpecialNeeds,
-            selectedItems: state.specialNeeds,
+            onChanged: cubit.toggleProfessionalQualification,
+            selectedItems: state.professionalQualifications,
           ),
+          if (hasProfessionalQualifications) ...[
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: cubit.professionalQualificationsDetailsController,
+              hintText: 'e.g. Diploma in Nursing, BSc in Psychology',
+              isRequired: true,
+              label: 'Qualification Details',
+              maxLines: 1,
+              onChanged: cubit.updateProfessionalQualificationsDetails,
+              validator: (val) {
+                if (val?.isEmpty ?? true) {
+                  return 'Please specify your qualifications';
+                }
+                return null;
+              },
+            ),
+          ],
         ],
       ),
     );
@@ -403,8 +524,8 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.green2,
                 Icons.local_library_rounded,
+                color: AppTheme.green2,
                 size: 22,
               ),
               SizedBox(width: 10),
@@ -459,9 +580,7 @@ class FamilyForm extends StatelessWidget {
     );
   }
 
-  Widget buildProfessionalQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
-    final hasProfessionalQualifications = state.professionalQualifications.isNotEmpty;
-
+  Widget buildSpecialNeedsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.gray3),
@@ -475,13 +594,13 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
+                Icons.favorite_rounded,
                 color: AppTheme.green2,
-                Icons.school_rounded,
                 size: 22,
               ),
               SizedBox(width: 10),
               Text(
-                'Professional Qualifications',
+                'Special Needs',
                 style: TextStyle(
                   color: AppTheme.black,
                   fontSize: 16,
@@ -493,84 +612,20 @@ class FamilyForm extends StatelessWidget {
           const SizedBox(height: 16),
           CheckboxGrid(
             items: const [
-              'Certificate',
-              'Diploma',
-              'Degree',
-              "Master's Degree",
-              'Phd',
+              'Disabled',
+              'Medical Support',
+              'Education Support',
+              'Converted'
             ],
-            onChanged: cubit.toggleProfessionalQualification,
-            selectedItems: state.professionalQualifications,
-          ),
-          if (hasProfessionalQualifications) ...[
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: cubit.professionalQualificationsDetailsController,
-              hintText: 'e.g. Diploma in Nursing, BSc in Psychology',
-              isRequired: true,
-              label: 'Qualification Details',
-              maxLines: 1,
-              onChanged: cubit.updateProfessionalQualificationsDetails,
-              validator: (val) {
-                if (val?.isEmpty ?? true) {
-                  return 'Please specify your qualifications';
-                }
-                return null;
-              },
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget buildMadarasaEducationSection(FamilyMemberCubit cubit, FamilyMemberState state) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.gray3),
-        borderRadius: BorderRadius.circular(16),
-        color: AppTheme.white5.withOpacity(0.3),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(
-                color: AppTheme.green2,
-                Icons.local_library_rounded,
-                size: 22,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Madarasa Education',
-                style: TextStyle(
-                  color: AppTheme.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          CheckboxGrid(
-            items: const [
-              'Kitab Part Time',
-              'Kitab Full Time',
-              'Hifz Part Time',
-              'Hifz Full Time',
-            ],
-            onChanged: cubit.toggleMadarasa,
-            selectedItems: state.madarasa,
+            onChanged: cubit.toggleSpecialNeeds,
+            selectedItems: state.specialNeeds,
           ),
         ],
       ),
     );
   }
 
-  Widget buildUlamaQualificationsSection(
-      FamilyMemberCubit cubit, FamilyMemberState state) {
+  Widget buildUlamaQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     final List<String> ulamaItems;
     if (state.gender == 'Female') {
       ulamaItems = const ['Hafiza', 'Alima'];
@@ -593,8 +648,8 @@ class FamilyForm extends StatelessWidget {
           const Row(
             children: [
               Icon(
-                color: AppTheme.green2,
                 Icons.school_rounded,
+                color: AppTheme.green2,
                 size: 22,
               ),
               SizedBox(width: 10),
@@ -616,61 +671,6 @@ class FamilyForm extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildActionButtons(BuildContext context, FamilyMemberCubit cubit, FamilyMemberState state) {
-    return Row(
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: 52,
-            child: OutlinedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ButtonStyle(
-                minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
-                padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.all(0),
-                ),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: GradientButton(
-            icon: Icons.check_circle_rounded,
-            onPressed: () {
-              if (cubit.validateAndSave()) {
-                Navigator.pop(context, {
-                  'member': state.toEntity(),
-                  'isEditing': isEditing,
-                  'memberIndex': memberIndex,
-                });
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: AppTheme.red,
-                    behavior: SnackBarBehavior.fixed,
-                    content: Row(
-                      children: [
-                        Icon(Icons.info_rounded, color: Colors.white),
-                        SizedBox(width: 12),
-                        Text('Please fill all required fields correctly.', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-            text: isEditing ? 'Update' : 'Add',
-          ),
-        ),
-      ],
     );
   }
 }
