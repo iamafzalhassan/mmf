@@ -8,15 +8,15 @@ import 'package:mmf/domain/usecases/submit_form.dart';
 import 'package:mmf/presentation/cubits/main_form_state.dart';
 
 class MainFormCubit extends Cubit<MainFormState> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  final ScrollController scrollController = ScrollController();
-
   final SubmitForm submitForm;
 
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController admissionNoController = TextEditingController();
-  final TextEditingController familiesCountController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  ScrollController scrollController = ScrollController();
+
+  TextEditingController addressController = TextEditingController();
+  TextEditingController admissionNoController = TextEditingController();
+  TextEditingController familiesCountController = TextEditingController();
 
   MainFormCubit({required this.submitForm}) : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
 

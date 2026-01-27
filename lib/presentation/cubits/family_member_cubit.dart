@@ -5,15 +5,15 @@ import 'package:mmf/domain/entities/family_member.dart';
 part 'family_member_state.dart';
 
 class FamilyMemberCubit extends Cubit<FamilyMemberState> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController ageController = TextEditingController();
-  final TextEditingController alYearController = TextEditingController();
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController mobileNoController = TextEditingController();
-  final TextEditingController nationalIdNoController = TextEditingController();
-  final TextEditingController occupationController = TextEditingController();
-  final TextEditingController professionalQualificationsDetailsController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController alYearController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController mobileNoController = TextEditingController();
+  TextEditingController nationalIdNoController = TextEditingController();
+  TextEditingController occupationController = TextEditingController();
+  TextEditingController professionalQualificationsDetailsController = TextEditingController();
 
   FamilyMemberCubit() : super(FamilyMemberState());
 
