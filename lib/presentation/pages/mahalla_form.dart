@@ -57,29 +57,133 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Future<void> addMember(BuildContext context, MainFormCubit cubit, MainFormState state) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const FamilyForm()),
+  Widget buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Text(
+                'Mahalla Members Details Collection Form 2025',
+                style: TextStyle(
+                  fontSize: 32,
+                  foreground: Paint()
+                    ..color = AppTheme.black
+                    ..strokeWidth = 1.25
+                    ..style = PaintingStyle.stroke,
+                  height: 1,
+                ),
+              ),
+              const Text(
+                'Mahalla Members Details Collection Form 2025',
+                style: TextStyle(color: AppTheme.black, fontSize: 32, height: 1),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Kohilawatta JM & Burial Ground',
+            style: TextStyle(color: AppTheme.gray5, fontSize: 22, height: 1),
+          ),
+        ],
+      ),
     );
+  }
 
-    if (result != null && result is Map<String, dynamic>) {
-      final member = result['member'];
+  Widget buildFormCard(BuildContext context, MainFormState state, MainFormCubit cubit) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: AppTheme.white1,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHouseholdSection(state, cubit),
+            const SizedBox(height: 32),
+            const Divider(height: 1),
+            const SizedBox(height: 32),
+            buildFamilyMembersSection(context, cubit, state),
+            const SizedBox(height: 32),
+            GradientButton(
+              icon: Icons.arrow_circle_right_rounded,
+              isLoading: state.isLoading,
+              onPressed: () => cubit.submit(context),
+              text: 'Submit Form',
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
-      if (member.relationship == 'Head of Family') {
-        if (cubit.hasExistingHead()) {
-          if (!context.mounted) return;
-
-          cubit.showErrorSnackBar(
-            context,
-            'A Head of Family already exists. Only one Head of Family is allowed.',
-          );
-          return;
-        }
-      }
-
-      cubit.addFamilyMember(member);
-    }
+  Widget buildHouseholdSection(MainFormState state, MainFormCubit cubit) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionHeader(
+          icon: Icons.home_rounded,
+          title: 'Household Information',
+        ),
+        const SizedBox(height: 24),
+        CustomTextField(
+          initialValue: state.refNo,
+          label: 'Reference No',
+          readOnly: true,
+          suffixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: cubit.admissionNoController,
+          hintText: 'Enter admission number',
+          label: 'Admission (Sandapaname) No',
+          onChanged: cubit.updateAdmissionNo,
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: cubit.addressController,
+          hintText: 'Enter full address',
+          isRequired: true,
+          label: 'Address',
+          onChanged: cubit.updateAddress,
+        ),
+        const SizedBox(height: 20),
+        CustomDropdown(
+          isRequired: true,
+          items: const ['Own', 'Rent'],
+          label: 'House Ownership',
+          onChanged: cubit.updateOwnership,
+          value: state.ownership,
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: cubit.familiesCountController,
+          hintText: 'Enter number of families',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(2),
+          ],
+          isRequired: true,
+          keyboardType: TextInputType.number,
+          label: 'Families in Home',
+          onChanged: cubit.updateFamiliesCount,
+          validator: (val) {
+            if (val?.isEmpty ?? true) {
+              return 'This field is required';
+            }
+            final num = int.tryParse(val!);
+            if (num == null || num < 1) {
+              return 'Please enter a valid number (min 1)';
+            }
+            return null;
+          },
+        ),
+      ],
+    );
   }
 
   Widget buildFamilyMembersSection(BuildContext context, MainFormCubit cubit, MainFormState state) {
@@ -150,133 +254,29 @@ class MahallaForm extends StatelessWidget {
     );
   }
 
-  Widget buildFormCard(BuildContext context, MainFormState state, MainFormCubit cubit) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppTheme.white1,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildHouseholdSection(state, cubit),
-            const SizedBox(height: 32),
-            const Divider(height: 1),
-            const SizedBox(height: 32),
-            buildFamilyMembersSection(context, cubit, state),
-            const SizedBox(height: 32),
-            GradientButton(
-              icon: Icons.arrow_circle_right_rounded,
-              isLoading: state.isLoading,
-              onPressed: () => cubit.submit(context),
-              text: 'Submit Form',
-            )
-          ],
-        ),
-      ),
+  Future<void> addMember(BuildContext context, MainFormCubit cubit, MainFormState state) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const FamilyForm()),
     );
-  }
 
-  Widget buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Text(
-                'Mahalla Members Details Collection Form 2025',
-                style: TextStyle(
-                  fontSize: 32,
-                  foreground: Paint()
-                    ..color = AppTheme.black
-                    ..strokeWidth = 1.25
-                    ..style = PaintingStyle.stroke,
-                  height: 1,
-                ),
-              ),
-              const Text(
-                'Mahalla Members Details Collection Form 2025',
-                style: TextStyle(color: AppTheme.black, fontSize: 32, height: 1),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Kohilawatta JM & Burial Ground',
-            style: TextStyle(color: AppTheme.gray5, fontSize: 22, height: 1),
-          ),
-        ],
-      ),
-    );
-  }
+    if (result != null && result is Map<String, dynamic>) {
+      final member = result['member'];
 
-  Widget buildHouseholdSection(MainFormState state, MainFormCubit cubit) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader(
-          icon: Icons.home_rounded,
-          title: 'Household Information',
-        ),
-        const SizedBox(height: 24),
-        CustomTextField(
-          initialValue: state.refNo,
-          label: 'Reference No',
-          readOnly: true,
-          suffixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: cubit.admissionNoController,
-          hintText: 'Enter admission number',
-          label: 'Admission (Sandapaname) No',
-          onChanged: cubit.updateAdmissionNo,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: cubit.addressController,
-          hintText: 'Enter full address',
-          isRequired: true,
-          label: 'Address',
-          onChanged: cubit.updateAddress,
-        ),
-        const SizedBox(height: 20),
-        CustomDropdown(
-          isRequired: true,
-          items: const ['Own', 'Rent'],
-          label: 'House Ownership',
-          onChanged: cubit.updateOwnership,
-          value: state.ownership,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: cubit.familiesCountController,
-          hintText: 'Enter number of families',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(2),
-          ],
-          isRequired: true,
-          keyboardType: TextInputType.number,
-          label: 'Families in Home',
-          onChanged: cubit.updateFamiliesCount,
-          validator: (val) {
-            if (val?.isEmpty ?? true) {
-              return 'This field is required';
-            }
-            final num = int.tryParse(val!);
-            if (num == null || num < 1) {
-              return 'Please enter a valid number (min 1)';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
+      if (member.relationship == 'Head of Family') {
+        if (cubit.hasExistingHead()) {
+          if (!context.mounted) return;
+
+          cubit.showErrorSnackBar(
+            context,
+            'A Head of Family already exists. Only one Head of Family is allowed.',
+          );
+          return;
+        }
+      }
+
+      cubit.addFamilyMember(member);
+    }
   }
 
   Future<void> editMember(BuildContext context, MainFormCubit cubit, MainFormState state, int index, dynamic member) async {
