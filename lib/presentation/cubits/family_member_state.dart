@@ -13,11 +13,11 @@ class FamilyMemberState {
   final String relationship;
   final String status;
   final String zakath;
-  final List<String> madarasa;
+  final List<String> madarasaEducation;
   final List<String> professionalQualifications;
   final List<String> schoolEducation;
   final List<String> specialNeeds;
-  final List<String> ulama;
+  final List<String> ulamaQualifications;
 
   FamilyMemberState({
     this.age = '',
@@ -32,11 +32,11 @@ class FamilyMemberState {
     this.relationship = '',
     this.status = '',
     this.zakath = '',
-    this.madarasa = const [],
+    this.madarasaEducation = const [],
     this.professionalQualifications = const [],
     this.schoolEducation = const [],
     this.specialNeeds = const [],
-    this.ulama = const [],
+    this.ulamaQualifications = const [],
   });
 
   FamilyMemberState copyWith({
@@ -52,11 +52,11 @@ class FamilyMemberState {
     String? relationship,
     String? status,
     String? zakath,
-    List<String>? madarasa,
+    List<String>? madarasaEducation,
     List<String>? professionalQualifications,
     List<String>? schoolEducation,
     List<String>? specialNeeds,
-    List<String>? ulama,
+    List<String>? ulamaQualifications,
   }) {
     return FamilyMemberState(
       age: age ?? this.age,
@@ -72,12 +72,11 @@ class FamilyMemberState {
       relationship: relationship ?? this.relationship,
       status: status ?? this.status,
       zakath: zakath ?? this.zakath,
-      madarasa: madarasa ?? this.madarasa,
-      professionalQualifications:
-      professionalQualifications ?? this.professionalQualifications,
+      madarasaEducation: madarasaEducation ?? this.madarasaEducation,
+      professionalQualifications: professionalQualifications ?? this.professionalQualifications,
       schoolEducation: schoolEducation ?? this.schoolEducation,
       specialNeeds: specialNeeds ?? this.specialNeeds,
-      ulama: ulama ?? this.ulama,
+      ulamaQualifications: ulamaQualifications ?? this.ulamaQualifications,
     );
   }
 
@@ -95,11 +94,11 @@ class FamilyMemberState {
       relationship: relationship,
       status: status,
       zakath: zakath,
-      madarasa: madarasa,
+      madarasa: madarasaEducation,
       professionalQualifications: professionalQualifications,
       schoolEducation: schoolEducation,
       specialNeeds: specialNeeds,
-      ulama: ulama,
+      ulama: ulamaQualifications,
     );
   }
 }

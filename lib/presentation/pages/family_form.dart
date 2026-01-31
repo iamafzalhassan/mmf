@@ -563,7 +563,7 @@ class FamilyForm extends StatelessWidget {
               'Hifz Full Time',
             ],
             onChanged: cubit.toggleMadarasa,
-            selectedItems: state.madarasa,
+            selectedItems: state.madarasaEducation,
           ),
         ],
       ),
@@ -612,7 +612,7 @@ class FamilyForm extends StatelessWidget {
           CheckboxGrid(
             items: ulamaItems,
             onChanged: cubit.toggleUlama,
-            selectedItems: state.ulama,
+            selectedItems: state.ulamaQualifications,
           ),
         ],
       ),

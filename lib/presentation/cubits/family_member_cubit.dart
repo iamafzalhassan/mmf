@@ -39,11 +39,11 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
       relationship: member.relationship,
       status: member.status,
       zakath: member.zakath,
-      madarasa: member.madarasa,
+      madarasaEducation: member.madarasa,
       professionalQualifications: member.professionalQualifications,
       schoolEducation: member.schoolEducation,
       specialNeeds: member.specialNeeds,
-      ulama: member.ulama,
+      ulamaQualifications: member.ulama,
     ));
   }
 
@@ -60,7 +60,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void updateGender(String value) {
-    List<String> updatedUlama = List<String>.from(state.ulama);
+    List<String> updatedUlama = List<String>.from(state.ulamaQualifications);
 
     if (value == 'Male') {
       updatedUlama.removeWhere((item) => item == 'Hafiza' || item == 'Alima');
@@ -84,7 +84,7 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
     emit(state.copyWith(
       gender: value,
       relationship: updatedRelationship,
-      ulama: updatedUlama,
+      ulamaQualifications: updatedUlama,
     ));
   }
 
@@ -121,13 +121,13 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void toggleMadarasa(String value) {
-    final list = List<String>.from(state.madarasa);
+    final list = List<String>.from(state.madarasaEducation);
     if (list.contains(value)) {
       list.remove(value);
     } else {
       list.add(value);
     }
-    emit(state.copyWith(madarasa: list));
+    emit(state.copyWith(madarasaEducation: list));
   }
 
   void toggleProfessionalQualification(String value) {
@@ -177,13 +177,13 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
   }
 
   void toggleUlama(String value) {
-    final list = List<String>.from(state.ulama);
+    final list = List<String>.from(state.ulamaQualifications);
     if (list.contains(value)) {
       list.remove(value);
     } else {
       list.add(value);
     }
-    emit(state.copyWith(ulama: list));
+    emit(state.copyWith(ulamaQualifications: list));
   }
 
   bool validateAndSave() {
