@@ -9,6 +9,7 @@ class MainFormState extends Equatable {
   final String familiesCount;
   final String ownership;
   final String refNo;
+  final String route;
   final String? error;
   final List<FamilyMember> familyMembers;
 
@@ -20,6 +21,7 @@ class MainFormState extends Equatable {
     this.familiesCount = '',
     this.ownership = '',
     required this.refNo,
+    this.route = '',
     this.error,
     this.familyMembers = const [],
   });
@@ -33,6 +35,7 @@ class MainFormState extends Equatable {
     familiesCount,
     ownership,
     refNo,
+    route,
     error,
     familyMembers,
   ];
@@ -45,6 +48,7 @@ class MainFormState extends Equatable {
     String? familiesCount,
     String? ownership,
     String? refNo,
+    String? route,
     String? error,
     List<FamilyMember>? familyMembers,
   }) {
@@ -56,6 +60,7 @@ class MainFormState extends Equatable {
       familiesCount: familiesCount ?? this.familiesCount,
       ownership: ownership ?? this.ownership,
       refNo: refNo ?? this.refNo,
+      route: route ?? this.route,
       error: error,
       familyMembers: familyMembers ?? this.familyMembers,
     );
