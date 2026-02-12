@@ -13,7 +13,7 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
 
   @override
   Future<void> submitForm(MainForm mainForm) async {
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxF0libb5mtdXe_GNK_v_itcqtvwJczUvnv3OHvq5OykJeURzRRq5c8Co528JUyuVWv/exec';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxVfOBUuadla8T_RlPOu-Wkl-VPaBehreSpbfLV8O0mwiQmFSXLiy7W7wZOEoh9AJrW/exec';
 
     try {
       final jsonData = jsonEncode(mainForm.toJson());
