@@ -154,6 +154,14 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 20),
         CustomDropdown(
           isRequired: true,
+          items: const ['Route 1', 'Route 2', 'Route 3'],
+          label: 'Route',
+          onChanged: cubit.updateRoute,
+          value: state.route,
+        ),
+        const SizedBox(height: 20),
+        CustomDropdown(
+          isRequired: true,
           items: const ['Own', 'Rent'],
           label: 'House Ownership',
           onChanged: cubit.updateOwnership,

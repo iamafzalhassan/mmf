@@ -72,6 +72,7 @@ class MainFormCubit extends Cubit<MainFormState> {
       familiesCount: '',
       ownership: '',
       refNo: DateTimeUtils.generateRefNo(),
+      route: '',
       error: null,
       familyMembers: [],
     ));
@@ -154,18 +155,19 @@ class MainFormCubit extends Cubit<MainFormState> {
       familiesCount: state.familiesCount,
       ownership: state.ownership,
       refNo: state.refNo,
+      route: state.route,
       familyMembers: state.familyMembers,
     );
 
     final result = await submitForm(mainForm);
 
     result.fold((failure) => emit(state.copyWith(
-        isLoading: false,
-        error: failure.message,
-      )), (_) {
-        scrollToTop();
-        resetForm();
-      },
+      isLoading: false,
+      error: failure.message,
+    )), (_) {
+      scrollToTop();
+      resetForm();
+    },
     );
   }
 
@@ -195,6 +197,10 @@ class MainFormCubit extends Cubit<MainFormState> {
 
   void updateRefNo(String value) {
     emit(state.copyWith(refNo: value));
+  }
+
+  void updateRoute(String value) {
+    emit(state.copyWith(route: value));
   }
 
   bool validateForm() {

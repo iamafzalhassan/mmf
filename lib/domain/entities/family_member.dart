@@ -12,6 +12,8 @@ class FamilyMember {
   final String professionalQualificationsDetails;
   final String relationship;
   final String status;
+  final String vocationalCourseDetails;
+  final String whatsappNo;
   final String zakath;
   final List<String> madarasa;
   final List<String> professionalQualifications;
@@ -31,6 +33,8 @@ class FamilyMember {
     required this.professionalQualificationsDetails,
     required this.relationship,
     required this.status,
+    required this.vocationalCourseDetails,
+    required this.whatsappNo,
     required this.zakath,
     required this.madarasa,
     required this.professionalQualifications,
@@ -52,6 +56,8 @@ class FamilyMember {
       'professionalQualificationsDetails': DataSanitizer.sanitizeString(professionalQualificationsDetails),
       'relationship': DataSanitizer.sanitizeString(relationship),
       'status': DataSanitizer.sanitizeString(status),
+      'vocationalCourseDetails': DataSanitizer.sanitizeString(vocationalCourseDetails),
+      'whatsappNo': DataSanitizer.sanitizePhone(whatsappNo),
       'zakath': DataSanitizer.sanitizeString(zakath),
       'madarasa': DataSanitizer.sanitizeList(madarasa).join(', '),
       'professionalQualifications': DataSanitizer.sanitizeList(professionalQualifications).join(', '),

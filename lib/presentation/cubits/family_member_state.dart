@@ -12,12 +12,14 @@ class FamilyMemberState {
   final String professionalQualificationsDetails;
   final String relationship;
   final String status;
+  final String vocationalCourseDetails;
+  final String whatsappNo;
   final String zakath;
-  final List<String> madarasaEducation;
+  final List<String> madarasa;
   final List<String> professionalQualifications;
   final List<String> schoolEducation;
   final List<String> specialNeeds;
-  final List<String> ulamaQualifications;
+  final List<String> ulama;
 
   FamilyMemberState({
     this.age = '',
@@ -31,12 +33,14 @@ class FamilyMemberState {
     this.professionalQualificationsDetails = '',
     this.relationship = '',
     this.status = '',
+    this.vocationalCourseDetails = '',
+    this.whatsappNo = '',
     this.zakath = '',
-    this.madarasaEducation = const [],
+    this.madarasa = const [],
     this.professionalQualifications = const [],
     this.schoolEducation = const [],
     this.specialNeeds = const [],
-    this.ulamaQualifications = const [],
+    this.ulama = const [],
   });
 
   FamilyMemberState copyWith({
@@ -51,12 +55,14 @@ class FamilyMemberState {
     String? professionalQualificationsDetails,
     String? relationship,
     String? status,
+    String? vocationalCourseDetails,
+    String? whatsappNo,
     String? zakath,
-    List<String>? madarasaEducation,
+    List<String>? madarasa,
     List<String>? professionalQualifications,
     List<String>? schoolEducation,
     List<String>? specialNeeds,
-    List<String>? ulamaQualifications,
+    List<String>? ulama,
   }) {
     return FamilyMemberState(
       age: age ?? this.age,
@@ -71,12 +77,15 @@ class FamilyMemberState {
       professionalQualificationsDetails ?? this.professionalQualificationsDetails,
       relationship: relationship ?? this.relationship,
       status: status ?? this.status,
+      vocationalCourseDetails: vocationalCourseDetails ?? this.vocationalCourseDetails,
+      whatsappNo: whatsappNo ?? this.whatsappNo,
       zakath: zakath ?? this.zakath,
-      madarasaEducation: madarasaEducation ?? this.madarasaEducation,
-      professionalQualifications: professionalQualifications ?? this.professionalQualifications,
+      madarasa: madarasa ?? this.madarasa,
+      professionalQualifications:
+      professionalQualifications ?? this.professionalQualifications,
       schoolEducation: schoolEducation ?? this.schoolEducation,
       specialNeeds: specialNeeds ?? this.specialNeeds,
-      ulamaQualifications: ulamaQualifications ?? this.ulamaQualifications,
+      ulama: ulama ?? this.ulama,
     );
   }
 
@@ -93,12 +102,14 @@ class FamilyMemberState {
       professionalQualificationsDetails: professionalQualificationsDetails,
       relationship: relationship,
       status: status,
+      vocationalCourseDetails: vocationalCourseDetails,
+      whatsappNo: whatsappNo,
       zakath: zakath,
-      madarasa: madarasaEducation,
+      madarasa: madarasa,
       professionalQualifications: professionalQualifications,
       schoolEducation: schoolEducation,
       specialNeeds: specialNeeds,
-      ulama: ulamaQualifications,
+      ulama: ulama,
     );
   }
 }

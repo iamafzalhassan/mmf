@@ -7,6 +7,7 @@ class MainForm {
   final String familiesCount;
   final String ownership;
   final String refNo;
+  final String route;
   final List<FamilyMember> familyMembers;
 
   MainForm({
@@ -15,6 +16,7 @@ class MainForm {
     required this.familiesCount,
     required this.ownership,
     required this.refNo,
+    required this.route,
     required this.familyMembers,
   });
 
@@ -25,6 +27,7 @@ class MainForm {
       'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
       'ownership': DataSanitizer.sanitizeString(ownership),
       'refNo': DataSanitizer.sanitizeString(refNo),
+      'route': DataSanitizer.sanitizeString(route),
       'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
     };
   }

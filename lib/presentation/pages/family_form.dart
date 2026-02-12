@@ -298,6 +298,26 @@ class FamilyForm extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         CustomTextField(
+          controller: cubit.whatsappNoController,
+          hintText: 'Enter WhatsApp number',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10),
+          ],
+          keyboardType: TextInputType.phone,
+          label: 'WhatsApp No',
+          onChanged: cubit.updateWhatsappNo,
+          validator: (val) {
+            if (val != null && val.isNotEmpty) {
+              if (val.length != 10 || !val.startsWith('07')) {
+                return 'Invalid WhatsApp number';
+              }
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
           controller: cubit.nationalIdNoController,
           hintText: 'Enter NIC',
           label: 'National ID No',
@@ -380,7 +400,7 @@ class FamilyForm extends StatelessWidget {
               'Disabled',
               'Medical Support',
               'Education Support',
-              'Converted'
+              'Converted',
             ],
             onChanged: cubit.toggleSpecialNeeds,
             selectedItems: state.specialNeeds,
@@ -426,6 +446,7 @@ class FamilyForm extends StatelessWidget {
               'Above Grade 8',
               'O/L',
               'A/L',
+              'Abroad Student',
             ],
             onChanged: cubit.toggleSchoolEducation,
             selectedItems: state.schoolEducation,
@@ -462,6 +483,7 @@ class FamilyForm extends StatelessWidget {
 
   Widget buildProfessionalQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     final hasProfessionalQualifications = state.professionalQualifications.isNotEmpty;
+    final hasVocationalCourse = state.professionalQualifications.contains('Vocational Course');
 
     return Container(
       decoration: BoxDecoration(
@@ -499,11 +521,12 @@ class FamilyForm extends StatelessWidget {
               'Degree',
               "Master's Degree",
               'Phd',
+              'Vocational Course',
             ],
             onChanged: cubit.toggleProfessionalQualification,
             selectedItems: state.professionalQualifications,
           ),
-          if (hasProfessionalQualifications) ...[
+          if (hasProfessionalQualifications && !hasVocationalCourse) ...[
             const SizedBox(height: 16),
             CustomTextField(
               controller: cubit.professionalQualificationsDetailsController,
@@ -515,6 +538,23 @@ class FamilyForm extends StatelessWidget {
               validator: (val) {
                 if (val?.isEmpty ?? true) {
                   return 'Please specify your qualifications';
+                }
+                return null;
+              },
+            ),
+          ],
+          if (hasVocationalCourse) ...[
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: cubit.vocationalCourseDetailsController,
+              hintText: 'e.g. Plumbing, Electrical, Carpentry',
+              isRequired: true,
+              label: 'Vocational Course Details',
+              maxLines: 1,
+              onChanged: cubit.updateVocationalCourseDetails,
+              validator: (val) {
+                if (val?.isEmpty ?? true) {
+                  return 'Please specify vocational course details';
                 }
                 return null;
               },
@@ -563,7 +603,7 @@ class FamilyForm extends StatelessWidget {
               'Hifz Full Time',
             ],
             onChanged: cubit.toggleMadarasa,
-            selectedItems: state.madarasaEducation,
+            selectedItems: state.madarasa,
           ),
         ],
       ),
@@ -612,7 +652,7 @@ class FamilyForm extends StatelessWidget {
           CheckboxGrid(
             items: ulamaItems,
             onChanged: cubit.toggleUlama,
-            selectedItems: state.ulamaQualifications,
+            selectedItems: state.ulama,
           ),
         ],
       ),
