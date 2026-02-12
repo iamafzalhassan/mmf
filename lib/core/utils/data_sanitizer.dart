@@ -24,10 +24,7 @@ class DataSanitizer {
   }
 
   static List<String> sanitizeList(List<String> values) {
-    return values
-        .where((item) => item.trim().isNotEmpty)
-        .map((item) => sanitizeString(item))
-        .toList();
+    return values.where((item) => item.trim().isNotEmpty).map((item) => sanitizeString(item)).toList();
   }
 
   static String sanitizeNIC(String nic) {
