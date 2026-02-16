@@ -66,7 +66,8 @@ class MainFormCubit extends Cubit<MainFormState> {
     Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
 
     emit(state.copyWith(
-      isSuccess: false,
+      isLoading: false,
+      isSuccess: true,
       address: '',
       admissionNo: '',
       familiesCount: '',
@@ -78,23 +79,11 @@ class MainFormCubit extends Cubit<MainFormState> {
     ));
   }
 
-  void scrollToTop() {
-    scrollController.animateTo(
-      0,
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 500),
-    );
-    emit(state.copyWith(
-      isLoading: false,
-      isSuccess: true,
-    ));
-  }
-
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: AppTheme.red,
-        behavior: SnackBarBehavior.fixed,
+        behavior: SnackBarBehavior.floating,
         content: Row(
           children: [
             const Icon(Icons.info_rounded, color: Colors.white),
@@ -102,22 +91,24 @@ class MainFormCubit extends Cubit<MainFormState> {
             Text(message, style: const TextStyle(fontSize: 16)),
           ],
         ),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20),
       ),
     );
   }
 
   void showSuccessSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         backgroundColor: AppTheme.green3,
-        behavior: SnackBarBehavior.fixed,
-        content: Row(
+        behavior: SnackBarBehavior.floating,
+        content: const Row(
           children: [
             Icon(Icons.check_circle_rounded, color: Colors.white),
             SizedBox(width: 12),
             Text('Form submitted successfully.', style: TextStyle(fontSize: 16)),
           ],
         ),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20),
       ),
     );
   }
@@ -162,12 +153,11 @@ class MainFormCubit extends Cubit<MainFormState> {
     final result = await submitForm(mainForm);
 
     result.fold((failure) => emit(state.copyWith(
-      isLoading: false,
-      error: failure.message,
-    )), (_) {
-      scrollToTop();
-      resetForm();
-    },
+        isLoading: false,
+        error: failure.message,
+      )), (_) {
+        resetForm();
+      },
     );
   }
 
