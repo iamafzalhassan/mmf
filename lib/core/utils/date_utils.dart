@@ -1,6 +1,8 @@
+import 'dart:math';
+
 class DateTimeUtils {
   static String generateRefNo() {
-    final random = (DateTime.now().millisecond % 1000).toString().padLeft(6, '0');
+    String random = (100000 + Random().nextInt(900000)).toString();
     return 'KJM-$random';
   }
 }
