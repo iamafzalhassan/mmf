@@ -483,7 +483,6 @@ class FamilyForm extends StatelessWidget {
 
   Widget buildProfessionalQualificationsSection(FamilyMemberCubit cubit, FamilyMemberState state) {
     final hasProfessionalQualifications = state.professionalQualifications.isNotEmpty;
-    final hasVocationalCourse = state.professionalQualifications.contains('Vocational Course');
 
     return Container(
       decoration: BoxDecoration(
@@ -526,11 +525,11 @@ class FamilyForm extends StatelessWidget {
             onChanged: cubit.toggleProfessionalQualification,
             selectedItems: state.professionalQualifications,
           ),
-          if (hasProfessionalQualifications && !hasVocationalCourse) ...[
+          if (hasProfessionalQualifications) ...[
             const SizedBox(height: 16),
             CustomTextField(
               controller: cubit.professionalQualificationsDetailsController,
-              hintText: 'e.g. Diploma in Nursing, BSc in Psychology',
+              hintText: 'e.g. Diploma in Nursing, BSc in Psychology, Plumbing, Electrical',
               isRequired: true,
               label: 'Qualification Details',
               maxLines: 1,
@@ -538,23 +537,6 @@ class FamilyForm extends StatelessWidget {
               validator: (val) {
                 if (val?.isEmpty ?? true) {
                   return 'Please specify your qualifications';
-                }
-                return null;
-              },
-            ),
-          ],
-          if (hasVocationalCourse) ...[
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: cubit.vocationalCourseDetailsController,
-              hintText: 'e.g. Plumbing, Electrical, Carpentry',
-              isRequired: true,
-              label: 'Vocational Course Details',
-              maxLines: 1,
-              onChanged: cubit.updateVocationalCourseDetails,
-              validator: (val) {
-                if (val?.isEmpty ?? true) {
-                  return 'Please specify vocational course details';
                 }
                 return null;
               },
@@ -693,16 +675,17 @@ class FamilyForm extends StatelessWidget {
                 });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     backgroundColor: AppTheme.red,
                     behavior: SnackBarBehavior.fixed,
-                    content: Row(
+                    content: const Row(
                       children: [
                         Icon(Icons.info_rounded, color: Colors.white),
                         SizedBox(width: 12),
                         Text('Please fill all required fields correctly.', style: TextStyle(fontSize: 16)),
                       ],
                     ),
+                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20),
                   ),
                 );
               }
