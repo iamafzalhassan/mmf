@@ -677,7 +677,7 @@ class FamilyForm extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: AppTheme.red,
-                    behavior: SnackBarBehavior.fixed,
+                    behavior: SnackBarBehavior.floating,
                     content: const Row(
                       children: [
                         Icon(Icons.info_rounded, color: Colors.white),
