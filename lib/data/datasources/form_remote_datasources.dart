@@ -19,33 +19,26 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
       final jsonData = jsonEncode(mainForm.toJson());
       final encodedData = base64Url.encode(utf8.encode(jsonData));
 
-      final uri = Uri.parse(scriptUrl).replace(
-        queryParameters: {
-          'data': encodedData,
-          'method': 'submit',
-        },
-      );
+      final uri = Uri.parse(scriptUrl).replace(queryParameters: {'data': encodedData, 'method': 'submit'});
 
-      final response = await client.get(uri).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw Exception('Request timeout - please try again');
-        },
-      );
+      final response = await client.get(uri).timeout(const Duration(seconds: 30), onTimeout: () {
+        throw Exception('Request timeout - please try again');
+      });
 
       if (response.statusCode == 200 || response.statusCode == 302) {
+        dynamic responseData;
         try {
-          final responseData = jsonDecode(response.body);
-          if (responseData['status'] == 'success') {
-            return;
-          } else if (responseData['status'] == 'error') {
-            throw Exception(responseData['message'] ?? 'Submission failed');
-          }
-        } catch (e) {
-          if (response.statusCode == 200 || response.statusCode == 302) {
-            return;
-          }
-          rethrow;
+          responseData = jsonDecode(response.body);
+        } catch (_) {
+          return;
+        }
+
+        final status = responseData is Map ? responseData['status'] : null;
+        if (status == 'success') {
+          return;
+        }
+        if (status == 'error') {
+          throw Exception(responseData['message'] ?? 'Submission failed');
         }
       }
 
@@ -53,6 +46,7 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
     } on http.ClientException {
       throw Exception('Network error. Please check your connection.');
     } catch (e) {
+      if (e is Exception) rethrow;
       throw Exception('Failed to submit: ${e.toString()}');
     }
   }

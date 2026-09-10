@@ -13,13 +13,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => SubmitForm(sl()));
 
-  sl.registerLazySingleton<FormRepository>(
-    () => FormRepositoryImpl(remoteDataSource: sl()),
-  );
+  sl.registerLazySingleton<FormRepository>(() => FormRepositoryImpl(remoteDataSource: sl()));
 
-  sl.registerLazySingleton<FormRemoteDataSource>(
-    () => FormRemoteDataSourceImpl(client: sl()),
-  );
+  sl.registerLazySingleton<FormRemoteDataSource>(() => FormRemoteDataSourceImpl(client: sl()));
 
   sl.registerLazySingleton(() => http.Client());
 }

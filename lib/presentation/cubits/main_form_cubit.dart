@@ -20,36 +20,21 @@ class MainFormCubit extends Cubit<MainFormState> {
 
   MainFormCubit({required this.submitForm}) : super(MainFormState(refNo: DateTimeUtils.generateRefNo()));
 
-  @override
-  Future<void> close() {
-    addressController.dispose();
-    admissionNoController.dispose();
-    familiesCountController.dispose();
-    scrollController.dispose();
-    return super.close();
-  }
-
   void addFamilyMember(FamilyMember member) {
     final updatedMembers = List<FamilyMember>.from(state.familyMembers)..add(member);
     emit(state.copyWith(familyMembers: updatedMembers));
   }
 
-  void clearError() {
-    emit(state.copyWith(error: null));
-  }
+  void clearError() => emit(state.copyWith(error: null));
 
-  void clearFamilyMembers() {
-    emit(state.copyWith(familyMembers: []));
-  }
+  void clearFamilyMembers() => emit(state.copyWith(familyMembers: []));
 
-  bool hasExistingHead({int? excludeIndex}) {
-    return state.familyMembers.asMap().entries.any((entry) {
-      if (excludeIndex != null && entry.key == excludeIndex) {
-        return false;
-      }
-      return entry.value.relationship == 'Head of Family';
-    });
-  }
+  bool hasExistingHead({int? excludeIndex}) => state.familyMembers.asMap().entries.any((entry) {
+        if (excludeIndex != null && entry.key == excludeIndex) {
+          return false;
+        }
+        return entry.value.relationship == 'Head of Family';
+      });
 
   void removeFamilyMember(int index) {
     if (index >= 0 && index < state.familyMembers.length) {
@@ -58,139 +43,37 @@ class MainFormCubit extends Cubit<MainFormState> {
     }
   }
 
-  void resetForm() {
-    addressController.clear();
-    admissionNoController.clear();
-    familiesCountController.clear();
-
-    Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
-
-    emit(state.copyWith(
-      isLoading: false,
-      isSuccess: true,
-      address: '',
-      admissionNo: '',
-      familiesCount: '',
-      ownership: '',
-      refNo: DateTimeUtils.generateRefNo(),
-      route: '',
-      error: null,
-      familyMembers: [],
-    ));
-  }
-
-  void showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppTheme.red,
-        behavior: SnackBarBehavior.floating,
-        content: Row(
-          children: [
-            const Icon(Icons.info_rounded, color: Colors.white),
-            const SizedBox(width: 12),
-            Text(message, style: const TextStyle(fontSize: 16)),
-          ],
-        ),
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20),
-      ),
-    );
-  }
-
-  void showSuccessSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppTheme.green3,
-        behavior: SnackBarBehavior.floating,
-        content: const Row(
-          children: [
-            Icon(Icons.check_circle_rounded, color: Colors.white),
-            SizedBox(width: 12),
-            Text('Form submitted successfully.', style: TextStyle(fontSize: 16)),
-          ],
-        ),
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20),
-      ),
-    );
-  }
+  void showSuccessSnackBar(BuildContext context) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: AppTheme.green3,
+      behavior: SnackBarBehavior.floating,
+      content: const Row(children: [Icon(Icons.check_circle_rounded, color: Colors.white), SizedBox(width: 12), Text('Form submitted successfully.', style: TextStyle(fontSize: 16))]),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20)));
 
   Future<void> submit(BuildContext context) async {
     if (!validateForm()) {
       if (state.familyMembers.isEmpty) {
-        showErrorSnackBar(
-          context,
-          'Please add at least one family member.',
-        );
+        showErrorSnackBar(context, 'Please add at least one family member.');
         return;
       }
 
       final status = state.familyMembers.any((m) => m.relationship == 'Head of Family');
       if (!status) {
-        showErrorSnackBar(
-          context,
-          'Please designate one member as Head of Family.',
-        );
+        showErrorSnackBar(context, 'Please designate one member as Head of Family.');
         return;
       }
 
       return;
     }
 
-    emit(state.copyWith(
-      isLoading: true,
-      error: null,
-    ));
+    emit(state.copyWith(isLoading: true, isSuccess: false, error: null));
 
-    final mainForm = MainForm(
-      address: state.address,
-      admissionNo: state.admissionNo,
-      familiesCount: state.familiesCount,
-      ownership: state.ownership,
-      refNo: state.refNo,
-      route: state.route,
-      familyMembers: state.familyMembers,
-    );
+    final mainForm = MainForm(address: state.address, admissionNo: state.admissionNo, familiesCount: state.familiesCount, ownership: state.ownership, refNo: state.refNo, route: state.route, familyMembers: state.familyMembers);
 
     final result = await submitForm(mainForm);
 
-    result.fold((failure) => emit(state.copyWith(
-        isLoading: false,
-        error: failure.message,
-      )), (_) {
-        resetForm();
-      },
-    );
-  }
-
-  void updateAddress(String value) {
-    emit(state.copyWith(address: value));
-  }
-
-  void updateAdmissionNo(String value) {
-    emit(state.copyWith(admissionNo: value));
-  }
-
-  void updateFamiliesCount(String value) {
-    emit(state.copyWith(familiesCount: value));
-  }
-
-  void updateFamilyMember(int index, FamilyMember member) {
-    if (index >= 0 && index < state.familyMembers.length) {
-      final updatedMembers = List<FamilyMember>.from(state.familyMembers);
-      updatedMembers[index] = member;
-      emit(state.copyWith(familyMembers: updatedMembers));
-    }
-  }
-
-  void updateOwnership(String value) {
-    emit(state.copyWith(ownership: value));
-  }
-
-  void updateRefNo(String value) {
-    emit(state.copyWith(refNo: value));
-  }
-
-  void updateRoute(String value) {
-    emit(state.copyWith(route: value));
+    result.fold((failure) => emit(state.copyWith(isLoading: false, error: failure.message)), (_) {
+      resetForm();
+    });
   }
 
   bool validateForm() {
@@ -204,5 +87,50 @@ class MainFormCubit extends Cubit<MainFormState> {
 
     final status = state.familyMembers.any((m) => m.relationship == 'Head of Family');
     return status;
+  }
+
+  void showErrorSnackBar(BuildContext context, String message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: AppTheme.red,
+      behavior: SnackBarBehavior.floating,
+      content: Row(children: [const Icon(Icons.info_rounded, color: Colors.white), const SizedBox(width: 12), Text(message, style: const TextStyle(fontSize: 16))]),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20)));
+
+  void resetForm() {
+    addressController.clear();
+    admissionNoController.clear();
+    familiesCountController.clear();
+
+    Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
+
+    emit(state.copyWith(isLoading: false, isSuccess: true, address: '', admissionNo: '', familiesCount: '', ownership: '', refNo: DateTimeUtils.generateRefNo(), route: '', error: null, familyMembers: []));
+  }
+
+  void updateAddress(String value) => emit(state.copyWith(address: value));
+
+  void updateAdmissionNo(String value) => emit(state.copyWith(admissionNo: value));
+
+  void updateFamiliesCount(String value) => emit(state.copyWith(familiesCount: value));
+
+  void updateFamilyMember(int index, FamilyMember member) {
+    if (index >= 0 && index < state.familyMembers.length) {
+      final updatedMembers = List<FamilyMember>.from(state.familyMembers);
+      updatedMembers[index] = member;
+      emit(state.copyWith(familyMembers: updatedMembers));
+    }
+  }
+
+  void updateOwnership(String value) => emit(state.copyWith(ownership: value));
+
+  void updateRefNo(String value) => emit(state.copyWith(refNo: value));
+
+  void updateRoute(String value) => emit(state.copyWith(route: value));
+
+  @override
+  Future<void> close() {
+    addressController.dispose();
+    admissionNoController.dispose();
+    familiesCountController.dispose();
+    scrollController.dispose();
+    return super.close();
   }
 }

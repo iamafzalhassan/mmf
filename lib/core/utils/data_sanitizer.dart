@@ -23,8 +23,17 @@ class DataSanitizer {
     return count.trim().replaceAll(RegExp(r'[^\d]'), '');
   }
 
-  static List<String> sanitizeList(List<String> values) {
-    return values.where((item) => item.trim().isNotEmpty).map((item) => sanitizeString(item)).toList();
+  static List<String> sanitizeList(List<String> values) => values.where((item) => item.trim().isNotEmpty).map((item) => sanitizeString(item)).toList();
+
+  static String sanitizeString(String value) {
+    if (value.isEmpty) return value;
+    String sanitized = value.toUpperCase();
+    sanitized = sanitized.trim();
+    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
+    sanitized = sanitized.replaceAllMapped(RegExp(r'\s+([.,!?;:])'), (match) => match[1]!);
+    sanitized = sanitized.replaceAll(RegExp(r'\(\s+'), '(');
+    sanitized = sanitized.replaceAll(RegExp(r'\s+\)'), ')');
+    return sanitized;
   }
 
   static String sanitizeNIC(String nic) {
@@ -38,17 +47,6 @@ class DataSanitizer {
     if (phone.isEmpty) return phone;
     String sanitized = phone.trim();
     sanitized = sanitized.replaceAll(RegExp(r'[^\d]'), '');
-    return sanitized;
-  }
-
-  static String sanitizeString(String value) {
-    if (value.isEmpty) return value;
-    String sanitized = value.toUpperCase();
-    sanitized = sanitized.trim();
-    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
-    sanitized = sanitized.replaceAll(RegExp(r'\s+([.,!?;:])'), r'$1');
-    sanitized = sanitized.replaceAll(RegExp(r'\(\s+'), '(');
-    sanitized = sanitized.replaceAll(RegExp(r'\s+\)'), ')');
     return sanitized;
   }
 

@@ -8,6 +8,4 @@ void main() async {
   run();
 }
 
-void run() {
-  runApp(const App());
-}
+void run() => runApp(const App());

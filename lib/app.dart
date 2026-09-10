@@ -9,15 +9,5 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => di.sl<MainFormCubit>(),
-      child: MaterialApp(
-        title: 'Mahalla Members Form',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        home: const MahallaForm(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => BlocProvider(create: (_) => di.sl<MainFormCubit>(), child: MaterialApp(debugShowCheckedModeBanner: false, home: const MahallaForm(), theme: AppTheme.lightTheme, title: 'Mahalla Members Form'));
 }

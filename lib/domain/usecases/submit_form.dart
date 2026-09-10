@@ -8,7 +8,5 @@ class SubmitForm {
 
   SubmitForm(this.repository);
 
-  Future<Either<Failure, void>> call(MainForm mainForm) async {
-    return await repository.submitForm(mainForm);
-  }
+  Future<Either<Failure, void>> call(MainForm mainForm) async => await repository.submitForm(mainForm);
 }

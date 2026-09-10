@@ -8,27 +8,18 @@ class MainForm {
   final String ownership;
   final String refNo;
   final String route;
+
   final List<FamilyMember> familyMembers;
 
-  MainForm({
-    required this.address,
-    required this.admissionNo,
-    required this.familiesCount,
-    required this.ownership,
-    required this.refNo,
-    required this.route,
-    required this.familyMembers,
-  });
+  MainForm({required this.address, required this.admissionNo, required this.familiesCount, required this.ownership, required this.refNo, required this.route, required this.familyMembers});
 
-  Map<String, dynamic> toJson() {
-    return {
-      'address': DataSanitizer.sanitizeAddress(address),
-      'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
-      'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
-      'ownership': DataSanitizer.sanitizeString(ownership),
-      'refNo': DataSanitizer.sanitizeString(refNo),
-      'route': DataSanitizer.sanitizeString(route),
-      'familyMembers': familyMembers.map((m) => m.toJson()).toList(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'address': DataSanitizer.sanitizeAddress(address),
+        'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
+        'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
+        'ownership': DataSanitizer.sanitizeString(ownership),
+        'refNo': DataSanitizer.sanitizeString(refNo),
+        'route': DataSanitizer.sanitizeString(route),
+        'familyMembers': familyMembers.map((m) => m.toJson()).toList()
+      };
 }
