@@ -8,15 +8,35 @@ import 'package:mmf/presentation/widgets/checkbox_grid.dart';
 import 'package:mmf/presentation/widgets/custom_dropdown.dart';
 import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
+import 'package:mmf/presentation/widgets/snack_bars.dart';
 
-class FamilyForm extends StatelessWidget {
+class FamilyForm extends StatefulWidget {
   const FamilyForm({super.key, this.memberIndex, this.existingMember});
 
   final int? memberIndex;
 
   final FamilyMember? existingMember;
 
-  bool get isEditing => existingMember != null;
+  @override
+  State<FamilyForm> createState() => FamilyFormState();
+}
+
+class FamilyFormState extends State<FamilyForm> {
+  final FamilyMemberCubit cubit = FamilyMemberCubit();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController alYearController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController mobileNoController = TextEditingController();
+  final TextEditingController nationalIdNoController = TextEditingController();
+  final TextEditingController occupationController = TextEditingController();
+  final TextEditingController professionalQualificationsDetailsController = TextEditingController();
+  final TextEditingController vocationalCourseDetailsController = TextEditingController();
+  final TextEditingController whatsappNoController = TextEditingController();
+
+  bool get isEditing => widget.existingMember != null;
 
   Widget buildHeader(BuildContext context) => Container(
       padding: const EdgeInsets.only(bottom: 32, top: 16),
@@ -59,14 +79,14 @@ class FamilyForm extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Row(children: [Icon(Icons.person_rounded, color: AppTheme.green2, size: 24), SizedBox(width: 12), Text('Personal Information', style: TextStyle(color: AppTheme.black, fontSize: 18, fontWeight: FontWeight.w600))]),
       const SizedBox(height: 24),
-      CustomTextField(controller: cubit.fullNameController, hintText: 'Enter full name', isRequired: true, label: 'Full Name', onChanged: cubit.updateName),
+      CustomTextField(controller: fullNameController, hintText: 'Enter full name', isRequired: true, label: 'Full Name', onChanged: cubit.updateName),
       const SizedBox(height: 20),
       CustomDropdown(isRequired: true, items: const ['Male', 'Female'], label: 'Gender', onChanged: cubit.updateGender, value: state.gender),
       const SizedBox(height: 20),
-      CustomTextField(controller: cubit.ageController, hintText: 'Enter age', inputFormatters: [FilteringTextInputFormatter.digitsOnly], isRequired: true, keyboardType: TextInputType.number, label: 'Age', onChanged: cubit.updateAge),
+      CustomTextField(controller: ageController, hintText: 'Enter age', inputFormatters: [FilteringTextInputFormatter.digitsOnly], isRequired: true, keyboardType: TextInputType.number, label: 'Age', onChanged: cubit.updateAge),
       const SizedBox(height: 20),
       CustomTextField(
-          controller: cubit.mobileNoController,
+          controller: mobileNoController,
           hintText: 'Enter phone number',
           inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
           isRequired: isHeadOfFamily,
@@ -90,7 +110,7 @@ class FamilyForm extends StatelessWidget {
           }),
       const SizedBox(height: 20),
       CustomTextField(
-          controller: cubit.whatsappNoController,
+          controller: whatsappNoController,
           hintText: 'Enter WhatsApp number',
           inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
           keyboardType: TextInputType.phone,
@@ -105,11 +125,11 @@ class FamilyForm extends StatelessWidget {
             return null;
           }),
       const SizedBox(height: 20),
-      CustomTextField(controller: cubit.nationalIdNoController, hintText: 'Enter NIC', label: 'National ID No', onChanged: cubit.updateNic),
+      CustomTextField(controller: nationalIdNoController, hintText: 'Enter NIC', label: 'National ID No', onChanged: cubit.updateNic),
       const SizedBox(height: 20),
       CustomDropdown(isRequired: true, items: const ['Studying Only', 'Working Only', 'Studying and Working', 'Not Working/Studying'], label: 'Status', onChanged: cubit.updateStatus, value: state.status),
       const SizedBox(height: 20),
-      if (shouldShowOccupation) CustomTextField(controller: cubit.occupationController, hintText: 'Enter Occupation/Business', isRequired: true, label: 'Occupation/Business', onChanged: cubit.updateOccupation),
+      if (shouldShowOccupation) CustomTextField(controller: occupationController, hintText: 'Enter Occupation/Business', isRequired: true, label: 'Occupation/Business', onChanged: cubit.updateOccupation),
       if (shouldShowOccupation) const SizedBox(height: 20),
       CustomDropdown(isRequired: true, items: const ['Married', 'Single', 'Divorced', 'Widow'], label: 'Civil Status', onChanged: cubit.updateCivilStatus, value: state.civilStatus),
       const SizedBox(height: 20),
@@ -136,7 +156,7 @@ class FamilyForm extends StatelessWidget {
         if (state.schoolEducation.contains('A/L')) ...[
           const SizedBox(height: 16),
           CustomTextField(
-              controller: cubit.alYearController,
+              controller: alYearController,
               hintText: 'Enter A/L year (e.g. 2020)',
               inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(4)],
               isRequired: true,
@@ -169,7 +189,7 @@ class FamilyForm extends StatelessWidget {
           if (hasProfessionalQualifications) ...[
             const SizedBox(height: 16),
             CustomTextField(
-                controller: cubit.professionalQualificationsDetailsController,
+                controller: professionalQualificationsDetailsController,
                 hintText: 'e.g. Diploma in Nursing, BSc in Psychology, Plumbing, Electrical',
                 isRequired: true,
                 label: 'Qualification Details',
@@ -185,7 +205,7 @@ class FamilyForm extends StatelessWidget {
           if (state.professionalQualifications.contains('Vocational Course')) ...[
             const SizedBox(height: 16),
             CustomTextField(
-                controller: cubit.vocationalCourseDetailsController,
+                controller: vocationalCourseDetailsController,
                 hintText: 'e.g. Plumbing, Electrical, Welding',
                 isRequired: true,
                 label: 'Vocational Course Details',
@@ -243,62 +263,88 @@ class FamilyForm extends StatelessWidget {
             child: GradientButton(
                 icon: Icons.check_circle_rounded,
                 onPressed: () {
-                  if (cubit.validateAndSave()) {
-                    Navigator.pop(context, {'isEditing': isEditing, 'member': state.toEntity(), 'memberIndex': memberIndex});
+                  if (formKey.currentState?.validate() ?? false) {
+                    Navigator.pop(context, {'isEditing': isEditing, 'member': state.toEntity(), 'memberIndex': widget.memberIndex});
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: AppTheme.red,
-                        behavior: SnackBarBehavior.floating,
-                        content: const Row(children: [Icon(Icons.info_rounded, color: Colors.white), SizedBox(width: 12), Text('Please fill all required fields correctly.', style: TextStyle(fontSize: 16))]),
-                        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 20, right: 20)));
+                    context.showErrorSnackBar('Please fill all required fields correctly.');
                   }
                 },
                 text: isEditing ? 'Update' : 'Add'))
       ]);
 
+  void clearHiddenFields(BuildContext context, FamilyMemberState state) {
+    if (state.alYear.isEmpty && alYearController.text.isNotEmpty) alYearController.clear();
+    if (state.professionalQualificationsDetails.isEmpty && professionalQualificationsDetailsController.text.isNotEmpty) professionalQualificationsDetailsController.clear();
+    if (state.vocationalCourseDetails.isEmpty && vocationalCourseDetailsController.text.isNotEmpty) vocationalCourseDetailsController.clear();
+  }
+
   @override
-  Widget build(BuildContext context) => BlocProvider(
-      create: (_) {
-        final cubit = FamilyMemberCubit();
-        if (existingMember != null) {
-          cubit.loadMember(existingMember!);
-        }
-        return cubit;
-      },
+  void initState() {
+    super.initState();
+    final member = widget.existingMember;
+    if (member == null) return;
+    cubit.loadMember(member);
+    ageController.text = member.age;
+    alYearController.text = member.alYear;
+    fullNameController.text = member.fullName;
+    mobileNoController.text = member.mobile;
+    nationalIdNoController.text = member.nationalIdNo;
+    occupationController.text = member.occupation;
+    professionalQualificationsDetailsController.text = member.professionalQualificationsDetails;
+    vocationalCourseDetailsController.text = member.vocationalCourseDetails;
+    whatsappNoController.text = member.whatsappNo;
+  }
+
+  @override
+  void dispose() {
+    ageController.dispose();
+    alYearController.dispose();
+    fullNameController.dispose();
+    mobileNoController.dispose();
+    nationalIdNoController.dispose();
+    occupationController.dispose();
+    professionalQualificationsDetailsController.dispose();
+    vocationalCourseDetailsController.dispose();
+    whatsappNoController.dispose();
+    cubit.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider.value(
+      value: cubit,
       child: Scaffold(
           body: Container(
               decoration: const BoxDecoration(gradient: AppTheme.backgroundGradient),
-              child: BlocBuilder<FamilyMemberCubit, FamilyMemberState>(builder: (context, state) {
-                final cubit = context.read<FamilyMemberCubit>();
-
-                return SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(children: [
-                          buildHeader(context),
-                          Form(
-                              key: cubit.formKey,
-                              child: Container(
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppTheme.white1),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        buildPersonalInfoSection(cubit, state),
-                                        const SizedBox(height: 32),
-                                        const Divider(height: 1),
-                                        const SizedBox(height: 32),
-                                        buildSpecialNeedsSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        buildSchoolEducationSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        buildProfessionalQualificationsSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        buildMadarasaEducationSection(cubit, state),
-                                        const SizedBox(height: 24),
-                                        buildUlamaQualificationsSection(cubit, state),
-                                        const SizedBox(height: 32),
-                                        buildActionButtons(context, cubit, state)
-                                      ]))))
-                        ])));
-              }))));
+              child: BlocConsumer<FamilyMemberCubit, FamilyMemberState>(
+                  listener: clearHiddenFields,
+                  builder: (context, state) => SingleChildScrollView(
+                      child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(children: [
+                            buildHeader(context),
+                            Form(
+                                key: formKey,
+                                child: Container(
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppTheme.white1),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                          buildPersonalInfoSection(cubit, state),
+                                          const SizedBox(height: 32),
+                                          const Divider(height: 1),
+                                          const SizedBox(height: 32),
+                                          buildSpecialNeedsSection(cubit, state),
+                                          const SizedBox(height: 24),
+                                          buildSchoolEducationSection(cubit, state),
+                                          const SizedBox(height: 24),
+                                          buildProfessionalQualificationsSection(cubit, state),
+                                          const SizedBox(height: 24),
+                                          buildMadarasaEducationSection(cubit, state),
+                                          const SizedBox(height: 24),
+                                          buildUlamaQualificationsSection(cubit, state),
+                                          const SizedBox(height: 32),
+                                          buildActionButtons(context, cubit, state)
+                                        ]))))
+                          ])))))));
 }

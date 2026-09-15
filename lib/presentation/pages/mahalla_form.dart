@@ -10,9 +10,21 @@ import 'package:mmf/presentation/widgets/custom_textfield.dart';
 import 'package:mmf/presentation/widgets/family_card.dart';
 import 'package:mmf/presentation/widgets/gradient_button.dart';
 import 'package:mmf/presentation/widgets/section_header.dart';
+import 'package:mmf/presentation/widgets/snack_bars.dart';
 
-class MahallaForm extends StatelessWidget {
+class MahallaForm extends StatefulWidget {
   const MahallaForm({super.key});
+
+  @override
+  State<MahallaForm> createState() => MahallaFormState();
+}
+
+class MahallaFormState extends State<MahallaForm> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController admissionNoController = TextEditingController();
+  final TextEditingController familiesCountController = TextEditingController();
 
   Widget buildHeader() => Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -43,7 +55,7 @@ class MahallaForm extends StatelessWidget {
             const SizedBox(height: 32),
             buildFamilyMembersSection(context, cubit, state),
             const SizedBox(height: 32),
-            GradientButton(icon: Icons.arrow_circle_right_rounded, isLoading: state.isLoading, onPressed: () => cubit.submit(context), text: 'Submit Form')
+            GradientButton(icon: Icons.arrow_circle_right_rounded, isLoading: state.isLoading, onPressed: () => cubit.submit(fieldsValid: formKey.currentState?.validate() ?? false), text: 'Submit Form')
           ])));
 
   Widget buildHouseholdSection(MainFormState state, MainFormCubit cubit) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -51,9 +63,9 @@ class MahallaForm extends StatelessWidget {
         const SizedBox(height: 24),
         CustomTextField(initialValue: state.refNo, label: 'Reference No', readOnly: true, suffixIcon: const Icon(Icons.lock_outline_rounded, size: 20)),
         const SizedBox(height: 20),
-        CustomTextField(controller: cubit.admissionNoController, hintText: 'Enter admission number', label: 'Admission (Sandapaname) No', onChanged: cubit.updateAdmissionNo),
+        CustomTextField(controller: admissionNoController, hintText: 'Enter admission number', label: 'Admission (Sandapaname) No', onChanged: cubit.updateAdmissionNo),
         const SizedBox(height: 20),
-        CustomTextField(controller: cubit.addressController, hintText: 'Enter full address', isRequired: true, label: 'Address', onChanged: cubit.updateAddress),
+        CustomTextField(controller: addressController, hintText: 'Enter full address', isRequired: true, label: 'Address', onChanged: cubit.updateAddress),
         const SizedBox(height: 20),
         CustomDropdown(
             isRequired: true,
@@ -112,7 +124,7 @@ class MahallaForm extends StatelessWidget {
         CustomDropdown(isRequired: true, items: const ['Own', 'Rent'], label: 'House Ownership', onChanged: cubit.updateOwnership, value: state.ownership),
         const SizedBox(height: 20),
         CustomTextField(
-            controller: cubit.familiesCountController,
+            controller: familiesCountController,
             hintText: 'Enter number of families',
             inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(2)],
             isRequired: true,
@@ -167,7 +179,7 @@ class MahallaForm extends StatelessWidget {
         if (cubit.hasExistingHead(excludeIndex: editIndex)) {
           if (!context.mounted) return;
 
-          cubit.showErrorSnackBar(context, 'A Head of Family already exists. Please change the existing Head\'s relationship first.');
+          context.showErrorSnackBar('A Head of Family already exists. Please change the existing Head\'s relationship first.');
           return;
         }
       }
@@ -186,7 +198,7 @@ class MahallaForm extends StatelessWidget {
         if (cubit.hasExistingHead()) {
           if (!context.mounted) return;
 
-          cubit.showErrorSnackBar(context, 'A Head of Family already exists. Only one Head of Family is allowed.');
+          context.showErrorSnackBar('A Head of Family already exists. Only one Head of Family is allowed.');
           return;
         }
       }
@@ -195,17 +207,32 @@ class MahallaForm extends StatelessWidget {
     }
   }
 
+  void resetFields() {
+    addressController.clear();
+    admissionNoController.clear();
+    familiesCountController.clear();
+    Future.delayed(const Duration(seconds: 1), () => formKey.currentState?.reset());
+  }
+
+  @override
+  void dispose() {
+    addressController.dispose();
+    admissionNoController.dispose();
+    familiesCountController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
       body: Container(
           decoration: const BoxDecoration(gradient: AppTheme.backgroundGradient),
           child: BlocConsumer<MainFormCubit, MainFormState>(
               listener: (context, state) {
-                final cubit = context.read<MainFormCubit>();
                 if (state.error != null) {
-                  cubit.showErrorSnackBar(context, state.error!);
+                  context.showErrorSnackBar(state.error!);
                 } else if (state.isSuccess) {
-                  cubit.showSuccessSnackBar(context);
+                  resetFields();
+                  context.showSuccessSnackBar('Form submitted successfully.');
                 }
               },
               listenWhen: (prev, curr) => prev.isSuccess != curr.isSuccess || prev.error != curr.error,
@@ -213,9 +240,8 @@ class MahallaForm extends StatelessWidget {
                 final cubit = context.read<MainFormCubit>();
 
                 return SingleChildScrollView(
-                    controller: cubit.scrollController,
                     child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Form(key: cubit.formKey, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [buildHeader(), const SizedBox(height: 16), buildFormCard(context, state, cubit)]))));
+                        child: Form(key: formKey, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [buildHeader(), const SizedBox(height: 16), buildFormCard(context, state, cubit)]))));
               })));
 }
