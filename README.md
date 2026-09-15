@@ -24,10 +24,10 @@ The form captures detailed, structured data (education, religious studies, quali
 ## Architecture
 
 - **Clean Architecture.** `domain` holds the `MainForm` and `FamilyMember` entities, the `FormRepository` contract and the `SubmitForm` use case; `data` holds the remote data source and repository implementation; `presentation` holds cubits, pages and widgets.
-- **Cubits for state.** `MainFormCubit` owns the household and its member list; `FamilyMemberCubit` owns a single member form, including its conditional fields and gender rules.
+- **Cubits for state.** `MainFormCubit` owns the household and its member list; `FamilyMemberCubit` owns a single member form, including its conditional fields and gender rules. Cubits hold only state and rules; the pages own the form keys, text controllers and snackbars.
 - **Dependency injection with GetIt**, registering the HTTP client, data source, repository, use case and cubit.
 - **Functional error handling.** The repository returns `Either<Failure, void>` from `dartz`, so the cubit folds a failure or a success instead of catching exceptions.
-- **Reusable widgets** for text fields, dropdowns, checkbox grids, member cards, section headers and gradient buttons.
+- **Reusable widgets** for text fields, dropdowns, checkbox grids, member cards, section headers, gradient buttons and snackbars.
 - **No code generation.** Entities and their JSON are written by hand.
 
 ## How submission works
@@ -70,7 +70,7 @@ lib/
     presentation/
         cubits/         MainFormCubit, FamilyMemberCubit and their states
         pages/          MahallaForm, FamilyForm
-        widgets/        Text field, dropdown, checkbox grid, family card, section header, gradient button
+        widgets/        Text field, dropdown, checkbox grid, family card, section header, gradient button, snackbars
 ```
 
 ## Building
@@ -79,6 +79,15 @@ lib/
 
 - **Run locally:** `flutter run -d chrome`.
 - **Deploy:** `flutter build web`, then `firebase deploy --only hosting`. Hosting serves `build/web` and rewrites every path to `index.html`.
+
+## Testing
+
+Unit tests live in `test/`, mirroring the `lib/` path of the code they cover:
+
+- **`test/core/utils/data_sanitizer_test.dart`**: text, addresses, phone numbers, national IDs and multi-select answers are cleaned as described above.
+- **`test/presentation/cubits/main_form_cubit_test.dart`**: a household without members or without a Head of Family is refused, invalid fields block submission, a valid household is submitted and the form resets with a new reference number, and editing a member ignores that member when checking for an existing head.
+
+Run them with `flutter test`.
 
 ## Roadmap
 
