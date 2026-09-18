@@ -4,42 +4,18 @@ import 'package:mmf/core/theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField(
-      {super.key,
-      this.isRequired = false,
-      this.obscureText = false,
-      this.readOnly = false,
-      this.maxLength,
-      this.maxLines = 1,
-      required this.label,
-      this.hintText,
-      this.initialValue,
-      this.prefixText,
-      this.inputFormatters,
-      this.validator,
-      this.controller,
-      this.keyboardType,
-      this.onChanged,
-      this.onTap,
-      this.prefixIcon,
-      this.suffixIcon});
+      {super.key, this.isRequired = false, this.readOnly = false, required this.label, this.hintText, this.initialValue, this.inputFormatters, this.validator, this.keyboardType, this.onChanged, this.onTap, this.suffixIcon});
 
   final bool isRequired;
-  final bool obscureText;
   final bool readOnly;
-
-  final int? maxLength;
-  final int? maxLines;
 
   final String label;
   final String? hintText;
   final String? initialValue;
-  final String? prefixText;
 
   final List<TextInputFormatter>? inputFormatters;
 
   final FormFieldValidator<String>? validator;
-
-  final TextEditingController? controller;
 
   final TextInputType? keyboardType;
 
@@ -47,39 +23,22 @@ class CustomTextField extends StatelessWidget {
 
   final VoidCallback? onTap;
 
-  final Widget? prefixIcon;
   final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (label.isNotEmpty) ...[
-          RichText(text: TextSpan(children: [
-            TextSpan(style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppTheme.black, fontSize: 16, fontWeight: FontWeight.w500) ?? const TextStyle(color: AppTheme.black, fontFamily: 'SFProDisplay', fontSize: 16, fontWeight: FontWeight.w500), text: label),
-            if (isRequired)
-              TextSpan(style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppTheme.red, fontSize: 16, fontWeight: FontWeight.w600) ?? const TextStyle(color: AppTheme.red, fontFamily: 'SFProDisplay', fontWeight: FontWeight.w600), text: ' *')
-          ])),
-          const SizedBox(height: 8)
-        ],
+        Text.rich(TextSpan(
+            style: const TextStyle(color: AppTheme.black, fontSize: 16, fontWeight: FontWeight.w500), text: label, children: [if (isRequired) const TextSpan(style: TextStyle(color: AppTheme.red, fontWeight: FontWeight.w600), text: ' *')])),
+        const SizedBox(height: 8),
         TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-                counterText: '',
-                hintText: hintText,
-                prefixIcon: prefixIcon,
-                prefixStyle: const TextStyle(color: AppTheme.black, fontFamily: 'SFProDisplay', fontSize: 16, fontWeight: FontWeight.w500),
-                prefixText: prefixText,
-                suffixIcon: suffixIcon,
-                suffixIconColor: AppTheme.gray6),
+            decoration: InputDecoration(hintText: hintText, suffixIcon: suffixIcon, suffixIconColor: AppTheme.gray5),
             initialValue: initialValue,
             inputFormatters: inputFormatters,
             keyboardType: keyboardType,
-            maxLength: maxLength,
-            maxLines: maxLines,
-            obscureText: obscureText,
             onChanged: onChanged,
             onTap: onTap,
             readOnly: readOnly,
-            style: const TextStyle(color: AppTheme.black, fontFamily: 'SFProDisplay', fontSize: 16, fontWeight: FontWeight.w400),
-            validator: validator ?? (isRequired ? (val) => (val == null || val.isEmpty) ? 'This field is required' : null : null))
+            style: const TextStyle(color: AppTheme.black, fontFamily: AppTheme.fontFamily, fontSize: 16, fontWeight: FontWeight.w400),
+            validator: validator ?? (isRequired ? (value) => (value?.isEmpty ?? true) ? 'This field is required' : null : null))
       ]);
 }

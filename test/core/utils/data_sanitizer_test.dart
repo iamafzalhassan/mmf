@@ -12,7 +12,7 @@ void main() {
     });
 
     test('keeps only digits in phone numbers', () {
-      expect(DataSanitizer.sanitizePhone(' 077-123 4567 '), '0771234567');
+      expect(DataSanitizer.sanitizeDigits(' 077-123 4567 '), '0771234567');
     });
 
     test('keeps only digits, V and X in national ID numbers', () {
@@ -20,8 +20,8 @@ void main() {
       expect(DataSanitizer.sanitizeNIC('2000-1234 5678'), '200012345678');
     });
 
-    test('drops blank multi-select answers and sanitises the rest', () {
-      expect(DataSanitizer.sanitizeList(<String>['o/l', '  ', ' a/l ']), <String>['O/L', 'A/L']);
+    test('drops blank multi-select answers and joins the sanitised rest', () {
+      expect(DataSanitizer.sanitizeList(<String>['o/l', '  ', ' a/l ']), 'O/L, A/L');
     });
   });
 }

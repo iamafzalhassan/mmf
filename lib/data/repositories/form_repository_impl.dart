@@ -15,7 +15,7 @@ class FormRepositoryImpl implements FormRepository {
       await remoteDataSource.submitForm(mainForm);
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure(e.toString()));
     }
   }
 }

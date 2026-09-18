@@ -1,90 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mmf/domain/entities/family_member.dart';
 
-part 'family_member_state.dart';
+class FamilyMemberCubit extends Cubit<FamilyMember> {
+  FamilyMemberCubit(super.initialState);
 
-class FamilyMemberCubit extends Cubit<FamilyMemberState> {
-  FamilyMemberCubit() : super(FamilyMemberState());
-
-  void loadMember(FamilyMember member) => emit(FamilyMemberState(
-      age: member.age,
-      alYear: member.alYear,
-      civilStatus: member.civilStatus,
-      fullName: member.fullName,
-      gender: member.gender,
-      mobile: member.mobile,
-      nationalIdNo: member.nationalIdNo,
-      occupation: member.occupation,
-      professionalQualificationsDetails: member.professionalQualificationsDetails,
-      relationship: member.relationship,
-      status: member.status,
-      vocationalCourseDetails: member.vocationalCourseDetails,
-      whatsappNo: member.whatsappNo,
-      zakath: member.zakath,
-      madarasa: member.madarasa,
-      professionalQualifications: member.professionalQualifications,
-      schoolEducation: member.schoolEducation,
-      specialNeeds: member.specialNeeds,
-      ulama: member.ulama));
-
-  void reset() => emit(FamilyMemberState());
-
-  void toggleMadarasa(String value) {
-    final list = List<String>.from(state.madarasa);
-    if (list.contains(value)) {
-      list.remove(value);
-    } else {
-      list.add(value);
-    }
-    emit(state.copyWith(madarasa: list));
-  }
+  void toggleMadarasa(String value) => emit(state.copyWith(madarasa: _toggled(state.madarasa, value)));
 
   void toggleProfessionalQualification(String value) {
-    final list = List<String>.from(state.professionalQualifications);
-    if (list.contains(value)) {
-      list.remove(value);
-    } else {
-      list.add(value);
-    }
-
-    final hasVocationalCourse = list.contains('Vocational Course');
-
-    emit(state.copyWith(professionalQualifications: list, professionalQualificationsDetails: list.isEmpty ? '' : null, vocationalCourseDetails: hasVocationalCourse ? null : ''));
+    final list = _toggled(state.professionalQualifications, value);
+    emit(state.copyWith(professionalQualifications: list, professionalQualificationsDetails: list.isEmpty ? '' : null, vocationalCourseDetails: list.contains('Vocational Course') ? null : ''));
   }
 
-  void toggleSchoolEducation(String value) {
-    final list = List<String>.from(state.schoolEducation);
-    if (list.contains(value)) {
-      list.remove(value);
-      if (value == 'A/L') {
-        emit(state.copyWith(alYear: '', schoolEducation: list));
-        return;
-      }
-    } else {
-      list.add(value);
-    }
-    emit(state.copyWith(schoolEducation: list));
-  }
+  void toggleSchoolEducation(String value) => emit(state.copyWith(alYear: value == 'A/L' && state.schoolEducation.contains(value) ? '' : null, schoolEducation: _toggled(state.schoolEducation, value)));
 
-  void toggleSpecialNeeds(String value) {
-    final list = List<String>.from(state.specialNeeds);
-    if (list.contains(value)) {
-      list.remove(value);
-    } else {
-      list.add(value);
-    }
-    emit(state.copyWith(specialNeeds: list));
-  }
+  void toggleSpecialNeeds(String value) => emit(state.copyWith(specialNeeds: _toggled(state.specialNeeds, value)));
 
-  void toggleUlama(String value) {
-    final list = List<String>.from(state.ulama);
-    if (list.contains(value)) {
-      list.remove(value);
-    } else {
-      list.add(value);
-    }
-    emit(state.copyWith(ulama: list));
-  }
+  void toggleUlama(String value) => emit(state.copyWith(ulama: _toggled(state.ulama, value)));
 
   void updateAge(String value) => emit(state.copyWith(age: value));
 
@@ -92,28 +23,19 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   void updateCivilStatus(String value) => emit(state.copyWith(civilStatus: value));
 
-  void updateGender(String value) {
-    List<String> updatedUlama = List<String>.from(state.ulama);
+  void updateGender(String value) => emit(state.copyWith(gender: value, relationship: relationshipsFor(value).contains(state.relationship) ? null : '', ulama: state.ulama.where(ulamaFor(value).contains).toList()));
 
-    if (value == 'Male') {
-      updatedUlama.removeWhere((item) => item == 'Hafiza' || item == 'Alima');
-    } else if (value == 'Female') {
-      updatedUlama.removeWhere((item) => item == 'Hafiz' || item == 'Alim');
-    }
+  static List<String> relationshipsFor(String gender) => switch (gender) {
+        'Male' => const ['Head of Family', 'Spouse', 'Son', 'Father', 'Brother', 'Grandson', 'Other'],
+        'Female' => const ['Head of Family', 'Spouse', 'Daughter', 'Mother', 'Sister', 'Granddaughter', 'Other'],
+        _ => const ['Head of Family', 'Spouse', 'Son', 'Daughter', 'Father', 'Mother', 'Brother', 'Sister', 'Grandson', 'Granddaughter', 'Other'],
+      };
 
-    String updatedRelationship = state.relationship;
-    if (value == 'Male') {
-      if (['Mother', 'Daughter', 'Sister', 'Granddaughter'].contains(state.relationship)) {
-        updatedRelationship = '';
-      }
-    } else if (value == 'Female') {
-      if (['Father', 'Son', 'Brother', 'Grandson'].contains(state.relationship)) {
-        updatedRelationship = '';
-      }
-    }
-
-    emit(state.copyWith(gender: value, relationship: updatedRelationship, ulama: updatedUlama));
-  }
+  static List<String> ulamaFor(String gender) => switch (gender) {
+        'Male' => const ['Hafiz', 'Alim'],
+        'Female' => const ['Hafiza', 'Alima'],
+        _ => const ['Hafiz', 'Hafiza', 'Alim', 'Alima'],
+      };
 
   void updateMobile(String value) => emit(state.copyWith(mobile: value));
 
@@ -133,5 +55,5 @@ class FamilyMemberCubit extends Cubit<FamilyMemberState> {
 
   void updateWhatsappNo(String value) => emit(state.copyWith(whatsappNo: value));
 
-  void updateZakath(String value) => emit(state.copyWith(zakath: value));
+  List<String> _toggled(List<String> list, String value) => list.contains(value) ? list.where((item) => item != value).toList() : [...list, value];
 }

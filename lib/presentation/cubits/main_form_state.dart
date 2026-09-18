@@ -15,7 +15,8 @@ class MainFormState extends Equatable {
 
   final List<FamilyMember> familyMembers;
 
-  const MainFormState({this.isLoading = false, this.isSuccess = false, this.address = '', this.admissionNo = '', this.familiesCount = '', this.ownership = '', required this.refNo, this.route = '', this.error, this.familyMembers = const []});
+  const MainFormState(
+      {this.isLoading = false, this.isSuccess = false, this.address = '', this.admissionNo = '', this.familiesCount = '', this.ownership = '', required this.refNo, this.route = '', this.error, this.familyMembers = const []});
 
   MainFormState copyWith({bool? isLoading, bool? isSuccess, String? address, String? admissionNo, String? familiesCount, String? ownership, String? refNo, String? route, String? error, List<FamilyMember>? familyMembers}) => MainFormState(
       isLoading: isLoading ?? this.isLoading,

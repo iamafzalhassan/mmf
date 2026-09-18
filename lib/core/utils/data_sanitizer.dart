@@ -1,58 +1,14 @@
-class DataSanitizer {
-  static String sanitizeAddress(String address) {
-    if (address.isEmpty) return address;
-    String sanitized = address.toUpperCase().trim();
-    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
-    sanitized = sanitized.replaceAll(RegExp(r',+'), ',');
-    sanitized = sanitized.replaceAll(RegExp(r'\s+,'), ',');
-    sanitized = sanitized.replaceAll(RegExp(r',\s*'), ', ');
-    sanitized = sanitized.replaceAll(RegExp(r',\s*$'), '');
-    return sanitized;
-  }
+abstract class DataSanitizer {
+  static String sanitizeAddress(String address) =>
+      address.toUpperCase().trim().replaceAll(RegExp(r'\s+'), ' ').replaceAll(RegExp(r',+'), ',').replaceAll(RegExp(r'\s+,'), ',').replaceAll(RegExp(r',\s*'), ', ').replaceAll(RegExp(r',\s*$'), '');
 
-  static String sanitizeAdmissionNo(String admissionNo) {
-    if (admissionNo.isEmpty) return admissionNo;
-    String sanitized = admissionNo.toUpperCase().trim();
-    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
-    sanitized = sanitized.replaceAll(RegExp(r'[^\dA-Z\-/\s]'), '');
-    return sanitized;
-  }
+  static String sanitizeAdmissionNo(String admissionNo) => admissionNo.toUpperCase().trim().replaceAll(RegExp(r'\s+'), ' ').replaceAll(RegExp(r'[^\dA-Z\-/\s]'), '');
 
-  static String sanitizeFamiliesCount(String count) {
-    if (count.isEmpty) return count;
-    return count.trim().replaceAll(RegExp(r'[^\d]'), '');
-  }
+  static String sanitizeDigits(String value) => value.replaceAll(RegExp(r'\D'), '');
 
-  static List<String> sanitizeList(List<String> values) => values.where((item) => item.trim().isNotEmpty).map((item) => sanitizeString(item)).toList();
+  static String sanitizeList(List<String> values) => values.where((item) => item.trim().isNotEmpty).map(sanitizeString).join(', ');
 
-  static String sanitizeString(String value) {
-    if (value.isEmpty) return value;
-    String sanitized = value.toUpperCase();
-    sanitized = sanitized.trim();
-    sanitized = sanitized.replaceAll(RegExp(r'\s+'), ' ');
-    sanitized = sanitized.replaceAllMapped(RegExp(r'\s+([.,!?;:])'), (match) => match[1]!);
-    sanitized = sanitized.replaceAll(RegExp(r'\(\s+'), '(');
-    sanitized = sanitized.replaceAll(RegExp(r'\s+\)'), ')');
-    return sanitized;
-  }
+  static String sanitizeString(String value) => value.toUpperCase().trim().replaceAll(RegExp(r'\s+'), ' ').replaceAllMapped(RegExp(r'\s+([.,!?;:])'), (match) => match[1]!).replaceAll(RegExp(r'\(\s+'), '(').replaceAll(RegExp(r'\s+\)'), ')');
 
-  static String sanitizeNIC(String nic) {
-    if (nic.isEmpty) return nic;
-    String sanitized = nic.toUpperCase().trim();
-    sanitized = sanitized.replaceAll(RegExp(r'[^\dVX]'), '');
-    return sanitized;
-  }
-
-  static String sanitizePhone(String phone) {
-    if (phone.isEmpty) return phone;
-    String sanitized = phone.trim();
-    sanitized = sanitized.replaceAll(RegExp(r'[^\d]'), '');
-    return sanitized;
-  }
-
-  static String sanitizeYear(String year) {
-    if (year.isEmpty) return year;
-    String sanitized = year.trim().replaceAll(RegExp(r'[^\d]'), '');
-    return sanitized;
-  }
+  static String sanitizeNIC(String nic) => nic.toUpperCase().replaceAll(RegExp(r'[^\dVX]'), '');
 }

@@ -16,7 +16,7 @@ class MainForm {
   Map<String, dynamic> toJson() => {
         'address': DataSanitizer.sanitizeAddress(address),
         'admissionNo': DataSanitizer.sanitizeAdmissionNo(admissionNo),
-        'familiesCount': DataSanitizer.sanitizeFamiliesCount(familiesCount),
+        'familiesCount': DataSanitizer.sanitizeDigits(familiesCount),
         'ownership': DataSanitizer.sanitizeString(ownership),
         'refNo': DataSanitizer.sanitizeString(refNo),
         'route': DataSanitizer.sanitizeString(route),

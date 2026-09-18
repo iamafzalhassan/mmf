@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:mmf/domain/entities/main_form.dart';
 
@@ -7,47 +8,30 @@ abstract class FormRemoteDataSource {
 }
 
 class FormRemoteDataSourceImpl implements FormRemoteDataSource {
+  static const String scriptUrl = 'https://script.google.com/macros/s/AKfycbxkIhMQDig84ZegqcJDqfIS3-lxxiKNA9W1rW2t5fj4k87kA0PdOFkhB3ifjFT6hXX8zw/exec';
+
   final http.Client client;
 
   FormRemoteDataSourceImpl({required this.client});
 
   @override
   Future<void> submitForm(MainForm mainForm) async {
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxkIhMQDig84ZegqcJDqfIS3-lxxiKNA9W1rW2t5fj4k87kA0PdOFkhB3ifjFT6hXX8zw/exec';
-
+    final uri = Uri.parse(scriptUrl).replace(queryParameters: {'data': base64Url.encode(utf8.encode(jsonEncode(mainForm.toJson()))), 'method': 'submit'});
+    final http.Response response;
     try {
-      final jsonData = jsonEncode(mainForm.toJson());
-      final encodedData = base64Url.encode(utf8.encode(jsonData));
-
-      final uri = Uri.parse(scriptUrl).replace(queryParameters: {'data': encodedData, 'method': 'submit'});
-
-      final response = await client.get(uri).timeout(const Duration(seconds: 30), onTimeout: () {
-        throw Exception('Request timeout - please try again');
-      });
-
-      if (response.statusCode == 200 || response.statusCode == 302) {
-        dynamic responseData;
-        try {
-          responseData = jsonDecode(response.body);
-        } catch (_) {
-          return;
-        }
-
-        final status = responseData is Map ? responseData['status'] : null;
-        if (status == 'success') {
-          return;
-        }
-        if (status == 'error') {
-          throw Exception(responseData['message'] ?? 'Submission failed');
-        }
-      }
-
-      throw Exception('Submission failed: ${response.statusCode}');
+      response = await client.get(uri).timeout(const Duration(seconds: 30), onTimeout: () => throw Exception('Request timeout - please try again'));
     } on http.ClientException {
       throw Exception('Network error. Please check your connection.');
-    } catch (e) {
-      if (e is Exception) rethrow;
-      throw Exception('Failed to submit: ${e.toString()}');
     }
+    if (response.statusCode != 200 && response.statusCode != 302) throw Exception('Submission failed: ${response.statusCode}');
+    final Object? body;
+    try {
+      body = jsonDecode(response.body);
+    } on FormatException {
+      return;
+    }
+    if (body is Map && body['status'] == 'success') return;
+    if (body is Map && body['status'] == 'error') throw Exception(body['message'] ?? 'Submission failed');
+    throw Exception('Submission failed: ${response.statusCode}');
   }
 }

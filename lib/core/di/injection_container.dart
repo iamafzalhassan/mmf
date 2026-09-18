@@ -8,14 +8,11 @@ import 'package:mmf/presentation/cubits/main_form_cubit.dart';
 
 final sl = GetIt.instance;
 
-Future<void> init() async {
-  sl.registerFactory(() => MainFormCubit(submitForm: sl()));
-
-  sl.registerLazySingleton(() => SubmitForm(sl()));
-
-  sl.registerLazySingleton<FormRepository>(() => FormRepositoryImpl(remoteDataSource: sl()));
-
-  sl.registerLazySingleton<FormRemoteDataSource>(() => FormRemoteDataSourceImpl(client: sl()));
-
-  sl.registerLazySingleton(() => http.Client());
+void init() {
+  sl
+    ..registerLazySingleton(http.Client.new)
+    ..registerLazySingleton<FormRemoteDataSource>(() => FormRemoteDataSourceImpl(client: sl()))
+    ..registerLazySingleton<FormRepository>(() => FormRepositoryImpl(remoteDataSource: sl()))
+    ..registerLazySingleton(() => SubmitForm(sl()))
+    ..registerFactory(() => MainFormCubit(submitForm: sl()));
 }
